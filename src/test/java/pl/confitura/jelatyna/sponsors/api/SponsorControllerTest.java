@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import pl.confitura.jelatyna.Application;
+import pl.confitura.jelatyna.JsonTestUtil;
 import pl.confitura.jelatyna.sponsors.SponsorService;
 import pl.confitura.jelatyna.sponsors.domain.Sponsor;
 import pl.confitura.jelatyna.sponsors.domain.SponsorGroup;
@@ -46,7 +47,7 @@ public class SponsorControllerTest {
     public void createSponsorGroup() throws Exception {
         ResultActions createSponsorGroup = mockMvc.perform(
                 post("/sponsorGroup")
-                        .content(json("{'name':'platinum', 'label':'Platynowi'}"))
+                        .content(JsonTestUtil.json("{'name':'platinum', 'label':'Platynowi'}"))
                         .contentType(APPLICATION_JSON));
 
         createSponsorGroup.andExpect(status().isCreated());
@@ -57,7 +58,7 @@ public class SponsorControllerTest {
     public void createSponsor() throws Exception {
         ResultActions createSponsor = mockMvc.perform(
                 post("/sponsor")
-                        .content(json("{'name':'Computex','description':'Great company','sponsorGroupName':'platinum'}"))
+                        .content(JsonTestUtil.json("{'name':'Computex','description':'Great company','sponsorGroupName':'platinum'}"))
                         .contentType(APPLICATION_JSON));
 
         createSponsor.andExpect(status().isCreated());
@@ -97,10 +98,6 @@ public class SponsorControllerTest {
                 .andExpect(jsonPath("$[0].sponsors[1].name", is("Softex")))
                 .andExpect(jsonPath("$[0].sponsors[1].description", is("Best soft")))
         ;
-    }
-
-    private String json(String s) {
-        return s.replaceAll("'", "\"");
     }
 
     @Configuration

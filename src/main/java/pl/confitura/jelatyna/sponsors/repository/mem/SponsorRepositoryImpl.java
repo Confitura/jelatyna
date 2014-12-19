@@ -16,7 +16,7 @@ public class SponsorRepositoryImpl extends InMemoryRepository<Sponsor, Integer> 
                 .withId(idSeq.getAndIncrement())
                 .withName(sponsor.getName())
                 .withDescription(sponsor.getDescription());
-        repo.put(sponsor.getId(), savedSponsor);
+        repo.put(savedSponsor.getId(), savedSponsor);
         return savedSponsor;
     }
 }

@@ -10,7 +10,6 @@ import pl.confitura.jelatyna.sponsors.domain.SponsorGroup;
 import pl.confitura.jelatyna.sponsors.repository.SponsorGroupRepository;
 import pl.confitura.jelatyna.sponsors.repository.SponsorRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.collect.Lists.*;
@@ -51,7 +50,7 @@ public class SponsorServiceImplTest {
 
     @Test
     public void getSponsorGroups() {
-        ArrayList<SponsorGroup> storedSponsorGroups = newArrayList(new SponsorGroup("platinum"), new SponsorGroup("gold"));
+        List<SponsorGroup> storedSponsorGroups = newArrayList(new SponsorGroup("platinum"), new SponsorGroup("gold"));
         when(sponsorGroupRepository.findAll()).thenReturn(storedSponsorGroups);
 
         List<SponsorGroup> sponsorGroups = sponsorService.getSponsorGroups();

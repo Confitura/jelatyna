@@ -33,7 +33,7 @@ public class SponsorServiceImpl implements SponsorService {
 
     @Override
     public List<SponsorGroup> getSponsorGroups() {
-        return null;
+        return sponsorGroupRepository.findAll();
     }
 
 }
