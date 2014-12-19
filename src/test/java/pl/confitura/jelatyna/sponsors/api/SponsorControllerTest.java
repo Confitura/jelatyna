@@ -15,7 +15,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import pl.confitura.jelatyna.Application;
-import pl.confitura.jelatyna.sponsors.SponsorGroupRepository;
+import pl.confitura.jelatyna.sponsors.SponsorService;
+import pl.confitura.jelatyna.sponsors.domain.Sponsor;
 import pl.confitura.jelatyna.sponsors.domain.SponsorGroup;
 
 import static org.mockito.Mockito.*;
@@ -32,7 +33,7 @@ public class SponsorControllerTest {
     private WebApplicationContext wac;
     private MockMvc mockMvc;
     @Autowired
-    private SponsorGroupRepository sponsorGroupRepository;
+    private SponsorService sponsorService;
 
     @Before
     public void setUp() {
@@ -40,14 +41,25 @@ public class SponsorControllerTest {
     }
 
     @Test
-    public void saveSponsorGroup() throws Exception {
+    public void createSponsorGroup() throws Exception {
         ResultActions createSponsorGroup = mockMvc.perform(
                 post("/sponsorGroup")
                         .content(json("{'name':'platinum', 'label':'Platynowi'}"))
                         .contentType(APPLICATION_JSON));
 
         createSponsorGroup.andExpect(status().isCreated());
-        verify(sponsorGroupRepository).save(new SponsorGroup("platinum").labeled("Platynowi"));
+        verify(sponsorService).createSponsorGroup(new SponsorGroup("platinum").withLabel("Platynowi"));
+    }
+
+    @Test
+    public void createSponsor() throws Exception {
+        ResultActions createSponsor = mockMvc.perform(
+                post("/sponsor")
+                        .content(json("{'name':'Computex','description':'Great company','sponsorGroupName':'platinum'}"))
+                        .contentType(APPLICATION_JSON));
+
+        createSponsor.andExpect(status().isCreated());
+        verify(sponsorService).createSponsorInGroup(new Sponsor().withName("Computex").withDescription("Great company"), "platinum");
     }
 
     private String json(String s) {
@@ -63,8 +75,8 @@ public class SponsorControllerTest {
         }
 
         @Bean
-        public SponsorGroupRepository sponsorGroupRepository() {
-            return mock(SponsorGroupRepository.class);
+        public SponsorService sponsorService() {
+            return mock(SponsorService.class);
         }
     }
 }

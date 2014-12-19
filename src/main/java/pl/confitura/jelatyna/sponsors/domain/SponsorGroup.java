@@ -19,7 +19,7 @@ public class SponsorGroup {
         this.name = name;
     }
 
-    public SponsorGroup labeled(String label) {
+    public SponsorGroup withLabel(String label) {
         this.label = label;
         return this;
     }
