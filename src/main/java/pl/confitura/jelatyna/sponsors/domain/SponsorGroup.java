@@ -28,12 +28,17 @@ public class SponsorGroup {
         return name;
     }
 
+    public String getLabel() {
+        return label;
+    }
+
     public List<Sponsor> getSponsors() {
         return sponsors;
     }
 
-    public void addSponsor(Sponsor sponsor) {
+    public SponsorGroup addSponsor(Sponsor sponsor) {
         sponsors.add(sponsor);
+        return this;
     }
 
     @Override

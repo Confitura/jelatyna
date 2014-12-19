@@ -8,6 +8,8 @@ import pl.confitura.jelatyna.sponsors.domain.SponsorGroup;
 import pl.confitura.jelatyna.sponsors.repository.SponsorGroupRepository;
 import pl.confitura.jelatyna.sponsors.repository.SponsorRepository;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class SponsorServiceImpl implements SponsorService {
@@ -27,6 +29,11 @@ public class SponsorServiceImpl implements SponsorService {
         SponsorGroup sponsorGroup = sponsorGroupRepository.findByName(sponsorGroupName);
         Sponsor savedSponsor = sponsorRepository.save(sponsor);
         sponsorGroup.addSponsor(savedSponsor);
+    }
+
+    @Override
+    public List<SponsorGroup> getSponsorGroups() {
+        return null;
     }
 
 }

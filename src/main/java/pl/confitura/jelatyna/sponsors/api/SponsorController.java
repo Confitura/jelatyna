@@ -9,6 +9,8 @@ import pl.confitura.jelatyna.sponsors.SponsorService;
 import pl.confitura.jelatyna.sponsors.domain.Sponsor;
 import pl.confitura.jelatyna.sponsors.domain.SponsorGroup;
 
+import java.util.List;
+
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
@@ -23,6 +25,11 @@ public class SponsorController {
     @ResponseStatus(CREATED)
     public void createSponsorGroup(@RequestBody SponsorGroupDto sponsorGroupDto) {
         sponsorService.createSponsorGroup(new SponsorGroup(sponsorGroupDto.getName()).withLabel(sponsorGroupDto.getLabel()));
+    }
+
+    @RequestMapping(value = "/sponsorGroup", method = GET)
+    public List<SponsorGroup> getSponsorGroups() {
+        return sponsorService.getSponsorGroups();
     }
 
     @RequestMapping(value = "/sponsor", method = POST, consumes = APPLICATION_JSON_VALUE)

@@ -19,6 +19,8 @@ import pl.confitura.jelatyna.sponsors.SponsorService;
 import pl.confitura.jelatyna.sponsors.domain.Sponsor;
 import pl.confitura.jelatyna.sponsors.domain.SponsorGroup;
 
+import static com.google.common.collect.Lists.*;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -60,6 +62,41 @@ public class SponsorControllerTest {
 
         createSponsor.andExpect(status().isCreated());
         verify(sponsorService).createSponsorInGroup(new Sponsor().withName("Computex").withDescription("Great company"), "platinum");
+    }
+
+    @Test
+    public void getSponsorGroups() throws Exception {
+        when(sponsorService.getSponsorGroups()).thenReturn(newArrayList(
+                new SponsorGroup("platinum").withLabel("Platynowi"),
+                new SponsorGroup("gold").withLabel("Złoci")
+        ));
+
+        ResultActions getSponsorGroups = mockMvc.perform(get("/sponsorGroup"));
+
+        getSponsorGroups.andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].name", is("platinum")))
+                .andExpect(jsonPath("$[0].label", is("Platynowi")))
+                .andExpect(jsonPath("$[1].name", is("gold")))
+                .andExpect(jsonPath("$[1].label", is("Złoci")))
+        ;
+    }
+
+    @Test
+    public void getSponsorGroupsWithSponsors() throws Exception {
+        when(sponsorService.getSponsorGroups()).thenReturn(newArrayList(
+                new SponsorGroup("")
+                        .addSponsor(new Sponsor().withName("Computex").withDescription("Good company"))
+                        .addSponsor(new Sponsor().withName("Softex").withDescription("Best soft"))
+        ));
+
+        ResultActions getSponsorGroups = mockMvc.perform(get("/sponsorGroup"));
+
+        getSponsorGroups.andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].sponsors[0].name", is("Computex")))
+                .andExpect(jsonPath("$[0].sponsors[0].description", is("Good company")))
+                .andExpect(jsonPath("$[0].sponsors[1].name", is("Softex")))
+                .andExpect(jsonPath("$[0].sponsors[1].description", is("Best soft")))
+        ;
     }
 
     private String json(String s) {
