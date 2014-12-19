@@ -9,6 +9,15 @@ public class Sponsor {
     private String name;
     private String description;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public Sponsor withId(Integer id) {
+        this.id = id;
+        return this;
+    }
+
     public Sponsor withName(String name) {
         this.name = name;
         return this;
@@ -32,5 +41,13 @@ public class Sponsor {
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

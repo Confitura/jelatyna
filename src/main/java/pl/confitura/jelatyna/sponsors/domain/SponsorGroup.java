@@ -28,6 +28,14 @@ public class SponsorGroup {
         return name;
     }
 
+    public List<Sponsor> getSponsors() {
+        return sponsors;
+    }
+
+    public void addSponsor(Sponsor sponsor) {
+        sponsors.add(sponsor);
+    }
+
     @Override
     public boolean equals(Object obj) {
         return EqualsBuilder.reflectionEquals(this, obj);
