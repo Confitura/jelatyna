@@ -1,0 +1,1 @@
+Please use provided code-formatter (contributors/settings.jar). It can be simply imported into IntelliJ IDEA by using File -> Import Settings. Notice that provided jar contains only code style settings under separated name and won't break your own IDE configuration.
