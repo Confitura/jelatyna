@@ -1,6 +1,7 @@
 package pl.confitura.jelatyna.domain;
 
 import lombok.Data;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 
@@ -16,6 +17,7 @@ public class Participant {
     private String lastName;
 
     @Column(unique = true)
+    @NotBlank
     private String email;
 
 }
