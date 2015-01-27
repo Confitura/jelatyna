@@ -1,15 +1,11 @@
 package pl.confitura.jelatyna.domain;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 import javax.persistence.*;
 
 @Data
 @Entity
-@EqualsAndHashCode
-@ToString
 public class Participant {
 
     @Id
