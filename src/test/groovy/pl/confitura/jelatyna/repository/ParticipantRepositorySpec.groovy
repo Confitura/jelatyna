@@ -13,7 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class ParticipantRepositorySpec extends AbstractRestSpec {
 
 	@Test
-	def "should create participant with given name"() {
+	def "should create participant with given email"() {
 		given:
 		    def email = "michal@jelatyna.pl"
 			mockMvc.perform(
