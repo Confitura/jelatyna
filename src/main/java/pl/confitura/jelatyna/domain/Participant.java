@@ -1,15 +1,12 @@
 package pl.confitura.jelatyna.domain;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 
 @Data
 @Entity
-@EqualsAndHashCode
-@ToString
 public class Participant {
 
     @Id
@@ -20,6 +17,7 @@ public class Participant {
     private String lastName;
 
     @Column(unique = true)
+    @NotBlank
     private String email;
 
 }

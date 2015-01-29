@@ -13,10 +13,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class ParticipantRepositorySpec extends AbstractRestSpec {
 
 	@Test
-	def "should create participant with given name"() {
+	def "should create participant with given email"() {
 		given:
+		    def email = "michal@jelatyna.pl"
 			mockMvc.perform(
-					post("/participants").contentType(MediaType.APPLICATION_JSON).content('{"firstName": "michal"}'))
+					post("/participants").contentType(MediaType.APPLICATION_JSON).content('{"email": "'+email+'"}'))
 					.andExpect(status().isCreated())
 
 		when:
@@ -24,6 +25,6 @@ class ParticipantRepositorySpec extends AbstractRestSpec {
 
 		then:
 			response.status == HttpStatus.OK.value()
-			asJson(response)._embedded.participants[0].firstName == "michal"
+			asJson(response)._embedded.participants[0].email == email
 	}
 }
