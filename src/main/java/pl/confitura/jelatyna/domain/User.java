@@ -7,9 +7,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Collection;
-
-import static java.util.Arrays.asList;
 
 @Data
 @Entity
@@ -18,6 +17,10 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Enumerated(value = EnumType.STRING)
+    Collection<UserPermission> roles = new ArrayList<>();
 
     @NotNull
     @OneToOne
@@ -28,7 +31,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return  asList(() -> "ROLE_BASIC");
+        return roles;
     }
 
     @Override

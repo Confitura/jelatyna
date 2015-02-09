@@ -9,11 +9,11 @@ import pl.confitura.jelatyna.repository.ParticipantRepository;
 import pl.confitura.jelatyna.repository.UserRepository;
 
 @Service
-public class FakeUserDetailsService implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
     private UserRepository userRepository;
 
     @Autowired
-    public FakeUserDetailsService(UserRepository userRepository, ParticipantRepository participantRepository) {
+    public UserDetailsServiceImpl(UserRepository userRepository, ParticipantRepository participantRepository) {
         this.userRepository = userRepository;
     }
 

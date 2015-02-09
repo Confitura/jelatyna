@@ -11,11 +11,20 @@ import pl.confitura.jelatyna.domain.Participant;
 @RepositoryRestResource
 public interface ParticipantRepository extends CrudRepository<Participant, Long> {
 
-    @PostAuthorize("returnObject.email == principal.username or hasRole('ROLE_ADMIN')")
+    @PostAuthorize("(returnObject!=null and returnObject.getEmail() == principal.getUsername()) or hasRole('ADMIN')")
     @Override
     Participant findOne(Long aLong);
 
     @Override
     @PreAuthorize("#participant.id == null ")
     Participant save(Participant participant);
+
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @Override
+    Iterable<Participant> findAll(Iterable<Long> iterable);
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @Override
+    Iterable<Participant> findAll();
 }
