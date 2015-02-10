@@ -17,9 +17,9 @@ class ParticipantRepositorySpec extends AbstractRestSpec implements SecurityHelp
 	@Test
 	def "should create participant with given name"() {
 		given:
-			Principal ADMIN = logInAsAdmin()
+			logInAsAdmin()
 			def postResult = mockMvc.perform(
-					post("/participants").contentType(MediaType.APPLICATION_JSON).content('{"firstName": "michal"}').principal(ADMIN))
+					post("/participants").contentType(MediaType.APPLICATION_JSON).content('{"firstName": "michal"}'))
 					.andExpect(status().isCreated()).andReturn()
 
 		when:
