@@ -6,24 +6,28 @@ import org.springframework.http.MediaType
 import org.springframework.mock.web.MockHttpServletResponse
 import pl.confitura.jelatyna.AbstractRestSpec
 
+import java.security.Principal
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-class ParticipantRepositorySpec extends AbstractRestSpec {
+class ParticipantRepositorySpec extends AbstractRestSpec implements SecurityHelper {
 
 	@Test
 	def "should create participant with given name"() {
 		given:
-			mockMvc.perform(
-					post("/participants").contentType(MediaType.APPLICATION_JSON).content('{"firstName": "michal"}'))
-					.andExpect(status().isCreated())
+			Principal ADMIN = logInAsAdmin()
+			def postResult = mockMvc.perform(
+					post("/participants").contentType(MediaType.APPLICATION_JSON).content('{"firstName": "michal"}').principal(ADMIN))
+					.andExpect(status().isCreated()).andReturn()
 
 		when:
-			MockHttpServletResponse response = mockMvc.perform(get("/participants")).andReturn().response
+			def location = postResult.getResponse().getHeader("location")
+			MockHttpServletResponse response = mockMvc.perform(get(location)).andReturn().response
 
 		then:
 			response.status == HttpStatus.OK.value()
-			asJson(response)._embedded.participants[0].firstName == "michal"
+			asJson(response).firstName == "michal"
 	}
 }
