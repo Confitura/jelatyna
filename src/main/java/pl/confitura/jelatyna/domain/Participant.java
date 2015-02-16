@@ -22,4 +22,7 @@ public class Participant {
     @Column(unique = true)
     private String email;
 
+    @OneToOne(mappedBy = "participant")
+    private User user;
+
 }

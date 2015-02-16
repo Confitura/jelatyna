@@ -35,7 +35,9 @@ class AbstractRestSpec extends Specification {
 		new JsonSlurper().parseText(response.contentAsString)
 	}
 
-	Principal logInAsAdmin() { return logInAs("admin@admin.pl", [UserPermission.ADMIN]) }
+    Principal logInAsAdmin() { return logInAs("admin@admin.pl", [UserPermission.ADMIN]) }
+
+    Principal logInAsAnonymous() { return logInAs("", []) }
 
 	def logInAs(String email, ArrayList<UserPermission> permissions) {
 		def participant = new Participant(email: email)
