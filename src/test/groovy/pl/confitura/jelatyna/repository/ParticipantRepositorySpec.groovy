@@ -75,4 +75,21 @@ class ParticipantRepositorySpec extends AbstractRestSpec {
           response.status == HttpStatus.OK.value()
           asJson(response).email == email
     }
+    
+    @Test
+    def "should NOT allow participant to access participants list"() {
+        given:
+          logInAsAnonymous()
+          def email = 'dmnk@dmnk.pl';
+          mockMvc.perform(
+                  post("/participants").contentType(MediaType.APPLICATION_JSON).content("""{"email": "${email}"}"""))
+                  .andExpect(status().isCreated()).andReturn()
+
+        when:
+          logInAs(email,[])
+          MockHttpServletResponse response = mockMvc.perform(get("/participants")).andReturn().response
+
+        then:
+          response.status == HttpStatus.FORBIDDEN.value()
+    }
 }
