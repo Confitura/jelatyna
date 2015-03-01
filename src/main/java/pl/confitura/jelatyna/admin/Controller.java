@@ -10,7 +10,6 @@ import pl.confitura.jelatyna.email.EmailService;
 import javax.validation.Valid;
 import java.util.List;
 
-import static com.google.common.collect.Lists.newArrayList;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
@@ -18,30 +17,31 @@ import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 @RequestMapping("/api/admin")
 public class Controller {
 
-	private Repository repository;
-	private TokenGenerator tokenGenerator;
+    private Repository repository;
+    private TokenGenerator tokenGenerator;
     private EmailService sender;
 
     @Autowired
-	public Controller(Repository repository, TokenGenerator tokenGenerator, EmailService sender) {
-		this.repository = repository;
-		this.tokenGenerator = tokenGenerator;
+    public Controller(Repository repository, TokenGenerator tokenGenerator, EmailService sender) {
+        this.repository = repository;
+        this.tokenGenerator = tokenGenerator;
         this.sender = sender;
     }
 
-	@RequestMapping
-	public List<Admin> all() {
-		return repository.findAll();
-	}
+    @RequestMapping
+    public List<Admin> all() {
+        return repository.findAll();
+    }
 
-	@RequestMapping(method = POST)
-	public void create(@Valid @RequestBody Admin admin) {
-		admin.token(tokenGenerator.generate());
-		repository.save(admin);
+    @RequestMapping(method = POST)
+    public void create(@Valid @RequestBody Admin admin) {
+        admin.token(tokenGenerator.generate());
+        repository.save(admin);
         sender.adminCreated(admin);
-	}
+    }
+
     @RequestMapping(method = PUT)
-	public void update(@Valid @RequestBody Admin admin) {
-		repository.save(admin);
-	}
+    public void update(@Valid @RequestBody Admin admin) {
+        repository.save(admin);
+    }
 }

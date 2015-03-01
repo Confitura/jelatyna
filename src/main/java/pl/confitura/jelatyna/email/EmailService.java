@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.confitura.jelatyna.admin.Admin;
 
-import static com.google.common.collect.ImmutableMap.of;
-
 @Service
 public class EmailService {
 

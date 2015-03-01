@@ -18,50 +18,50 @@ import javax.persistence.Id;
 @ToString
 public class Admin {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-	@NotEmpty
-	private String firstName;
+    @NotEmpty
+    private String firstName;
 
-	@NotEmpty
-	private String lastName;
+    @NotEmpty
+    private String lastName;
 
-	@Email
-	@NotEmpty
+    @Email
+    @NotEmpty
     @Column(unique = true)
-	private String email;
-	private String token;
+    private String email;
+    private String token;
 
-	public String getFirstName() {
-		return firstName;
-	}
+    public String getFirstName() {
+        return firstName;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public String getLastName() {
-		return lastName;
-	}
+    public String getLastName() {
+        return lastName;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
-	public Admin token(String token) {
-		this.token = token;
-		return this;
-	}
+    public Admin token(String token) {
+        this.token = token;
+        return this;
+    }
 
     public String getToken() {
         return token;

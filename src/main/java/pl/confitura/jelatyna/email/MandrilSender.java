@@ -16,7 +16,7 @@ import static com.google.common.collect.Lists.newArrayList;
 
 @Component
 @Profile("default")
-public class MandrilSender implements  Sender{
+public class MandrilSender implements Sender {
 
 
     private MandrillApi api;
@@ -39,7 +39,7 @@ public class MandrilSender implements  Sender{
         MandrillMessage.Recipient recipient = new MandrillMessage.Recipient();
         recipient.setEmail(address);
         recipient.setName(params.getFullName());
-        
+
         MandrillMessage message = new MandrillMessage();
         message.setTo(newArrayList(recipient));
         message.setMergeVars(newArrayList(generateVarsBucketFor(address, params)));

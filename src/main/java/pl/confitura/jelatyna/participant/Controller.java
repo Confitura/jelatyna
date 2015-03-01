@@ -18,20 +18,20 @@ public class Controller {
 
     @Autowired
     private Repository repository;
-    
+
     @RequestMapping(method = POST)
     public void create(@Valid @RequestBody Participant participant) {
         repository.save(participant);
     }
-    
+
     @RequestMapping(method = PUT)
     public void update(@Valid @RequestBody Participant participant) {
         repository.save(participant);
     }
-    
+
     @RequestMapping(method = GET)
-    public List<Participant> get(){
+    public List<Participant> get() {
         return repository.findAll();
     }
-    
+
 }
