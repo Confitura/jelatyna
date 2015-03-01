@@ -21,7 +21,7 @@ import javax.transaction.Transactional
 @WebAppConfiguration
 @Transactional
 @TransactionConfiguration(defaultRollback = true)
-abstract class AbstractRestSpec extends Specification {
+abstract class AbstractControllerSpec extends Specification {
 
     MockMvc mockMvc
 

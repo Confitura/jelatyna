@@ -1,16 +1,15 @@
 package pl.confitura.jelatyna.email
-
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.SpringApplicationContextLoader
 import org.springframework.test.context.ContextConfiguration
 import pl.confitura.jelatyna.Application
 import pl.confitura.jelatyna.admin.Admin
 import spock.lang.Specification
-
+//@Ignore("This is not a unity test. It is used to check if the integration is working")
 @ContextConfiguration(loader = SpringApplicationContextLoader.class, classes = Application.class)
-class EmailSenderTest extends Specification {
+class EmailServiceTest extends Specification {
     @Autowired
-    def EmailSender emailSender;
+    def EmailService emailSender;
 
     def "should send email"() {
 

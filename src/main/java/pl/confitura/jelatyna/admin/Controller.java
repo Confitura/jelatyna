@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.confitura.jelatyna.common.TokenGenerator;
-import pl.confitura.jelatyna.email.EmailSender;
+import pl.confitura.jelatyna.email.EmailService;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -14,16 +14,16 @@ import static com.google.common.collect.Lists.newArrayList;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
-@RestController
+@RestController("adminController")
 @RequestMapping("/api/admin")
 public class Controller {
 
 	private Repository repository;
 	private TokenGenerator tokenGenerator;
-    private EmailSender sender;
+    private EmailService sender;
 
     @Autowired
-	public Controller(Repository repository, TokenGenerator tokenGenerator, EmailSender sender) {
+	public Controller(Repository repository, TokenGenerator tokenGenerator, EmailService sender) {
 		this.repository = repository;
 		this.tokenGenerator = tokenGenerator;
         this.sender = sender;

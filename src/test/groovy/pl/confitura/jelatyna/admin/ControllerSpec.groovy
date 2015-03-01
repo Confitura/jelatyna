@@ -3,18 +3,18 @@ package pl.confitura.jelatyna.admin
 import groovy.json.JsonBuilder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.MethodArgumentNotValidException
-import pl.confitura.jelatyna.AbstractRestSpec
+import pl.confitura.jelatyna.AbstractControllerSpec
 import pl.confitura.jelatyna.common.TokenGenerator
-import pl.confitura.jelatyna.email.EmailSender
+import pl.confitura.jelatyna.email.EmailService
 import spock.lang.Unroll
 
-class ControllerSpec extends AbstractRestSpec {
+class ControllerSpec extends AbstractControllerSpec {
 
     @Autowired
     private Repository repository;
     @Autowired
     private TokenGenerator generator;
-    private EmailSender emailSender = Mock(EmailSender);
+    private EmailService emailSender = Mock(EmailService);
 
     @Unroll
     def "should throw exception if admin is invalid"() {

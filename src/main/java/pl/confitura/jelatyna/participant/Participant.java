@@ -1,4 +1,4 @@
-package pl.confitura.jelatyna.domain;
+package pl.confitura.jelatyna.participant;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
