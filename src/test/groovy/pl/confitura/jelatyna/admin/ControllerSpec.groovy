@@ -64,6 +64,21 @@ class ControllerSpec extends AbstractControllerSpec {
               it.firstName == "John"
           })
     }
+    
+    def "should get admin by token"(){
+        given:
+          repository.save(new Admin(firstName: "John", lastName: "Smith", email: "john@smith.com", token: "TOKEN"))
+
+        when:
+          def admin = doGet("/api/admin/create/TOKEN");
+        
+        then:
+          with(admin){
+              firstName: "John"
+              lastName: "Smith"
+          }
+        
+    }
 
     def "should update admin"() {
         given:
@@ -93,8 +108,7 @@ class ControllerSpec extends AbstractControllerSpec {
         if (id != null) {
             user << [id: id]
         }
-        def builder = new JsonBuilder(user)
-        return builder.toString()
+        return new JsonBuilder(user).toString()
     }
 
     @Override

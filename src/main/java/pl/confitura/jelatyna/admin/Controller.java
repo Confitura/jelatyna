@@ -1,6 +1,7 @@
 package pl.confitura.jelatyna.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,6 +32,12 @@ public class Controller {
     @RequestMapping
     public List<Admin> all() {
         return repository.findAll();
+    }
+
+    @RequestMapping(value = "/create/{token}")
+
+    public Admin getBy(@PathVariable String token) {
+        return repository.findAll().get(0);
     }
 
     @RequestMapping(method = POST)

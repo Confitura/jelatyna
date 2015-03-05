@@ -20,7 +20,7 @@ public class Controller {
     private Repository repository;
 
     @RequestMapping(method = POST)
-    public void create(@Valid @RequestBody Participant participant) {
+    public void create(@RequestBody Participant participant) {
         repository.save(participant);
     }
 

@@ -1,5 +1,4 @@
 package pl.confitura.jelatyna.participant
-
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import pl.confitura.jelatyna.AbstractControllerSpec
