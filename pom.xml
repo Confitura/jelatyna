@@ -14,7 +14,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.2.1.RELEASE</version>
+		<version>1.2.2.RELEASE</version>
 		<relativePath/>
 		<!-- lookup parent from repository -->
 	</parent>
@@ -45,12 +45,6 @@
 			<groupId>com.insightfullogic</groupId>
 			<artifactId>lambda-behave</artifactId>
 			<version>${lambda-behave.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.assertj</groupId>
-			<artifactId>assertj-core</artifactId>
-			<version>${assertj.version}</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -86,34 +80,12 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.codehaus.groovy</groupId>
-			<artifactId>groovy-all</artifactId>
-			<version>${groovy.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>cglib</groupId>
 			<artifactId>cglib-nodep</artifactId>
 			<version>3.1</version>
 			<scope>test</scope>
 		</dependency>
-
-
 	</dependencies>
-
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<start-class>pl.confitura.jelatyna.Application</start-class>
-		<java.version>1.8</java.version>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
-		<lambda-behave.version>0.3</lambda-behave.version>
-		<assertj.version>1.7.0</assertj.version>
-		<h2.version>1.4.182</h2.version>
-		<lombok.version>1.14.8</lombok.version>
-		<spock.version>1.0-groovy-2.0</spock.version>
-		<groovy.version>2.0.1</groovy.version>
-	</properties>
 
 	<build>
 		<plugins>
@@ -122,23 +94,12 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 			<plugin>
-				<groupId>org.codehaus.gmaven</groupId>
-				<artifactId>gmaven-plugin</artifactId>
+				<groupId>org.codehaus.gmavenplus</groupId>
+				<artifactId>gmavenplus-plugin</artifactId>
 				<version>1.5</version>
-				<configuration>
-					<providerSelection>2.0</providerSelection>
-				</configuration>
-				<dependencies>
-					<dependency>
-						<groupId>org.codehaus.gmaven.runtime</groupId>
-						<artifactId>gmaven-runtime-2.0</artifactId>
-						<version>1.5</version>
-					</dependency>
-				</dependencies>
 				<executions>
 					<execution>
 						<goals>
-							<goal>compile</goal>
 							<goal>testCompile</goal>
 						</goals>
 					</execution>
@@ -159,5 +120,19 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<start-class>pl.confitura.jelatyna.Application</start-class>
+		<java.version>1.8</java.version>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<lambda-behave.version>0.3</lambda-behave.version>
+		<assertj.version>1.7.0</assertj.version>
+		<h2.version>1.4.182</h2.version>
+		<lombok.version>1.14.8</lombok.version>
+		<spock.version>1.0-groovy-2.4</spock.version>
+		<groovy.version>2.4.1</groovy.version>
+	</properties>
 
 </project>
