@@ -1,8 +1,7 @@
 package pl.confitura.jelatyna.admin;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
+import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -14,8 +13,7 @@ import javax.persistence.Id;
 
 @Entity
 @Data
-@EqualsAndHashCode
-@ToString
+@Accessors(chain = true)
 public class Admin {
 
     @Id
@@ -34,40 +32,4 @@ public class Admin {
     private String email;
     private String token;
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public Admin token(String token) {
-        this.token = token;
-        return this;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public Long getId() {
-        return id;
-    }
 }

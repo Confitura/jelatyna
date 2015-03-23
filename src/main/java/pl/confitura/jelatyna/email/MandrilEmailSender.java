@@ -16,18 +16,18 @@ import static com.google.common.collect.Lists.newArrayList;
 
 @Component
 @Profile("default")
-public class MandrilSender implements Sender {
+public class MandrilEmailSender implements EmailSender {
 
 
     private MandrillApi api;
 
     @Autowired
-    public MandrilSender(@Value("${mandril.key}") String key) {
+    public MandrilEmailSender(@Value("${mandril.key}") String key) {
         api = new MandrillApi(key);
     }
 
     @Override
-    public void send(String address, String templateId, EmailParams params) {
+    public void send(String address, String templateId, EmailPersonalizationData params) {
         try {
             doSend(address, templateId, params);
         } catch (Exception ex) {
@@ -35,25 +35,38 @@ public class MandrilSender implements Sender {
         }
     }
 
-    private void doSend(String address, String templateId, EmailParams params) throws MandrillApiError, IOException {
+    private void doSend(String address, String templateId, EmailPersonalizationData params) throws MandrillApiError, IOException {
+        MandrillMessage.Recipient recipient = createRecipient(address, params);
+        MandrillMessage message = createMessage(address, params, recipient);
+        sendMessage(templateId, message);
+    }
+
+    private MandrillMessage.Recipient createRecipient(String address, EmailPersonalizationData params) {
         MandrillMessage.Recipient recipient = new MandrillMessage.Recipient();
         recipient.setEmail(address);
         recipient.setName(params.getFullName());
+        return recipient;
+    }
 
+    private MandrillMessage createMessage(String address, EmailPersonalizationData params, MandrillMessage.Recipient recipient) {
         MandrillMessage message = new MandrillMessage();
         message.setTo(newArrayList(recipient));
         message.setMergeVars(newArrayList(generateVarsBucketFor(address, params)));
+        return message;
+    }
+
+    private void sendMessage(String templateId, MandrillMessage message) throws MandrillApiError, IOException {
         api.messages().sendTemplate(templateId, null, message, true);
     }
 
-    private MergeVarBucket generateVarsBucketFor(String address, EmailParams params) {
+    private MergeVarBucket generateVarsBucketFor(String address, EmailPersonalizationData params) {
         MergeVarBucket bucket = new MergeVarBucket();
         bucket.setRcpt(address);
         bucket.setVars(generateVarsFrom(params));
         return bucket;
     }
 
-    private MergeVar[] generateVarsFrom(EmailParams params) {
+    private MergeVar[] generateVarsFrom(EmailPersonalizationData params) {
         return params.asMap().entrySet().stream()
             .map(entry -> new MergeVar(entry.getKey(), entry.getValue()))
             .toArray(MergeVar[]::new);

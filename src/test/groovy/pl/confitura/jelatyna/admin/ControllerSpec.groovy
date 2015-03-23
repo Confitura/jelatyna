@@ -4,14 +4,13 @@ import groovy.json.JsonBuilder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.MethodArgumentNotValidException
 import pl.confitura.jelatyna.AbstractControllerSpec
-import pl.confitura.jelatyna.common.TokenGenerator
 import pl.confitura.jelatyna.email.EmailService
 import spock.lang.Unroll
 
 class ControllerSpec extends AbstractControllerSpec {
 
     @Autowired
-    private Repository repository;
+    private AdminRepository repository;
     @Autowired
     private TokenGenerator generator;
     private EmailService emailSender = Mock(EmailService);
@@ -60,7 +59,7 @@ class ControllerSpec extends AbstractControllerSpec {
           doPost("/api/admin", json)
 
         then:
-          1 * emailSender.adminCreated({
+          1 * emailSender.notifyAdminAboutCreatedAccount({
               it.firstName == "John"
           })
     }
@@ -113,6 +112,7 @@ class ControllerSpec extends AbstractControllerSpec {
 
     @Override
     def getControllerUnderTest() {
-        return new Controller(repository, generator, emailSender)
+		def adminService = new AdminService(repository, generator, emailSender)
+        return new AdminController(adminService)
     }
 }
