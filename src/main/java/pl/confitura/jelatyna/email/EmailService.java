@@ -1,21 +1,20 @@
 package pl.confitura.jelatyna.email;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.confitura.jelatyna.admin.Admin;
 
+@Slf4j
 @Service
 public class EmailService {
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    public static final String ADMIN_CREATION_TEMPLET_ID = "admin-creation";
 
     @Autowired
-    private Sender sender;
+    private EmailSender emailSender;
 
-    public void adminCreated(Admin admin) {
-        sender.send(admin.getEmail(), "admin-creation",
-            new EmailParams().firstName(admin.getFirstName()).lastName(admin.getLastName()).token(admin.getToken()));
+    public void notifyAdminAboutCreatedAccount(Admin admin) {
+        emailSender.send(admin.getEmail(), ADMIN_CREATION_TEMPLET_ID, EmailPersonalizationData.of(admin));
     }
 }

@@ -17,7 +17,7 @@ class EmailServiceTest extends Specification {
     def "should send email"() {
 
         expect:
-          emailSender.adminCreated(new Admin([email    : "michal.margiel@gmail.com",
+          emailSender.notifyAdminAboutCreatedAccount(new Admin([email    : "michal.margiel@gmail.com",
                                               firstName: "Michal",
                                               lastName : "Margiel",
                                               token    : "abc"]));

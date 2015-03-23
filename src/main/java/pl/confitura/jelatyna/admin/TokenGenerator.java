@@ -1,4 +1,4 @@
-package pl.confitura.jelatyna.common;
+package pl.confitura.jelatyna.admin;
 
 import org.springframework.stereotype.Service;
 
