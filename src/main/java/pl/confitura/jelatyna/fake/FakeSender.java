@@ -1,4 +1,4 @@
-package pl.confitura.jelatyna.demo;
+package pl.confitura.jelatyna.fake;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +9,7 @@ import pl.confitura.jelatyna.email.Sender;
 
 @Service
 @Profile("demo")
-public class DemoSender implements Sender {
+public class FakeSender implements Sender {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
