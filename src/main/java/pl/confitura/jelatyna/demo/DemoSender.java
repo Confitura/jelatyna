@@ -17,8 +17,8 @@ public class DemoSender implements Sender {
     public void send(String address, String templateId, EmailParams params) {
         logger.info("********************************************************************");
         logger.info("Sending template email {} to {} with parameters", templateId, address);
-        params.asMap().entrySet().stream()
-            .forEach(entry -> logger.info("{} = {}", entry.getKey(), entry.getValue()));
+        params.asMap()
+            .forEach((key, value) -> logger.info("{} = {}", key, value));
         logger.info("********************************************************************");
     }
 }

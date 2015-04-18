@@ -14,7 +14,7 @@ class ControllerSpec extends AbstractControllerSpec {
 
         when:
 
-          def participants = doGet("/api/participant")
+          def participants = doGetResponse("/api/participant")
 
         then:
           participants[0].firstName == "michal"

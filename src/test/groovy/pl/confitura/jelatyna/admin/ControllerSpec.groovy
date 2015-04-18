@@ -1,5 +1,4 @@
 package pl.confitura.jelatyna.admin
-
 import groovy.json.JsonBuilder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.MethodArgumentNotValidException
@@ -12,8 +11,10 @@ class ControllerSpec extends AbstractControllerSpec {
 
     @Autowired
     private Repository repository;
+
     @Autowired
     private TokenGenerator generator;
+
     private EmailService emailSender = Mock(EmailService);
 
     @Unroll
@@ -42,13 +43,14 @@ class ControllerSpec extends AbstractControllerSpec {
           doPost("/api/admin", json)
 
         then:
-          def admins = doGet("/api/admin");
+          def admins = doGetResponse("/api/admin");
           with(admins[0]) {
               id != null
-              token != null
-              firstName == "John"
-              lastName == "Smith"
-              email == "john@smith.invalid"
+              roles == ["ADMIN"]
+              person.token != null
+              person.firstName == "John"
+              person.lastName == "Smith"
+              person.email == "john@smith.invalid"
           }
     }
 
@@ -64,49 +66,62 @@ class ControllerSpec extends AbstractControllerSpec {
               it.firstName == "John"
           })
     }
-    
-    def "should get admin by token"(){
+
+    def "should get admin by token"() {
         given:
-          repository.save(new Admin(firstName: "John", lastName: "Smith", email: "john@smith.com", token: "TOKEN"))
+          repository.save(new User(person: new Person(firstName: "John", lastName: "Smith", email: "john@smith.com", token: "TOKEN")))
 
         when:
-          def admin = doGet("/api/admin/create/TOKEN");
-        
+          def admin = doGetResponse("/api/admin/create/TOKEN");
+
         then:
-          with(admin){
-              firstName: "John"
-              lastName: "Smith"
+          with(admin) {
+              person.firstName == "John"
+              person.lastName == "Smith"
           }
-        
+    }
+
+    def "should throw exception if admin doesn't exist for token"() {
+        given:
+          repository.save(new User(person: new Person(firstName: "John", lastName: "Smith", email: "john@smith.com", token: "TOKEN")))
+
+        when:
+          def exception = doGet("/api/admin/create/WRONG_TOKEN").resolvedException;
+
+        then:
+          exception.class == TokenInvalidException.class
     }
 
     def "should update admin"() {
         given:
-          def user = repository.save(new Admin(firstName: "John", lastName: "Smith", email: "john@smith.com"))
+          def user = repository.save(new User(person: new Person(firstName: "John", lastName: "Smith", email: "john@smith.com")))
 
         when:
 
           doPut("/api/admin", admin("Bob", 'Smith', 'bob@smith.com', user.getId()))
 
         then:
-          def admins = doGet("/api/admin");
+          def admins = doGetResponse("/api/admin");
           with(admins[0]) {
-              firstName: "Bob"
-              lastName: "Smith"
-              email: "bob@smith.com"
+              person.firstName == "Bob"
+              person.lastName == "Smith"
+              person.email == "bob@smith.com"
 
           }
     }
 
     private String admin(String firstName, String lastName, String email, Long id = null) {
         def user = [
-            firstName: firstName,
-            lastName : lastName,
-            email    : email
+            person: [
+                firstName: firstName,
+                lastName : lastName,
+                email    : email
 
+            ]
         ]
         if (id != null) {
             user << [id: id]
+            user.person << [id: id]
         }
         return new JsonBuilder(user).toString()
     }

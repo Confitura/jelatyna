@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.SpringApplicationContextLoader
 import org.springframework.test.context.ContextConfiguration
 import pl.confitura.jelatyna.Application
-import pl.confitura.jelatyna.admin.Admin
+import pl.confitura.jelatyna.admin.User
 import spock.lang.Ignore
 import spock.lang.Specification
 
@@ -17,7 +17,7 @@ class EmailServiceTest extends Specification {
     def "should send email"() {
 
         expect:
-          emailSender.adminCreated(new Admin([email    : "michal.margiel@gmail.com",
+          emailSender.adminCreated(new User([email    : "michal.margiel@gmail.com",
                                               firstName: "Michal",
                                               lastName : "Margiel",
                                               token    : "abc"]));

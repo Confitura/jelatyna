@@ -38,8 +38,11 @@ abstract class AbstractControllerSpec extends Specification {
         new JsonSlurper().parseText(response.contentAsString)
     }
 
-    protected Object doGet(String url) {
-        asJson(mockMvc.perform(MockMvcRequestBuilders.get(url)).andReturn().response)
+    protected Object doGetResponse(String url) {
+        asJson(doGet(url).response)
+    }
+    protected MvcResult doGet(String url) {
+        mockMvc.perform(MockMvcRequestBuilders.get(url)).andReturn()
     }
 
     protected MvcResult doPost(String url, String json) {

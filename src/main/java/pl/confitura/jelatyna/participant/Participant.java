@@ -26,13 +26,4 @@ public class Participant {
     @Column(unique = true)
     private String email;
 
-    @Override
-    public String toString() {
-        return "Participant{" +
-            "id=" + id +
-            ", firstName='" + firstName + '\'' +
-            ", lastName='" + lastName + '\'' +
-            ", email='" + email + '\'' +
-            '}';
-    }
 }
