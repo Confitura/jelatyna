@@ -1,9 +1,9 @@
 package pl.confitura.jelatyna.email;
 
-import com.google.common.collect.ImmutableMap;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import com.google.common.collect.ImmutableMap;
 
 public class EmailParams {
 
@@ -24,12 +24,12 @@ public class EmailParams {
         return this;
     }
 
-    public Map<String, String> asMap() {
-        return ImmutableMap.copyOf(params);
-    }
-
     public String getFullName() {
         return params.get("firstName") + " " + params.get("lastName");
+    }
+
+    public Map<String, String> asMap() {
+        return ImmutableMap.copyOf(params);
     }
 
 }

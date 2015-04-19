@@ -1,12 +1,14 @@
-package pl.confitura.jelatyna.admin;
-
-import org.springframework.data.jpa.repository.Query;
+package pl.confitura.jelatyna.user;
 
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.jpa.repository.Query;
+
+import pl.confitura.jelatyna.user.domain.User;
+
 @org.springframework.stereotype.Repository("userRepository")
-public interface Repository extends org.springframework.data.repository.Repository<User, Long> {
+public interface UserRepository extends org.springframework.data.repository.Repository<User, Long> {
 
     User save(User user);
 

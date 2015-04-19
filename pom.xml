@@ -14,7 +14,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.2.2.RELEASE</version>
+		<version>1.2.3.RELEASE</version>
 		<relativePath/>
 		<!-- lookup parent from repository -->
 	</parent>
@@ -36,30 +36,27 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>mysql</groupId>-->
+			<!--<artifactId>mysql-connector-java</artifactId>-->
+			<!--<version>5.1.35</version>-->
+		<!--</dependency>-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.insightfullogic</groupId>
-			<artifactId>lambda-behave</artifactId>
-			<version>${lambda-behave.version}</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<version>${h2.version}</version>
+			<!--<scope>test</scope>-->
 		</dependency>
-
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>${lombok.version}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>com.mandrillapp.wrapper.lutung</groupId>
 			<artifactId>lutung</artifactId>
@@ -136,7 +133,7 @@
 		<lambda-behave.version>0.3</lambda-behave.version>
 		<assertj.version>1.7.0</assertj.version>
 		<h2.version>1.4.182</h2.version>
-		<lombok.version>1.14.8</lombok.version>
+		<lombok.version>1.16.4</lombok.version>
 		<spock.version>1.0-groovy-2.4</spock.version>
 		<groovy.version>2.4.1</groovy.version>
 	</properties>

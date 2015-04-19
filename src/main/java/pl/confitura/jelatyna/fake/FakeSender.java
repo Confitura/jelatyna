@@ -1,24 +1,23 @@
 package pl.confitura.jelatyna.fake;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
+
+import lombok.extern.slf4j.Slf4j;
 import pl.confitura.jelatyna.email.EmailParams;
-import pl.confitura.jelatyna.email.Sender;
+import pl.confitura.jelatyna.email.EmailSender;
 
 @Service
-@Profile("demo")
-public class FakeSender implements Sender {
-
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+@Profile("fake")
+@Slf4j
+public class FakeSender implements EmailSender {
 
     @Override
     public void send(String address, String templateId, EmailParams params) {
-        logger.info("********************************************************************");
-        logger.info("Sending template email {} to {} with parameters", templateId, address);
+        log.info("********************************************************************");
+        log.info("Sending template email {} to {} with parameters", templateId, address);
         params.asMap()
-            .forEach((key, value) -> logger.info("{} = {}", key, value));
-        logger.info("********************************************************************");
+                .forEach((key, value) -> log.info("{} = {}", key, value));
+        log.info("********************************************************************");
     }
 }

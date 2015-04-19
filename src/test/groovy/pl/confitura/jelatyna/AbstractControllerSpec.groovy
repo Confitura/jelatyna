@@ -1,5 +1,6 @@
 package pl.confitura.jelatyna
 
+import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.SpringApplicationContextLoader
@@ -36,6 +37,9 @@ abstract class AbstractControllerSpec extends Specification {
 
     def asJson(MockHttpServletResponse response) {
         new JsonSlurper().parseText(response.contentAsString)
+    }
+    def asJson(Object content) {
+        new JsonBuilder(content).toString()
     }
 
     protected Object doGetResponse(String url) {

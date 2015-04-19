@@ -1,6 +1,6 @@
 package pl.confitura.jelatyna.email;
 
-public interface Sender {
+public interface EmailSender {
 
     void send(String address, String templateId, EmailParams params);
 }

@@ -1,8 +1,7 @@
-package pl.confitura.jelatyna.admin;
+package pl.confitura.jelatyna.user.domain;
 
-import lombok.Data;
-import lombok.experimental.Accessors;
-
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -11,8 +10,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 @Entity
 @Data
@@ -30,13 +32,17 @@ public class User {
     @ElementCollection
     private List<Role> roles = new ArrayList<>();
 
+    @JsonIgnore
+    private String password;
 
     public User token(String token) {
         this.person.setToken(token);
         return this;
     }
 
-    public void addRole(Role role) {
+    public User addRole(Role role) {
         roles.add(role);
+        return this;
     }
+
 }

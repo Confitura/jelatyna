@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.SpringApplicationContextLoader
 import org.springframework.test.context.ContextConfiguration
 import pl.confitura.jelatyna.Application
-import pl.confitura.jelatyna.admin.User
+import pl.confitura.jelatyna.user.domain.User
 import spock.lang.Ignore
 import spock.lang.Specification
 
