@@ -51,8 +51,4 @@ public class AdminController {
         return HttpStatus.CREATED;
     }
 
-    @RequestMapping(method = PUT)
-    public void update(@Valid @RequestBody User user) {
-        repository.save(user);
-    }
 }
