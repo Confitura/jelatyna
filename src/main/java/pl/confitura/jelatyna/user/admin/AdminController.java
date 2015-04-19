@@ -8,17 +8,15 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import pl.confitura.jelatyna.email.EmailService;
-import pl.confitura.jelatyna.user.domain.Person;
 import pl.confitura.jelatyna.user.TokenGenerator;
-import pl.confitura.jelatyna.user.TokenInvalidException;
-import pl.confitura.jelatyna.user.domain.User;
 import pl.confitura.jelatyna.user.UserRepository;
+import pl.confitura.jelatyna.user.domain.Person;
+import pl.confitura.jelatyna.user.domain.User;
 
 @RestController("adminController")
 @RequestMapping("/api/admin")
@@ -40,11 +38,6 @@ public class AdminController {
     @RequestMapping
     public List<User> all() {
         return repository.findAll();
-    }
-
-    @RequestMapping(value = "/password/{token}")
-    public User getBy(@PathVariable String token) {
-        return repository.findByToken(token).orElseThrow(TokenInvalidException::new);
     }
 
     @RequestMapping(method = POST)
