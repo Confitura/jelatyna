@@ -1,4 +1,5 @@
 package pl.confitura.jelatyna.user.password
+
 import org.springframework.beans.factory.annotation.Autowired
 import pl.confitura.jelatyna.AbstractControllerSpec
 import pl.confitura.jelatyna.user.TokenGenerator
@@ -32,7 +33,7 @@ class PasswordControllerSpec extends AbstractControllerSpec {
         }
     }
 
-    def "should throw exception if admin doesn't exist for token"() {
+    def "should throw exception if user doesn't exist for token"() {
         given:
         def user = aUser { token "123" }
         repository.save(user)
