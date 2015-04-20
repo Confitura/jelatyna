@@ -14,12 +14,15 @@ public class Participant {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     private String firstName;
     private String lastName;
 
     @Column(unique = true)
     private String email;
+
+    @OneToOne(mappedBy = "participant")
+    private User user;
 
 }
