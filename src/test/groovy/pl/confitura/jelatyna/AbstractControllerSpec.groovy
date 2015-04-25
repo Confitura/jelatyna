@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.SpringApplicationContextLoader
 import org.springframework.http.MediaType
 import org.springframework.mock.web.MockHttpServletResponse
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.transaction.TransactionConfiguration
 import org.springframework.test.context.web.WebAppConfiguration
@@ -14,9 +16,13 @@ import org.springframework.test.web.servlet.MvcResult
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.context.WebApplicationContext
+import pl.confitura.jelatyna.user.domain.Person
+import pl.confitura.jelatyna.user.domain.Role
+import pl.confitura.jelatyna.user.domain.User
 import spock.lang.Specification
 
 import javax.transaction.Transactional
+import java.security.Principal
 
 @ContextConfiguration(loader = SpringApplicationContextLoader.class, classes = Application.class)
 @WebAppConfiguration
@@ -63,6 +69,18 @@ abstract class AbstractControllerSpec extends Specification {
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON))
             .andReturn()
+    }
+
+    Principal logInAsAdmin() { return logInAs("admin@admin.pl", [UserPermission.ADMIN]) }
+
+    Principal logInAsAnonymous() { return logInAs("", []) }
+
+    def logInAs(String email, List<Role> permissions) {
+        def person = new Person(email: email)
+        def user = new User(person: person)
+        def principal = new UsernamePasswordAuthenticationToken(user, "admin", permissions)
+        SecurityContextHolder.getContext().setAuthentication(principal);
+        return principal
     }
 
     abstract getControllerUnderTest();

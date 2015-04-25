@@ -6,6 +6,7 @@ import pl.confitura.jelatyna.AbstractControllerSpec
 import pl.confitura.jelatyna.user.TokenGenerator
 import pl.confitura.jelatyna.email.EmailService
 import pl.confitura.jelatyna.user.UserRepository
+import pl.confitura.jelatyna.user.domain.Role
 import spock.lang.Unroll
 
 class AdminControllerSpec extends AbstractControllerSpec {
@@ -44,10 +45,10 @@ class AdminControllerSpec extends AbstractControllerSpec {
         doPost("/api/admin", json)
 
         then:
-        def admins = doGetResponse("/api/admin");
-        with(admins[0]) {
+        def admin = repository.findByEmail('john@smith.invalid');
+        with(admin.get()) {
             id != null
-            roles == ["ADMIN"]
+            roles == [Role.ADMIN]
             person.token != null
             person.firstName == "John"
             person.lastName == "Smith"
@@ -57,7 +58,7 @@ class AdminControllerSpec extends AbstractControllerSpec {
 
     def "should send email to created admin"() {
         given:
-        def json = person('John', 'Smith', 'john@smith.com')
+        def json = person('John', 'Smith', 'john@smith.invalid')
 
         when:
         doPost("/api/admin", json)

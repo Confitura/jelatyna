@@ -1,6 +1,7 @@
 package pl.confitura.jelatyna.user.password
 
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import pl.confitura.jelatyna.AbstractControllerSpec
 import pl.confitura.jelatyna.user.TokenGenerator
 import pl.confitura.jelatyna.user.TokenInvalidException
@@ -29,7 +30,7 @@ class PasswordControllerSpec extends AbstractControllerSpec {
 
         then:
         with(repository.findByToken("123").get()) {
-            password == generator.encrypt("new_password")
+            new BCryptPasswordEncoder().matches("new_password", password)
         }
     }
 
@@ -47,6 +48,6 @@ class PasswordControllerSpec extends AbstractControllerSpec {
 
     @Override
     def getControllerUnderTest() {
-        return new PasswordController(repository, generator)
+        return new PasswordController(repository)
     }
 }

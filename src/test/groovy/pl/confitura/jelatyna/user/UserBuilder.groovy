@@ -4,7 +4,7 @@ import pl.confitura.jelatyna.user.domain.Person
 import pl.confitura.jelatyna.user.domain.User
 
 class UserBuilder {
-    def person = new Person(firstName: "John", lastName: "Smith", email: "john@smith.com")
+    def person = new Person(firstName: "John", lastName: "Smith", email: "john@smith.invalid")
 
     def token = null
 

@@ -17,4 +17,6 @@ public interface UserRepository extends org.springframework.data.repository.Repo
     @Query("FROM User WHERE person.token = ?1")
     Optional<User> findByToken(String token);
 
+    @Query("FROM User WHERE person.email = ?1")
+    Optional<User> findByEmail(String email);
 }

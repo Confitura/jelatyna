@@ -1,29 +1,42 @@
 package pl.confitura.jelatyna;
 
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.RestController;
+
+import pl.confitura.jelatyna.user.UserRepository;
+import pl.confitura.jelatyna.user.domain.Person;
+import pl.confitura.jelatyna.user.domain.Role;
+import pl.confitura.jelatyna.user.domain.User;
 
 @SpringBootApplication
+@RestController
 public class Application {
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
 
-    @Configuration
-    @EnableWebSecurity
-    static class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    @Bean
+    @Transactional
+    InitializingBean init(UserRepository repository) {
+        return () -> {
+            repository.save(
+                    new User()
+                            .addRole(Role.ADMIN)
+                            .setPassword(new BCryptPasswordEncoder().encode("password"))
+                            .setPerson(
+                                    new Person()
+                                            .setFirstName("John")
+                                            .setLastName("Smith")
+                                            .setEmail("john@smith.com")
 
-        @Override
-        protected void configure(HttpSecurity http) throws Exception {
-            //TODO: any easy way to have csrf enabled and share tokens with client library?
-            http.csrf().disable().anonymous();
-        }
-
-
+                            ));
+        };
     }
 }

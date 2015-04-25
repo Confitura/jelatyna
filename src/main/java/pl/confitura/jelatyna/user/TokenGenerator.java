@@ -14,7 +14,4 @@ public class TokenGenerator {
         return new BigInteger(130, random).toString(32);
     }
 
-    public String encrypt(String password) {
-         return "encrypted" + password;
-    }
 }
