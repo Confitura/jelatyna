@@ -3,7 +3,7 @@ package pl.confitura.jelatyna.email;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.google.common.collect.ImmutableMap;
+import static java.util.Collections.unmodifiableMap;
 
 public class EmailParams {
 
@@ -29,7 +29,7 @@ public class EmailParams {
     }
 
     public Map<String, String> asMap() {
-        return ImmutableMap.copyOf(params);
+        return unmodifiableMap(params);
     }
 
 }

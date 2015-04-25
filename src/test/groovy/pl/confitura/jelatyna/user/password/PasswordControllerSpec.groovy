@@ -24,12 +24,14 @@ class PasswordControllerSpec extends AbstractControllerSpec {
         }
         repository.save(user);
 
+          def new_password = "new_password"
+
         when:
-        doPost("/api/password", asJson([token: "123", value: "new_password"]));
+        doPost("/api/password", asJson([token: "123", value: new_password]));
 
         then:
         with(repository.findByToken("123").get()) {
-            password == generator.encrypt("new_password")
+            generator.matches(new_password, password)
         }
     }
 

@@ -45,7 +45,7 @@ class AdminControllerSpec extends AbstractControllerSpec {
 
         then:
         def admins = doGetResponse("/api/admin");
-        with(admins[0]) {
+        with(admins.find {it.person.email == "john@smith.invalid"}) {
             id != null
             roles == ["ADMIN"]
             person.token != null
@@ -83,6 +83,6 @@ class AdminControllerSpec extends AbstractControllerSpec {
 
     @Override
     def getControllerUnderTest() {
-        return new AdminController(repository, generator, emailSender)
+        return new AdminController(repository, new AdminService(repository, generator, emailSender))
     }
 }
