@@ -1,19 +1,19 @@
 package pl.confitura.jelatyna.email;
 
-import static com.google.common.collect.Lists.*;
-
-import java.io.IOException;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Service;
 
 import com.microtripit.mandrillapp.lutung.MandrillApi;
 import com.microtripit.mandrillapp.lutung.model.MandrillApiError;
 import com.microtripit.mandrillapp.lutung.view.MandrillMessage;
 import com.microtripit.mandrillapp.lutung.view.MandrillMessage.MergeVar;
 import com.microtripit.mandrillapp.lutung.view.MandrillMessage.MergeVarBucket;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+
+import static java.util.Collections.singletonList;
 
 @Service
 @Profile("default")
@@ -42,8 +42,8 @@ public class MandrilSender implements EmailSender {
         recipient.setName(params.getFullName());
 
         MandrillMessage message = new MandrillMessage();
-        message.setTo(newArrayList(recipient));
-        message.setMergeVars(newArrayList(generateVarsBucketFor(address, params)));
+        message.setTo(singletonList(recipient));
+        message.setMergeVars(singletonList(generateVarsBucketFor(address, params)));
         api.messages().sendTemplate(templateId, null, message, true);
     }
 
