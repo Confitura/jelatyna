@@ -1,7 +1,5 @@
 package pl.confitura.jelatyna;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,12 +12,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.client.RestTemplate;
 
+import static org.junit.Assert.assertEquals;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @IntegrationTest({
-        "server.port:0",
-        "spring.profiles.active=fake"
+    "server.port:0",
+    "spring.profiles.active=fake"
 })
 public class ApplicationTests {
 
@@ -32,7 +32,7 @@ public class ApplicationTests {
     public void loginSucceeds() {
         RestTemplate template = new TestRestTemplate("john@smith.com", "password");
         ResponseEntity<String> response = template.getForEntity("http://localhost:" + port
-                + "/user", String.class);
+            + "/api/user", String.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 

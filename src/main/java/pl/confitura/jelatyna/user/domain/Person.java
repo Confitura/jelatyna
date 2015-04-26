@@ -1,16 +1,15 @@
 package pl.confitura.jelatyna.user.domain;
 
+import lombok.Data;
+import lombok.experimental.Accessors;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotEmpty;
-
-import lombok.Data;
-import lombok.experimental.Accessors;
 
 @Entity
 @Data
@@ -34,5 +33,10 @@ public class Person {
     @Column(unique = true)
     private String email;
 
+    public void copyFrom(Person person) {
+        email = person.email;
+        firstName = person.firstName;
+        lastName = person.lastName;
 
+    }
 }

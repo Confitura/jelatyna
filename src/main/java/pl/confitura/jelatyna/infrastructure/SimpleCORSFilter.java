@@ -1,9 +1,7 @@
 package pl.confitura.jelatyna.infrastructure;
 
-import static javax.servlet.http.HttpServletResponse.SC_OK;
-import static org.springframework.web.bind.annotation.RequestMethod.*;
+import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -12,8 +10,10 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
-import org.springframework.stereotype.Component;
+import static javax.servlet.http.HttpServletResponse.SC_OK;
+import static org.springframework.web.bind.annotation.RequestMethod.OPTIONS;
 
 @Component
 public class SimpleCORSFilter implements Filter {
@@ -24,8 +24,8 @@ public class SimpleCORSFilter implements Filter {
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Cache-Control, Pragma, Origin, Authorization, Content-Type, X-Requested-With," +
-                " x-xsrf-token");
-        if (OPTIONS.name().equals(((HttpServletRequest) req).getMethod())){
+            " x-xsrf-token");
+        if (OPTIONS.name().equals(((HttpServletRequest) req).getMethod())) {
             ((HttpServletResponse) res).setStatus(SC_OK);
             return;
         }

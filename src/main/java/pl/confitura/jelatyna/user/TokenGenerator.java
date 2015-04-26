@@ -1,9 +1,9 @@
 package pl.confitura.jelatyna.user;
 
+import org.springframework.stereotype.Service;
+
 import java.math.BigInteger;
 import java.security.SecureRandom;
-
-import org.springframework.stereotype.Service;
 
 @Service
 public class TokenGenerator {

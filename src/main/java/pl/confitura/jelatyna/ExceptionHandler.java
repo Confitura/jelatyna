@@ -1,12 +1,13 @@
 package pl.confitura.jelatyna;
 
-import static org.springframework.http.HttpStatus.*;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.SERVICE_UNAVAILABLE;
 
 @ControllerAdvice
 public class ExceptionHandler {
@@ -19,6 +20,7 @@ public class ExceptionHandler {
     }
 
     private static class Error {
+
         private String message;
         private int httpStatus = SERVICE_UNAVAILABLE.value();
 

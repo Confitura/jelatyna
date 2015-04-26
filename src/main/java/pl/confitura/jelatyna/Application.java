@@ -1,21 +1,18 @@
 package pl.confitura.jelatyna;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.RestController;
-
 import pl.confitura.jelatyna.user.UserRepository;
+import pl.confitura.jelatyna.user.domain.Authority;
 import pl.confitura.jelatyna.user.domain.Person;
-import pl.confitura.jelatyna.user.domain.Role;
 import pl.confitura.jelatyna.user.domain.User;
 
+import javax.transaction.Transactional;
+
 @SpringBootApplication
-@RestController
 public class Application {
 
     public static void main(String[] args) {
@@ -25,18 +22,16 @@ public class Application {
     @Bean
     @Transactional
     InitializingBean init(UserRepository repository) {
-        return () -> {
-            repository.save(
-                    new User()
-                            .addRole(Role.ADMIN)
-                            .setPassword(new BCryptPasswordEncoder().encode("password"))
-                            .setPerson(
-                                    new Person()
-                                            .setFirstName("John")
-                                            .setLastName("Smith")
-                                            .setEmail("john@smith.com")
+        return () -> repository.save(
+            new User()
+                .addAuthority(Authority.ADMIN)
+                .setPassword(new BCryptPasswordEncoder().encode("password"))
+                .setPerson(
+                    new Person()
+                        .setFirstName("John")
+                        .setLastName("Smith")
+                        .setEmail("john@smith.com")
 
-                            ));
-        };
+                ));
     }
 }

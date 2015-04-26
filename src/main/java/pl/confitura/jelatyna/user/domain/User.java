@@ -1,8 +1,11 @@
 package pl.confitura.jelatyna.user.domain;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+import lombok.experimental.Accessors;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -10,21 +13,17 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 import javax.validation.Valid;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import lombok.Data;
-import lombok.experimental.Accessors;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Data
 @Accessors(chain = true)
-public class User implements UserDetails{
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -35,24 +34,32 @@ public class User implements UserDetails{
     private Person person;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    private List<Role> roles = new ArrayList<>();
+    private List<Authority> authorities = new ArrayList<>();
+
+    private String twitter;
+
+    private String code;
+
+    @Lob
+    private String bio;
 
     @JsonIgnore
     private String password;
+
 
     public User token(String token) {
         this.person.setToken(token);
         return this;
     }
 
-    public User addRole(Role role) {
-        roles.add(role);
+    public User addAuthority(Authority authority) {
+        authorities.add(authority);
         return this;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles;
+        return authorities;
     }
 
     @Override
@@ -78,5 +85,12 @@ public class User implements UserDetails{
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public void copyFrom(User user) {
+        person.copyFrom(user.getPerson());
+        twitter = user.twitter;
+        code = user.code;
+        bio = user.bio;
     }
 }

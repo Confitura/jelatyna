@@ -20,30 +20,30 @@ class PasswordControllerSpec extends AbstractControllerSpec {
 
     def "should update password for a user by token"() {
         given:
-        def user = aUser {
-            token "123"
-        }
-        repository.save(user);
+          def user = aUser {
+              token "123"
+          }
+          repository.save(user);
 
         when:
-        doPost("/api/password", asJson([token: "123", value: "new_password"]));
+          doPost("/api/password", asJson([token: "123", value: "new_password"]));
 
         then:
-        with(repository.findByToken("123").get()) {
-            new BCryptPasswordEncoder().matches("new_password", password)
-        }
+          with(repository.findByToken("123").get()) {
+              new BCryptPasswordEncoder().matches("new_password", password)
+          }
     }
 
     def "should throw exception if user doesn't exist for token"() {
         given:
-        def user = aUser { token "123" }
-        repository.save(user)
+          def user = aUser { token "123" }
+          repository.save(user)
 
         when:
-        def exception = doPost("/api/password", asJson([token: "WRONG_TOKEN", value: "new_password"])).resolvedException
+          def exception = doPost("/api/password", asJson([token: "WRONG_TOKEN", value: "new_password"])).resolvedException
 
         then:
-        exception.class == TokenInvalidException.class
+          exception.class == TokenInvalidException.class
     }
 
     @Override

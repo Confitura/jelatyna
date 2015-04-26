@@ -18,9 +18,9 @@ class EmailServiceTest extends Specification {
 
         expect:
           emailSender.adminCreated(new User([email    : "michal.margiel@gmail.com",
-                                              firstName: "Michal",
-                                              lastName : "Margiel",
-                                              token    : "abc"]));
+                                             firstName: "Michal",
+                                             lastName : "Margiel",
+                                             token    : "abc"]));
 
     }
 }

@@ -2,7 +2,7 @@ package pl.confitura.jelatyna.user.domain;
 
 import org.springframework.security.core.GrantedAuthority;
 
-public enum Role implements GrantedAuthority {
+public enum Authority implements GrantedAuthority {
     ADMIN;
 
     @Override

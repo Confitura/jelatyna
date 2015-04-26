@@ -1,9 +1,8 @@
 package pl.confitura.jelatyna.fake;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
-
-import lombok.extern.slf4j.Slf4j;
 import pl.confitura.jelatyna.email.EmailParams;
 import pl.confitura.jelatyna.email.EmailSender;
 
@@ -17,7 +16,7 @@ public class FakeSender implements EmailSender {
         log.info("********************************************************************");
         log.info("Sending template email {} to {} with parameters", templateId, address);
         params.asMap()
-                .forEach((key, value) -> log.info("{} = {}", key, value));
+            .forEach((key, value) -> log.info("{} = {}", key, value));
         log.info("********************************************************************");
     }
 }
