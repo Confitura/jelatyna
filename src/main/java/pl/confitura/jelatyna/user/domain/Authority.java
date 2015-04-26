@@ -1,15 +1,12 @@
-package pl.confitura.jelatyna.domain;
-
+package pl.confitura.jelatyna.user.domain;
 
 import org.springframework.security.core.GrantedAuthority;
 
-public enum UserPermission implements GrantedAuthority{
-    ADMIN,
-    BASIC;
+public enum Authority implements GrantedAuthority {
+    ADMIN;
 
     @Override
     public String getAuthority() {
         return name();
     }
-
 }
