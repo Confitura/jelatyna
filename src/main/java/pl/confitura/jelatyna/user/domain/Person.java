@@ -5,11 +5,16 @@ import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import java.time.LocalDateTime;
+
+import static java.util.Optional.ofNullable;
 
 @Entity
 @Data
@@ -28,6 +33,9 @@ public class Person {
 
     private String token;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private Registration registration;
+
     @Email
     @NotEmpty
     @Column(unique = true)
@@ -37,6 +45,18 @@ public class Person {
         email = person.email;
         firstName = person.firstName;
         lastName = person.lastName;
+    }
 
+    public void arrived() {
+        registration.setArrivalDate(LocalDateTime.now());
+    }
+
+    public boolean isArrived() {
+        return ofNullable(registration)
+            .orElse(new Registration()).getArrivalDate() != null;
+    }
+
+    public void reject() {
+        registration.setArrivalDate(null);
     }
 }

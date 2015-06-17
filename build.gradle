@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '1.2.3.RELEASE'
+        springBootVersion = '1.2.4.RELEASE'
     }
     repositories {
         mavenCentral()
@@ -48,6 +48,8 @@ dependencies {
     compile("com.mandrillapp.wrapper.lutung:lutung:${mandrilVersion}")
     compile("org.codehaus.groovy:groovy-all:${groovyVersion}")
     compile("com.h2database:h2:${h2Version}")
+    compile("com.h2database:h2:${h2Version}")
+    compile ("net.glxn.qrgen:javase:2.0")
     testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile("org.spockframework:spock-core:${spockVersion}")
     testCompile("org.spockframework:spock-spring:${spockVersion}")
