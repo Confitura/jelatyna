@@ -23,10 +23,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
 
-    @RequestMapping(value = "/api/user")
-    public Principal user(Principal user) {
-        return user;
-    }
+
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -35,7 +32,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.httpBasic().and().authorizeRequests()
+        http.httpBasic()
+            .and().authorizeRequests()
+            .antMatchers("/api/password").permitAll()
             .anyRequest().authenticated()
             .and().logout()
             .logoutUrl("/api/logout")

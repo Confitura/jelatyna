@@ -12,6 +12,7 @@ import pl.confitura.jelatyna.user.UserRepository;
 import pl.confitura.jelatyna.user.domain.User;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/password")
@@ -28,7 +29,7 @@ public class PasswordController {
 
     @RequestMapping(method = RequestMethod.POST)
     @Transactional
-    public void reset(@RequestBody PasswordRequest passwordRequest) {
+    public void reset(@RequestBody @Valid PasswordRequest passwordRequest) {
         User user = repository.findByToken(passwordRequest.getToken()).orElseThrow(TokenInvalidException::new);
         user.setPassword(encoder.encode(passwordRequest.getValue()));
     }

@@ -1,27 +1,27 @@
-package pl.confitura.jelatyna.user.admin;
+package pl.confitura.jelatyna.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.confitura.jelatyna.email.EmailService;
-import pl.confitura.jelatyna.user.TokenGenerator;
-import pl.confitura.jelatyna.user.UserRepository;
-import pl.confitura.jelatyna.user.domain.Person;
 import pl.confitura.jelatyna.user.domain.User;
+import pl.confitura.jelatyna.user.dto.UserDto;
+import pl.confitura.jelatyna.user.dto.NewUser;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
-import java.util.List;
+import java.security.Principal;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
-import static pl.confitura.jelatyna.user.domain.Authority.ADMIN;
 
-@RestController("adminController")
-@RequestMapping("/api/admin")
-public class AdminController {
+@RestController("userController")
+@RequestMapping("/api/user")
+public class UserController {
 
     private UserRepository repository;
 
@@ -30,24 +30,23 @@ public class AdminController {
     private EmailService sender;
 
     @Autowired
-    public AdminController(UserRepository repository, TokenGenerator tokenGenerator, EmailService sender) {
+    public UserController(UserRepository repository, TokenGenerator tokenGenerator, EmailService sender) {
         this.repository = repository;
         this.tokenGenerator = tokenGenerator;
         this.sender = sender;
     }
 
     @RequestMapping
-    public List<User> all() {
-        return repository.findAll();
+    public UserDto user(Principal principal) {
+        User user = (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+        return UserDto.copyFrom(user);
     }
 
     @RequestMapping(method = POST)
+    @PreAuthorize("hasRole('ADMIN')")
     @Transactional
-    public HttpStatus create(@Valid @RequestBody Person person) {
-        User user = new User()
-            .setPerson(person)
-            .addAuthority(ADMIN)
-            .token(tokenGenerator.generate());
+    public HttpStatus create(@Valid @RequestBody NewUser newUser) {
+        User user = newUser.asUser().token(tokenGenerator.generate());
         repository.save(user);
         sender.adminCreated(user.getPerson());
         return HttpStatus.CREATED;
@@ -55,9 +54,9 @@ public class AdminController {
 
     @RequestMapping(method = PUT)
     @Transactional
-    public void update(@Valid @RequestBody User user) {
+    public void update(@Valid @RequestBody UserDto user) {
         repository.findOne(user.getId())
-            .ifPresent(stored -> stored.copyFrom(user));
+            .ifPresent(user::copyTo);
     }
 
 }

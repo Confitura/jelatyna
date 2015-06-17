@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.MethodArgumentNotValidException
 import pl.confitura.jelatyna.AbstractControllerSpec
 import pl.confitura.jelatyna.email.EmailService
+import pl.confitura.jelatyna.user.UserController
 import pl.confitura.jelatyna.user.TokenGenerator
 import pl.confitura.jelatyna.user.UserBuilder
 import pl.confitura.jelatyna.user.UserRepository
@@ -126,6 +127,6 @@ class AdminControllerSpec extends AbstractControllerSpec {
 
     @Override
     def getControllerUnderTest() {
-        return new AdminController(repository, generator, emailSender)
+        return new UserController(repository, generator, emailSender)
     }
 }

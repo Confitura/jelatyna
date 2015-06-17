@@ -18,7 +18,6 @@ import static com.google.common.collect.Lists.newArrayList;
 @Profile("default")
 public class MandrilSender implements EmailSender {
 
-
     private MandrillApi api;
 
     @Autowired
@@ -36,14 +35,17 @@ public class MandrilSender implements EmailSender {
     }
 
     private void doSend(String address, String templateId, EmailParams params) throws MandrillApiError, IOException {
+        MandrillMessage message = new MandrillMessage();
+        message.setTo(newArrayList(getRecipient(address, params)));
+        message.setMergeVars(newArrayList(generateVarsBucketFor(address, params)));
+        api.messages().sendTemplate(templateId, null, message, true);
+    }
+
+    private MandrillMessage.Recipient getRecipient(String address, EmailParams params) {
         MandrillMessage.Recipient recipient = new MandrillMessage.Recipient();
         recipient.setEmail(address);
         recipient.setName(params.getFullName());
-
-        MandrillMessage message = new MandrillMessage();
-        message.setTo(newArrayList(recipient));
-        message.setMergeVars(newArrayList(generateVarsBucketFor(address, params)));
-        api.messages().sendTemplate(templateId, null, message, true);
+        return recipient;
     }
 
     private MergeVarBucket generateVarsBucketFor(String address, EmailParams params) {

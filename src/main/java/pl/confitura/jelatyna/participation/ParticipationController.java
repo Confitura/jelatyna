@@ -2,6 +2,7 @@ package pl.confitura.jelatyna.participation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/participation")
+@PreAuthorize("hasRole('ADMIN', 'VOLUNTEER')")
 public class ParticipationController {
 
     private PersonRepository repository;
