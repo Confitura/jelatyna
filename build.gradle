@@ -17,10 +17,10 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
 apply plugin: 'io.spring.dependency-management'
-
+project.version = '0.0.1-SNAPSHOT'
 jar {
     baseName = 'jelatyna'
-    version = '0.0.1-SNAPSHOT'
+    version = null
 }
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
