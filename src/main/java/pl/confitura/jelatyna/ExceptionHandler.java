@@ -5,6 +5,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+import java.util.NoSuchElementException;
 
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.SERVICE_UNAVAILABLE;
@@ -17,6 +20,11 @@ public class ExceptionHandler {
     @ResponseBody
     public ResponseEntity<Error> accessDeniedException(Exception ex) {
         return Error.create(ex, FORBIDDEN).buildResponse();
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    private void handleNotFoundException(NoSuchElementException ex) {
     }
 
     private static class Error {

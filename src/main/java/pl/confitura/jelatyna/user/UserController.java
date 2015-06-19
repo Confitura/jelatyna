@@ -3,18 +3,17 @@ package pl.confitura.jelatyna.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.confitura.jelatyna.email.EmailService;
 import pl.confitura.jelatyna.user.domain.User;
-import pl.confitura.jelatyna.user.dto.UserDto;
 import pl.confitura.jelatyna.user.dto.NewUser;
+import pl.confitura.jelatyna.user.dto.UserDto;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
-import java.security.Principal;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
@@ -36,9 +35,9 @@ public class UserController {
         this.sender = sender;
     }
 
-    @RequestMapping
-    public UserDto user(Principal principal) {
-        User user = (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+    @RequestMapping(value = "/login")
+    public UserDto user(Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
         return UserDto.copyFrom(user);
     }
 

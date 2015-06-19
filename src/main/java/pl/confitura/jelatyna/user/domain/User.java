@@ -93,4 +93,8 @@ public class User implements UserDetails {
         code = user.code;
         bio = user.bio;
     }
+
+    public void resetToken() {
+        person.setToken(null);
+    }
 }

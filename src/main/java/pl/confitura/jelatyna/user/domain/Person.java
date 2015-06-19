@@ -59,4 +59,6 @@ public class Person {
     public void reject() {
         registration.setArrivalDate(null);
     }
+
+
 }

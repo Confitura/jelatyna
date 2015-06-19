@@ -13,7 +13,7 @@ public class QrCodeTest {
 
     @Test
     public void name() throws IOException {
-        byte[] bytes = QRCode.from("123").to(ImageType.PNG).withSize(250,250).stream().toByteArray();
+        byte[] bytes = QRCode.from("zoqxIVPsL0da0XYobEWjrXi4qtwG5jZnzfsDVntkc0Xagbz2VMLwzPdgvYZsCk").to(ImageType.PNG).withSize(250,250).stream().toByteArray();
         Path path = Paths.get("/users/margielm/jelatyna/qrcode.png");
         Files.write(path, bytes);
 

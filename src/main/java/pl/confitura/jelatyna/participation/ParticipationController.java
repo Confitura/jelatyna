@@ -3,21 +3,19 @@ package pl.confitura.jelatyna.participation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import pl.confitura.jelatyna.user.PersonRepository;
 import pl.confitura.jelatyna.user.domain.Person;
 
 import javax.transaction.Transactional;
-import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/participation")
-@PreAuthorize("hasRole('ADMIN', 'VOLUNTEER')")
+@PreAuthorize("hasAnyRole('ADMIN, VOLUNTEER')")
+
 public class ParticipationController {
 
     private PersonRepository repository;
@@ -47,10 +45,6 @@ public class ParticipationController {
         return HttpStatus.OK;
     }
 
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    private void handleNotFoundException(NoSuchElementException ex) {
-    }
 
     private Person getPersonBy(@PathVariable String token) {
         return repository.findByToken(token).get();
