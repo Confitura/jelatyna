@@ -7,7 +7,7 @@ import pl.confitura.jelatyna.email.EmailParams;
 import pl.confitura.jelatyna.email.EmailSender;
 
 @Service
-@Profile("fake")
+@Profile({"fake", "test"})
 @Slf4j
 public class FakeSender implements EmailSender {
 

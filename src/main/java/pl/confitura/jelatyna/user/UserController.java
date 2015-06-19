@@ -2,7 +2,6 @@ package pl.confitura.jelatyna.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,7 +41,7 @@ public class UserController {
     }
 
     @RequestMapping(method = POST)
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     public HttpStatus create(@Valid @RequestBody NewUser newUser) {
         User user = newUser.asUser().token(tokenGenerator.generate());

@@ -1,5 +1,6 @@
 package pl.confitura.jelatyna.infrastructure;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.Filter;
@@ -17,10 +18,12 @@ import static org.springframework.web.bind.annotation.RequestMethod.OPTIONS;
 
 @Component
 public class SimpleCORSFilter implements Filter {
+    @Value("${gui.host}")
+    private String guiHost;
 
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         HttpServletResponse response = (HttpServletResponse) res;
-        response.setHeader("Access-Control-Allow-Origin", "http://192.168.0.14:9090");
+        response.setHeader("Access-Control-Allow-Origin", guiHost);
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Cache-Control, Pragma, Origin, Authorization, Content-Type, X-Requested-With," +

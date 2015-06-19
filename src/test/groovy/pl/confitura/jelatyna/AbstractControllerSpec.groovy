@@ -29,7 +29,7 @@ import java.security.Principal
 @WebAppConfiguration
 @Transactional
 @TransactionConfiguration(defaultRollback = true)
-@ActiveProfiles("fake")
+@ActiveProfiles("test")
 abstract class AbstractControllerSpec extends Specification {
 
     MockMvc mockMvc

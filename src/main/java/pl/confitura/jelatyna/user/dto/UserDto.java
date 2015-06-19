@@ -11,12 +11,9 @@ import java.util.List;
 
 @Data
 @Accessors(chain = true)
-public class UserDto {
+public class UserDto extends PersonDto {
 
     private Long id;
-    private String firstName;
-    private String lastName;
-    private String email;
     private String bio;
     private String twitter;
     private String code;

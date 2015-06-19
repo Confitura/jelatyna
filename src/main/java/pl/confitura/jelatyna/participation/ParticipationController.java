@@ -1,7 +1,6 @@
 package pl.confitura.jelatyna.participation;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +10,7 @@ import pl.confitura.jelatyna.user.PersonRepository;
 import pl.confitura.jelatyna.user.domain.Person;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/participation")
@@ -25,24 +25,26 @@ public class ParticipationController {
         this.repository = repository;
     }
 
-    @RequestMapping("/{token}")
+    @RequestMapping("/{text:.+}")
+    public List<Person> findAll(@PathVariable String text) {
+        return repository.find(text);
+    }
+    @RequestMapping("/token/{token}")
     public Person getFor(@PathVariable String token) {
         return getPersonBy(token);
     }
 
-    @RequestMapping(value = "/{token}/confirm", method = RequestMethod.POST)
+    @RequestMapping(value = "/token/{token}/confirm", method = RequestMethod.POST)
     @Transactional
-    public HttpStatus confirm(@PathVariable String token) {
+    public void confirm(@PathVariable String token) {
         getPersonBy(token).arrived();
-        return HttpStatus.OK;
     }
 
 
-    @RequestMapping(value = "/{token}/reject", method = RequestMethod.POST)
+    @RequestMapping(value = "/token/{token}/reject", method = RequestMethod.POST)
     @Transactional
-    public HttpStatus reject(@PathVariable String token) {
+    public void reject(@PathVariable String token) {
         getPersonBy(token).reject();
-        return HttpStatus.OK;
     }
 
 

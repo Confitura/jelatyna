@@ -36,7 +36,7 @@ public class FakeInitializer {
 
                     ));
             personRepository
-                .save(aPerson("Rob", "Smith", "1", "S"));
+                .save(aPerson("Rob", "Smith", "zoqxIVPsL0da0XYobEWjrXi4qtwG5jZnzfsDVntkc0Xagbz2VMLwzPdgvYZsCk", "S"));
             personRepository
                 .save(aPerson("Martha", "Smith", "2", "XL"));
         };

@@ -28,11 +28,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
 
-    @RequestMapping(value = "/api/user")
-    public UserDto user(Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
-        return UserDto.copyFrom(user);
-    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {

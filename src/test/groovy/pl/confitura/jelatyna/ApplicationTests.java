@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.client.RestTemplate;
 
+import static java.lang.String.format;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -26,13 +27,10 @@ public class ApplicationTests {
     @Value("${local.server.port}")
     private int port;
 
-    private RestTemplate template = new TestRestTemplate();
-
     @Test
     public void loginSucceeds() {
         RestTemplate template = new TestRestTemplate("john@smith.com", "password");
-        ResponseEntity<String> response = template.getForEntity("http://localhost:" + port
-            + "/api/user", String.class);
+        ResponseEntity<String> response = template.getForEntity(format("http://localhost:%s/api/user/login", port), String.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 

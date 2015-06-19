@@ -1,17 +1,17 @@
-package pl.confitura.jelatyna.user.admin
+package pl.confitura.jelatyna.user
 
+import groovy.json.JsonBuilder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.MethodArgumentNotValidException
 import pl.confitura.jelatyna.AbstractControllerSpec
 import pl.confitura.jelatyna.email.EmailService
-import pl.confitura.jelatyna.user.UserController
-import pl.confitura.jelatyna.user.TokenGenerator
-import pl.confitura.jelatyna.user.UserBuilder
-import pl.confitura.jelatyna.user.UserRepository
-import pl.confitura.jelatyna.user.domain.Authority
+import pl.confitura.jelatyna.user.dto.NewUser
+import pl.confitura.jelatyna.user.dto.UserDto
 import spock.lang.Unroll
 
-class AdminControllerSpec extends AbstractControllerSpec {
+import static pl.confitura.jelatyna.user.domain.Authority.ADMIN
+
+class UserControllerSpec extends AbstractControllerSpec {
 
     @Autowired
     private UserRepository repository;
@@ -24,7 +24,7 @@ class AdminControllerSpec extends AbstractControllerSpec {
     @Unroll
     def "should throw exception if admin is invalid"() {
         when:
-          def exception = doPost("/api/admin", json).resolvedException;
+          def exception = doPost("/api/user", json).resolvedException;
 
         then:
           exception.class == MethodArgumentNotValidException.class
@@ -41,16 +41,16 @@ class AdminControllerSpec extends AbstractControllerSpec {
 
     def "should create admin"() {
         given:
-          def json = person('John', 'Smith', 'john@smith.invalid')
+          def newUser = new NewUser(firstName: 'John', lastName: 'Smith', email: 'john@smith.invalid', role: ADMIN)
 
         when:
-          doPost("/api/admin", json)
+          doPost("/api/user", new JsonBuilder(newUser).toString())
 
         then:
           def admin = repository.findByEmail('john@smith.invalid');
           with(admin.get()) {
               id != null
-              authorities == [Authority.ADMIN]
+              authorities == [ADMIN]
               person.token != null
               person.firstName == "John"
               person.lastName == "Smith"
@@ -60,10 +60,10 @@ class AdminControllerSpec extends AbstractControllerSpec {
 
     def "should send email to created admin"() {
         given:
-          def json = person('John', 'Smith', 'john@smith.invalid')
+          def newUser = new NewUser(firstName: 'John', lastName: 'Smith', email: 'john@smith.invalid', role: ADMIN)
 
         when:
-          doPost("/api/admin", json)
+          doPost("/api/user", new JsonBuilder(newUser).toString())
 
         then:
           1 * emailSender.adminCreated({
@@ -76,14 +76,15 @@ class AdminControllerSpec extends AbstractControllerSpec {
           def user = repository.save(UserBuilder.aUser {})
 
         when:
-          doPut("/api/admin", UserBuilder.aUserAsJson {
-              id user.id
-              twitter "my twitter"
-              code "my code"
-              bio "my bio"
-              name "Smith John"
-              email "smith@john.invalid"
-          })
+          doPut("/api/user", new JsonBuilder(new UserDto(
+              id: user.id,
+              twitter: "my twitter",
+              code: "my code",
+              bio: "my bio",
+              firstName: "Smith",
+              lastName: "John",
+              email: "smith@john.invalid"
+          )).toString())
 
         then:
           with(repository.findOne(user.id).get()) {
@@ -104,7 +105,7 @@ class AdminControllerSpec extends AbstractControllerSpec {
           })
 
         when:
-          doPut("/api/admin", UserBuilder.aUserAsJson {
+          doPut("/api/user", UserBuilder.aUserAsJson {
               id user.id
               password ""
               token ""
