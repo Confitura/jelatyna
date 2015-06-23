@@ -1,27 +1,30 @@
 package pl.confitura.jelatyna.email;
 
+import com.google.common.collect.ImmutableMap;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import com.google.common.collect.ImmutableMap;
 
 public class EmailParams {
 
     private Map<String, String> params = new HashMap<>();
+    private byte[] code;
+    private String address;
+
+    public EmailParams(String address) {
+        this.address = address;
+    }
 
     public EmailParams firstName(String firstName) {
-        params.put("firstName", firstName);
-        return this;
+        return put("firstName", firstName);
     }
 
     public EmailParams lastName(String lastName) {
-        params.put("lastName", lastName);
-        return this;
+        return put("lastName", lastName);
     }
 
     public EmailParams token(String token) {
-        params.put("token", token);
-        return this;
+        return put("token", token);
     }
 
     public String getFullName() {
@@ -32,4 +35,18 @@ public class EmailParams {
         return ImmutableMap.copyOf(params);
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    private EmailParams put(String name, String value) {
+        if (value != null) {
+            params.put(name, value);
+        }
+        return this;
+    }
+
+    public void addImage(String name, byte[] content) {
+        code = content;
+    }
 }

@@ -14,10 +14,8 @@ import pl.confitura.jelatyna.user.domain.User;
 
 import javax.transaction.Transactional;
 
-import static java.lang.String.format;
-
 @Configuration
-@Profile("fake")
+@Profile({"fake", "default"})
 public class FakeInitializer {
 
     @Bean
@@ -32,21 +30,26 @@ public class FakeInitializer {
                         new Person()
                             .setFirstName("John")
                             .setLastName("Smith")
-                            .setEmail("john@smith.com")
-
+                            .setEmail("john@example.com")
                     ));
             personRepository
-                .save(aPerson("Rob", "Smith", "zoqxIVPsL0da0XYobEWjrXi4qtwG5jZnzfsDVntkc0Xagbz2VMLwzPdgvYZsCk", "S"));
+                .save(aPerson("Rob", "Smith", "1", "S", "michal.margiel@gmail.com"));
             personRepository
-                .save(aPerson("Martha", "Smith", "2", "XL"));
+                .save(aPerson("Martha", "Smith", "2", "XL", "michalmargiel@gmail.com"));
+            personRepository
+                .save(new Person()
+                    .setFirstName("Michal")
+                    .setLastName("Margiel")
+                    .setEmail("m.ichalmargiel@gmail.com")
+                    .setToken("1234"));
         };
     }
 
-    private Person aPerson(String firstName, String lastName, String token, String size) {
+    private Person aPerson(String firstName, String lastName, String token, String size, String address) {
         return new Person()
             .setFirstName(firstName)
             .setLastName(lastName)
-            .setEmail(format("%s@%s.com", firstName, lastName))
+            .setEmail(address)
             .setToken(token)
             .setRegistration(new Registration().setSize(size));
     }

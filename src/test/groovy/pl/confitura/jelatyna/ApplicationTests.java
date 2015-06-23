@@ -29,7 +29,7 @@ public class ApplicationTests {
 
     @Test
     public void loginSucceeds() {
-        RestTemplate template = new TestRestTemplate("john@smith.com", "password");
+        RestTemplate template = new TestRestTemplate("john@example.com", "password");
         ResponseEntity<String> response = template.getForEntity(format("http://localhost:%s/api/user/login", port), String.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }

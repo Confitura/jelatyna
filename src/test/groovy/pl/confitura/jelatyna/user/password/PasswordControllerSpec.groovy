@@ -2,7 +2,7 @@ package pl.confitura.jelatyna.user.password
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import pl.confitura.jelatyna.AbstractControllerSpec
-import pl.confitura.jelatyna.email.EmailService
+import pl.confitura.jelatyna.email.service.EmailService
 import pl.confitura.jelatyna.user.TokenGenerator
 import pl.confitura.jelatyna.user.TokenInvalidException
 import pl.confitura.jelatyna.user.UserRepository

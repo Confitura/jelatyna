@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import pl.confitura.jelatyna.email.EmailService;
+import pl.confitura.jelatyna.email.service.EmailService;
 import pl.confitura.jelatyna.user.TokenGenerator;
 import pl.confitura.jelatyna.user.TokenInvalidException;
 import pl.confitura.jelatyna.user.UserRepository;

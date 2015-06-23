@@ -4,7 +4,7 @@ import groovy.json.JsonBuilder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.MethodArgumentNotValidException
 import pl.confitura.jelatyna.AbstractControllerSpec
-import pl.confitura.jelatyna.email.EmailService
+import pl.confitura.jelatyna.email.service.EmailService
 import pl.confitura.jelatyna.user.dto.NewUser
 import pl.confitura.jelatyna.user.dto.UserDto
 import spock.lang.Unroll

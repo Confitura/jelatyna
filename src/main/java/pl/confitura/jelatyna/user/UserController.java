@@ -6,7 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pl.confitura.jelatyna.email.EmailService;
+import pl.confitura.jelatyna.email.service.EmailService;
 import pl.confitura.jelatyna.user.domain.User;
 import pl.confitura.jelatyna.user.dto.NewUser;
 import pl.confitura.jelatyna.user.dto.UserDto;
