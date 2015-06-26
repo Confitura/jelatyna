@@ -20,7 +20,6 @@ public class EmailService {
 
     private EmailSender sender;
     private PersonRepository personRepository;
-
     private BarCodeGenerator generator;
 
     @Autowired
@@ -30,19 +29,27 @@ public class EmailService {
         this.generator = generator;
     }
 
-    public void send(EmailDto email) {
-        List<Person> people = getPeopleFor(email);
-        sender.send(email.getTemplate(), getParametersFor(people));
+    public void adminCreated(Person person) {
+        doSend(person, "admin-creation");
     }
 
-    private List<EmailParams> getParametersFor(List<Person> people) {
+    public void passwordResetRequested(User user) {
+        doSend(user.getPerson(), "password-reset-requested");
+    }
+
+    public List<TemplateDto> getTemplates() {
+        return sender.getTemplates();
+    }
+
+
+    public void send(EmailDto email) {
+        List<Person> people = getPeopleFor(email);
+        sender.send(email.getTemplate(), getParametersFor(people, email.isIncludeBarcode()), email.isIncludeBarcode());
+    }
+
+    private List<EmailParams> getParametersFor(List<Person> people, boolean includeBarcode) {
         return people.stream()
-            .map(it -> {
-                    EmailParams params = getParametersFor(it);
-                    params.addImage("barcode", generator.generateFor(it.getToken()));
-                    return params;
-                }
-            )
+            .map(it -> getParametersFor(it, includeBarcode))
             .collect(Collectors.toList());
     }
 
@@ -55,28 +62,21 @@ public class EmailService {
         }
     }
 
-
-    public void adminCreated(Person person) {
-        doSend(person, "admin-creation");
-    }
-
-    public void passwordResetRequested(User user) {
-        doSend(user.getPerson(), "password-reset-requested");
-    }
-
     private void doSend(Person person, String templateId) {
         sender.send(templateId,
-            getParametersFor(person));
+            getParametersFor(person, false));
     }
 
-    private EmailParams getParametersFor(Person person) {
-        return new EmailParams(person.getEmail())
+    private EmailParams getParametersFor(Person person, boolean includeBarcode) {
+        EmailParams params = new EmailParams(person.getEmail())
             .firstName(person.getFirstName())
             .lastName(person.getLastName())
             .token(person.getToken());
+        if (includeBarcode) {
+            params.barcode(generator.generateFor(person.getToken()));
+        }
+        System.out.println(params);
+        return params;
     }
 
-    public List<TemplateDto> getTemplates() {
-        return sender.getTemplates();
-    }
 }

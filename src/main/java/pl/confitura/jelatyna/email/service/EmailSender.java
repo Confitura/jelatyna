@@ -9,7 +9,7 @@ public interface EmailSender {
 
     void send(String templateId, EmailParams params);
 
-    void send(String templateId, List<EmailParams> parameters);
+    void send(String templateId, List<EmailParams> parameters, boolean includeBarcode);
 
     List<TemplateDto> getTemplates();
 

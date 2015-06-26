@@ -31,6 +31,7 @@ public class FakeInitializer {
                             .setFirstName("John")
                             .setLastName("Smith")
                             .setEmail("john@example.com")
+                            .setToken("asdad")
                     ));
             personRepository
                 .save(aPerson("Rob", "Smith", "1", "S", "michal.margiel@gmail.com"));

@@ -8,7 +8,7 @@ import java.util.Map;
 public class EmailParams {
 
     private Map<String, String> params = new HashMap<>();
-    private byte[] code;
+    private byte[] barcode;
     private String address;
 
     public EmailParams(String address) {
@@ -46,7 +46,11 @@ public class EmailParams {
         return this;
     }
 
-    public void addImage(String name, byte[] content) {
-        code = content;
+    public void barcode(byte[] barcode) {
+        this.barcode = barcode;
+    }
+
+    public byte[] getBarcode() {
+        return barcode;
     }
 }

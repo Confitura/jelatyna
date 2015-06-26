@@ -1,9 +1,7 @@
 package pl.confitura.jelatyna.user.domain;
 
-import lombok.Data;
-import lombok.experimental.Accessors;
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotEmpty;
+import static java.time.LocalDateTime.*;
+import static java.util.Optional.*;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,9 +10,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
-import java.time.LocalDateTime;
 
-import static java.util.Optional.ofNullable;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 @Entity
 @Data
@@ -48,7 +49,7 @@ public class Person {
     }
 
     public void arrived() {
-        registration.setArrivalDate(LocalDateTime.now());
+        registration.setArrivalDate(now());
     }
 
     public boolean isArrived() {
@@ -60,5 +61,16 @@ public class Person {
         registration.setArrivalDate(null);
     }
 
+    public void stamp() {
+        registration.setStampDate(now());
+    }
+
+    public void unstamp() {
+        registration.setStampDate(null);
+    }
+
+    public boolean isStamped() {
+        return registration.getStampDate() != null;
+    }
 
 }

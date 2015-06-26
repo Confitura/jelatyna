@@ -1,15 +1,14 @@
 package pl.confitura.jelatyna.user.domain;
 
-import lombok.Data;
-import lombok.experimental.Accessors;
+import static javax.persistence.GenerationType.*;
 
+import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-import java.time.LocalDateTime;
-
-import static javax.persistence.GenerationType.AUTO;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 @Entity
 @Data
@@ -22,5 +21,6 @@ public class Registration {
     private String experience;
     private String position;
     private LocalDateTime arrivalDate;
+    private LocalDateTime stampDate;
 
 }

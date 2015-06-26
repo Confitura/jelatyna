@@ -25,7 +25,7 @@ public class FakeSender implements EmailSender {
     }
 
     @Override
-    public void send(String templateId, List<EmailParams> parameters) {
+    public void send(String templateId, List<EmailParams> parameters, boolean includeBarcode) {
         parameters.stream().forEach(it -> this.send(templateId, it));
     }
 

@@ -1,16 +1,17 @@
 package pl.confitura.jelatyna.participation;
 
+import java.util.List;
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
 import pl.confitura.jelatyna.user.PersonRepository;
 import pl.confitura.jelatyna.user.domain.Person;
-
-import javax.transaction.Transactional;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/participation")
@@ -29,28 +30,38 @@ public class ParticipationController {
     public List<Person> findAll(@PathVariable String text) {
         return repository.find(text);
     }
+
     @RequestMapping("/token/{token}")
     public Person getFor(@PathVariable String token) {
         return getPersonBy(token);
     }
 
-    @RequestMapping(value = "/token/{token}/confirm", method = RequestMethod.POST)
     @Transactional
+    @RequestMapping(value = "/token/{token}/confirm", method = RequestMethod.POST)
     public void confirm(@PathVariable String token) {
         getPersonBy(token).arrived();
     }
 
-
-    @RequestMapping(value = "/token/{token}/reject", method = RequestMethod.POST)
     @Transactional
+    @RequestMapping(value = "/token/{token}/reject", method = RequestMethod.POST)
     public void reject(@PathVariable String token) {
         getPersonBy(token).reject();
     }
 
+    @Transactional
+    @RequestMapping(value = "/token/{token}/stamp", method = RequestMethod.POST)
+    public void stamp(@PathVariable String token) {
+        getPersonBy(token).stamp();
+    }
+
+    @Transactional
+    @RequestMapping(value = "/token/{token}/unstamp", method = RequestMethod.POST)
+    public void unstamp(@PathVariable String token) {
+        getPersonBy(token).unstamp();
+    }
 
     private Person getPersonBy(@PathVariable String token) {
         return repository.findByToken(token).get();
     }
-
 
 }

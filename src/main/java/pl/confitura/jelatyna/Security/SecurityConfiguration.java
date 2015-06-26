@@ -41,7 +41,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .httpBasic()
                 .and()
             .authorizeRequests()
-                .antMatchers( "/api/password/**", "/api/code/**")
+                .antMatchers( "/api/password/**")
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()
@@ -50,15 +50,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .logoutSuccessHandler((request, response, authentication) -> {})
                 .and()
             .csrf().disable();
-//                .csrfTokenRepository(csrfTokenRepository())
-//                .and()
-//            .addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class);
         //@formatter:on
     }
 
-//    private CsrfTokenRepository csrfTokenRepository() {
-//        HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
-//        repository.setHeaderName("X-XSRF-TOKEN");
-//        return repository;
-//    }
 }
