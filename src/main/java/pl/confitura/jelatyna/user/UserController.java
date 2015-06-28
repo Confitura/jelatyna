@@ -1,21 +1,22 @@
 package pl.confitura.jelatyna.user;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import pl.confitura.jelatyna.email.service.EmailService;
-import pl.confitura.jelatyna.user.domain.User;
-import pl.confitura.jelatyna.user.dto.NewUser;
-import pl.confitura.jelatyna.user.dto.UserDto;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
-import static org.springframework.web.bind.annotation.RequestMethod.PUT;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import pl.confitura.jelatyna.email.service.EmailService;
+import pl.confitura.jelatyna.user.domain.User;
+import pl.confitura.jelatyna.user.dto.NewUser;
+import pl.confitura.jelatyna.user.dto.UserDto;
 
 @RestController("userController")
 @RequestMapping("/api/user")
@@ -41,7 +42,7 @@ public class UserController {
     }
 
     @RequestMapping(method = POST)
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     public HttpStatus create(@Valid @RequestBody NewUser newUser) {
         User user = newUser.asUser().token(tokenGenerator.generate());
