@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost/confitura-next
+    username: confitura-next
+    password: confitura-next
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+  profiles:
+      active: default
+
+logging:
+  level:
+    org.hibernate: INFO
+    org.hibernate.SQL: DEBUG
+
+#spring.groovy.template.check-template-location=false
+
+
+
+mandril:
+  key: fake
+gui:
+  host: http://localhost:9090

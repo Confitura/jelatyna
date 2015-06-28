@@ -32,15 +32,16 @@ public class Person {
     @NotEmpty
     private String lastName;
 
+    @Email
+    @NotEmpty
+//    @Column(unique = true)
+    private String email;
+
+    @Column(unique = true)
     private String token;
 
     @OneToOne(cascade = CascadeType.ALL)
     private Registration registration;
-
-    @Email
-    @NotEmpty
-    @Column(unique = true)
-    private String email;
 
     public void copyFrom(Person person) {
         email = person.email;
@@ -54,7 +55,7 @@ public class Person {
 
     public boolean isArrived() {
         return ofNullable(registration)
-            .orElse(new Registration()).getArrivalDate() != null;
+                .orElse(new Registration()).getArrivalDate() != null;
     }
 
     public void reject() {
@@ -73,4 +74,7 @@ public class Person {
         return registration.getStampDate() != null;
     }
 
+    public void drown() {
+        registration.setDrawn(true);
+    }
 }

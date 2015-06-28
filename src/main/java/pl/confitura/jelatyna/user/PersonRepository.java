@@ -1,12 +1,14 @@
 package pl.confitura.jelatyna.user;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
-import pl.confitura.jelatyna.user.domain.Person;
 
-import java.util.List;
-import java.util.Optional;
+import pl.confitura.jelatyna.user.domain.Person;
 
 public interface PersonRepository extends Repository<Person, Long> {
 
@@ -14,20 +16,28 @@ public interface PersonRepository extends Repository<Person, Long> {
 
     Optional<Person> findByToken(String token);
 
-
-    @Query("FROM Person p " +
-        "WHERE lower(p.firstName) like :text% " +
-        "OR lower(p.lastName) like :text% " +
-        "OR lower(p.email) like :text% "
-    )
-    List<Person> doFind(@Param("text") String text);
-
     default List<Person> find(String text) {
         return doFind(text.toLowerCase());
     }
+
+    @Query("FROM Person p " +
+            "WHERE lower(p.firstName) like :text% " +
+            "OR lower(p.lastName) like :text% " +
+            "OR lower(p.email) like :text% "
+    )
+    List<Person> doFind(@Param("text") String text);
 
     List<Person> findAll();
 
     @Query("FROM Person WHERE registration IS NOT NULL")
     List<Person> findAllRegistered();
+
+    @Query("From Person " +
+            "WHERE registration.stampDate IS NOT NULL " +
+            "AND drawn = false")
+    List<Person> findNotDrawnWithStamps();
+
+    @Modifying
+    @Query("UPDATE Registration SET drawn = false")
+    void resetDrawing();
 }

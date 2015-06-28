@@ -1,10 +1,13 @@
 package pl.confitura.jelatyna.fake;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import pl.confitura.jelatyna.user.PersonRepository;
 import pl.confitura.jelatyna.user.UserRepository;
 import pl.confitura.jelatyna.user.domain.Authority;
@@ -12,10 +15,8 @@ import pl.confitura.jelatyna.user.domain.Person;
 import pl.confitura.jelatyna.user.domain.Registration;
 import pl.confitura.jelatyna.user.domain.User;
 
-import javax.transaction.Transactional;
-
 @Configuration
-@Profile({"fake", "default"})
+@Profile({"fake"})
 public class FakeInitializer {
 
     @Bean
@@ -24,7 +25,7 @@ public class FakeInitializer {
         return () -> {
             repository.save(
                 new User()
-                    .addAuthority(Authority.ADMIN)
+                    .addAuthority(Authority.VOLUNTEER)
                     .setPassword(new BCryptPasswordEncoder().encode("password"))
                     .setPerson(
                         new Person()

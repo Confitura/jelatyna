@@ -17,10 +17,23 @@ public class Registration {
     @Id
     @GeneratedValue(strategy = AUTO)
     private Long id;
-    private String size = "L";
+
+    private String sex;
+
+    private String city;
+
+    private String size;
+
     private String experience;
+
     private String position;
+
+    private LocalDateTime registrationDate;
+
     private LocalDateTime arrivalDate;
+
     private LocalDateTime stampDate;
+
+    private boolean drawn;
 
 }

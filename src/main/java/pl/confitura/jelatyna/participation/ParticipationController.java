@@ -16,7 +16,6 @@ import pl.confitura.jelatyna.user.domain.Person;
 @RestController
 @RequestMapping("/api/participation")
 @PreAuthorize("hasAnyRole('ADMIN, VOLUNTEER')")
-
 public class ParticipationController {
 
     private PersonRepository repository;
@@ -37,25 +36,25 @@ public class ParticipationController {
     }
 
     @Transactional
-    @RequestMapping(value = "/token/{token}/confirm", method = RequestMethod.POST)
+    @RequestMapping(value = "/token/confirm/{token}", method = RequestMethod.POST)
     public void confirm(@PathVariable String token) {
         getPersonBy(token).arrived();
     }
 
     @Transactional
-    @RequestMapping(value = "/token/{token}/reject", method = RequestMethod.POST)
+    @RequestMapping(value = "/token/reject/{token}", method = RequestMethod.POST)
     public void reject(@PathVariable String token) {
         getPersonBy(token).reject();
     }
 
     @Transactional
-    @RequestMapping(value = "/token/{token}/stamp", method = RequestMethod.POST)
+    @RequestMapping(value = "/token/stamp/{token}", method = RequestMethod.POST)
     public void stamp(@PathVariable String token) {
         getPersonBy(token).stamp();
     }
 
     @Transactional
-    @RequestMapping(value = "/token/{token}/unstamp", method = RequestMethod.POST)
+    @RequestMapping(value = "/token/unstamp/{token}", method = RequestMethod.POST)
     public void unstamp(@PathVariable String token) {
         getPersonBy(token).unstamp();
     }
