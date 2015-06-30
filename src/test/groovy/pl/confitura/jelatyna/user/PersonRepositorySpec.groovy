@@ -28,15 +28,15 @@ class PersonRepositorySpec extends Specification {
     def rob;
 
     def setup() {
-        john = repository.save(new Person(firstName: 'John', lastName: 'Smith', token: '1', email: 'j@s.com',
+        john = repository.save(new Person(firstName: 'John', lastName: 'Smith', token: '3', email: 'j@s.com',
             registration: new Registration(size: 'S')))
-        rob = repository.save(new Person(firstName: 'Rob', lastName: 'Martin', token: '2', email: 'r@m.com',
+        rob = repository.save(new Person(firstName: 'Rob', lastName: 'Martin', token: '4', email: 'r@m.com',
             registration: new Registration(size: 'M')))
     }
 
     def "should find a person by token"() {
         when:
-          def person = repository.findByToken('1');
+          def person = repository.findByToken('3');
 
         then:
           with(person.get()) {

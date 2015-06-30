@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:confitura-next
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+  profiles:
+      active: default
+
+logging:
+  level:
+    org.hibernate: INFO
+    org.hibernate.SQL: DEBUG
+
+
+mandril:
+  key: fake
+gui:
+  host: http://localhost:9090
