@@ -21,9 +21,10 @@ public interface PersonRepository extends Repository<Person, Long> {
     }
 
     @Query("FROM Person p " +
-            "WHERE lower(p.firstName) like :text% " +
+            "WHERE registration IS NOT NULL " +
+            "AND (lower(p.firstName) like :text% " +
             "OR lower(p.lastName) like :text% " +
-            "OR lower(p.email) like :text% "
+            "OR lower(p.email) like :text%)"
     )
     List<Person> doFind(@Param("text") String text);
 
