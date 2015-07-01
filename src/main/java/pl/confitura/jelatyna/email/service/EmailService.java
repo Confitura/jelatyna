@@ -3,6 +3,8 @@ package pl.confitura.jelatyna.email.service;
 import static java.util.stream.Collectors.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,9 +47,13 @@ public class EmailService {
         return sender.getTemplates();
     }
 
+    @Transactional
     public void send(EmailDto email) {
         List<Person> people = getPeopleFor(email);
         sender.send(email.getTemplate(), getParametersFor(people, email.isIncludeBarcode()), email.isIncludeBarcode());
+        if (email.isIncludeBarcode()) {
+            people.stream().forEach(Person::ticketSent);
+        }
     }
 
     private List<EmailParams> getParametersFor(List<Person> people, boolean includeBarcode) {
@@ -60,13 +66,14 @@ public class EmailService {
         if ("all".equals(email.getAudience())) {
             return personRepository.findAll();
         } else {
-            return personRepository.findAllRegistered();
+            return personRepository.findAllRegistered().stream()
+                    .filter(person -> !email.isIncludeBarcode() || person.ticketNotSentYet())
+                    .collect(Collectors.toList());
         }
     }
 
     private void doSend(Person person, String templateId) {
-        sender.send(templateId,
-                getParametersFor(person, false));
+        sender.send(templateId, getParametersFor(person, false));
     }
 
     private EmailParams getParametersFor(Person person, boolean includeBarcode) {

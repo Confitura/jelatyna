@@ -2,6 +2,8 @@ package pl.confitura.jelatyna.user;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
@@ -51,11 +53,19 @@ public class UserController {
         return HttpStatus.CREATED;
     }
 
+    @RequestMapping(method = GET)
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<UserDto> allUsers() {
+        return repository.findAll().stream()
+                .map(UserDto::copyFrom)
+                .collect(Collectors.toList());
+    }
+
     @RequestMapping(method = PUT)
     @Transactional
     public void update(@Valid @RequestBody UserDto user) {
         repository.findOne(user.getId())
-            .ifPresent(user::copyTo);
+                .ifPresent(user::copyTo);
     }
 
 }

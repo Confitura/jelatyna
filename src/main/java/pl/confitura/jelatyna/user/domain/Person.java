@@ -34,7 +34,6 @@ public class Person {
 
     @Email
     @NotEmpty
-//    @Column(unique = true)
     private String email;
 
     @Column(unique = true)
@@ -76,5 +75,13 @@ public class Person {
 
     public void drown() {
         registration.setDrawn(true);
+    }
+
+    public void ticketSent() {
+        registration.setTicketSendDate(now());
+    }
+
+    public boolean ticketNotSentYet() {
+        return registration.getTicketSendDate() == null;
     }
 }

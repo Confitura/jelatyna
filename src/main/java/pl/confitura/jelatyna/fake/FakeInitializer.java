@@ -25,7 +25,7 @@ public class FakeInitializer {
         return () -> {
             repository.save(
                 new User()
-                    .addAuthority(Authority.VOLUNTEER)
+                    .addAuthority(Authority.ADMIN)
                     .setPassword(new BCryptPasswordEncoder().encode("password"))
                     .setPerson(
                         new Person()

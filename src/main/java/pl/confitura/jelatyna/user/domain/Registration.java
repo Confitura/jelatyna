@@ -34,6 +34,8 @@ public class Registration {
 
     private LocalDateTime stampDate;
 
+    private LocalDateTime ticketSendDate;
+
     private boolean drawn;
 
 }
