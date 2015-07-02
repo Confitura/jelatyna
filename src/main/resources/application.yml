@@ -3,6 +3,10 @@ spring:
     url: jdbc:mysql://localhost/confitura-next
     username: confitura-next
     password: confitura-next
+    max-active: 20
+    max-idle: 8
+    min-idle: 5
+    initial-size: 5
 
   jpa:
     hibernate:

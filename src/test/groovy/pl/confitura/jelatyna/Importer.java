@@ -26,9 +26,9 @@ import pl.confitura.jelatyna.user.domain.Registration;
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @IntegrationTest({
-        "server.port:0",
+        "server.port=0",
         "spring.profiles.active=default",
-        "spring.datasource.url: jdbc:mysql://localhost:33061/confitura-next?useUnicode=yes&characterEncoding=UTF-8"
+        "spring.datasource.url=jdbc:mysql://localhost:33061/confitura-next?useUnicode=yes&characterEncoding=UTF-8"
 })
 @TransactionConfiguration(defaultRollback = false)
 public class Importer {
@@ -40,7 +40,7 @@ public class Importer {
     @Ignore
     public void import_participants() throws Exception {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        Path path = Paths.get("/Users/margielm/jelatyna/participants_2.csv");
+        Path path = Paths.get("/Users/margielm/jelatyna/participants_4.csv");
         Files.lines(path, Charsets.UTF_8)
                 .skip(1)
                 .map(line -> line.split(";"))

@@ -1,6 +1,8 @@
 spring:
   datasource:
     url: jdbc:h2:mem:confitura-next
+    username: confitura-next
+    password: confitura-next
 
   jpa:
     hibernate:
