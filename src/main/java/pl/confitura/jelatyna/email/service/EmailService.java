@@ -4,6 +4,7 @@ import static java.util.stream.Collectors.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
 import pl.confitura.jelatyna.barcode.BarCodeGenerator;
 import pl.confitura.jelatyna.email.EmailParams;
+import pl.confitura.jelatyna.email.dto.Audience;
 import pl.confitura.jelatyna.email.dto.EmailDto;
 import pl.confitura.jelatyna.email.dto.TemplateDto;
 import pl.confitura.jelatyna.user.PersonRepository;
@@ -63,13 +65,13 @@ public class EmailService {
     }
 
     private List<Person> getPeopleFor(EmailDto email) {
-        if ("all".equals(email.getAudience())) {
-            return personRepository.findAll();
-        } else {
-            return personRepository.findAllRegistered().stream()
-                    .filter(person -> !email.isIncludeBarcode() || person.ticketNotSentYet())
-                    .collect(Collectors.toList());
+        Stream<Person> all = personRepository.findAll().stream();
+        if (email.getAudience() == Audience.REGISTERED) {
+            all = all.filter(Person::isRegistered);
+        } else if (email.getAudience() == Audience.ATTENDED) {
+            all = all.filter(Person::isArrived);
         }
+        return all.collect(Collectors.toList());
     }
 
     private void doSend(Person person, String templateId) {

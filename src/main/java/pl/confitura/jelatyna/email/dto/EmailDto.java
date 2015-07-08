@@ -7,7 +7,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class EmailDto {
 
-    private String audience;
+    private Audience audience;
     private boolean includeBarcode;
     private String template;
 

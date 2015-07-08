@@ -57,6 +57,11 @@ public class Person {
                 .orElse(new Registration()).getArrivalDate() != null;
     }
 
+    public boolean isRegistered() {
+        return ofNullable(registration)
+                .orElse(new Registration()).getRegistrationDate() != null;
+    }
+
     public void reject() {
         registration.setArrivalDate(null);
     }

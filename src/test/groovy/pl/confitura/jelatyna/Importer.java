@@ -40,7 +40,7 @@ public class Importer {
     @Ignore
     public void import_participants() throws Exception {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        Path path = Paths.get("/Users/margielm/jelatyna/participants_4.csv");
+        Path path = Paths.get("/Users/margielm/jelatyna/participants_6.csv");
         Files.lines(path, Charsets.UTF_8)
                 .skip(1)
                 .map(line -> line.split(";"))
