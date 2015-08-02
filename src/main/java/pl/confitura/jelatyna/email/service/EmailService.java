@@ -82,9 +82,9 @@ public class EmailService {
         EmailParams params = new EmailParams(person.getEmail())
                 .firstName(person.getFirstName())
                 .lastName(person.getLastName())
-                .token(person.getToken());
+                .token(person.getId());
         if (includeBarcode) {
-            params.barcode(generator.generateFor(person.getToken()));
+            params.barcode(generator.generateFor(person.getId()));
         }
         return params;
     }

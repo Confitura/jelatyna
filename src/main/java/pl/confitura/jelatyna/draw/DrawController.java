@@ -14,7 +14,7 @@ import pl.confitura.jelatyna.user.PersonRepository;
 import pl.confitura.jelatyna.user.domain.Person;
 
 @RestController
-@RequestMapping("/api/draw")
+@RequestMapping("/draw")
 @PreAuthorize("hasRole('ADMIN')")
 public class DrawController {
     @Autowired

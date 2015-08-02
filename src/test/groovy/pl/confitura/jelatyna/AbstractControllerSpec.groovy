@@ -17,7 +17,7 @@ import org.springframework.test.web.servlet.MvcResult
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.context.WebApplicationContext
-import pl.confitura.jelatyna.user.domain.Authority
+import pl.confitura.jelatyna.user.domain.Role
 import pl.confitura.jelatyna.user.domain.Person
 import pl.confitura.jelatyna.user.domain.User
 import spock.lang.Specification
@@ -79,7 +79,7 @@ abstract class AbstractControllerSpec extends Specification {
 
     Principal logInAsAnonymous() { return logInAs("", []) }
 
-    def logInAs(String email, List<Authority> permissions) {
+    def logInAs(String email, List<Role> permissions) {
         def person = new Person(email: email)
         def user = new User(person: person)
         def principal = new UsernamePasswordAuthenticationToken(user, "admin", permissions)

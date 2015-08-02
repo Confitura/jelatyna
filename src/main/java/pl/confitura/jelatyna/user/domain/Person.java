@@ -4,11 +4,7 @@ import static java.time.LocalDateTime.*;
 import static java.util.Optional.*;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 import org.hibernate.validator.constraints.Email;
@@ -16,15 +12,12 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import pl.confitura.jelatyna.AbstractEntity;
 
 @Entity
 @Data
 @Accessors(chain = true)
-public class Person {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+public class Person extends AbstractEntity {
 
     @NotEmpty
     private String firstName;
@@ -36,8 +29,7 @@ public class Person {
     @NotEmpty
     private String email;
 
-    @Column(unique = true)
-    private String token;
+
 
     @OneToOne(cascade = CascadeType.ALL)
     private Registration registration;

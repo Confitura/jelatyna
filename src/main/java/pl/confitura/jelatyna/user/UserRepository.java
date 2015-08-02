@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 @org.springframework.stereotype.Repository("userRepository")
-public interface UserRepository extends org.springframework.data.repository.Repository<User, Long> {
+public interface UserRepository extends org.springframework.data.repository.Repository<User, String> {
 
     User save(User user);
 
@@ -19,5 +19,5 @@ public interface UserRepository extends org.springframework.data.repository.Repo
     @Query("FROM User WHERE person.email = ?1")
     Optional<User> findByEmail(String email);
 
-    Optional<User> findOne(Long id);
+    Optional<User> findOne(String id);
 }

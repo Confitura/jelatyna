@@ -1,23 +1,24 @@
 package pl.confitura.jelatyna.user.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import groovy.transform.EqualsAndHashCode;
 import lombok.Data;
 import lombok.experimental.Accessors;
-import pl.confitura.jelatyna.user.domain.Authority;
+import pl.confitura.jelatyna.user.domain.Role;
 import pl.confitura.jelatyna.user.domain.User;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 @Data
 @Accessors(chain = true)
+@EqualsAndHashCode(callSuper = true)
 public class UserDto extends PersonDto {
 
-    private Long id;
+    private String id;
     private String bio;
     private String twitter;
     private String code;
-    private List<Authority> authorities= new ArrayList<>();
+    private List<Role> roles = new ArrayList<>();
 
     public void copyTo(User user) {
         user.setBio(bio)
@@ -38,7 +39,7 @@ public class UserDto extends PersonDto {
         dto.bio = user.getBio();
         dto.twitter = user.getTwitter();
         dto.code = user.getCode();
-        dto.authorities.addAll((Collection<? extends Authority>) user.getAuthorities());
+        dto.roles.addAll(user.getRoles());
         return dto ;
     }
 }

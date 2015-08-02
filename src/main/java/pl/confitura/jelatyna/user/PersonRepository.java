@@ -14,7 +14,7 @@ public interface PersonRepository extends Repository<Person, Long> {
 
     Person save(Person person);
 
-    Optional<Person> findByToken(String token);
+    Optional<Person> findOne(String id);
 
     default List<Person> find(String text) {
         return doFind(text.toLowerCase());

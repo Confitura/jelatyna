@@ -1,5 +1,7 @@
 package pl.confitura.jelatyna.email;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -7,14 +9,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
 import pl.confitura.jelatyna.email.dto.EmailDto;
 import pl.confitura.jelatyna.email.dto.TemplateDto;
 import pl.confitura.jelatyna.email.service.EmailService;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/api/email")
+@RequestMapping("/email")
 @PreAuthorize("hasRole('ADMIN')")
 public class EmailController {
 

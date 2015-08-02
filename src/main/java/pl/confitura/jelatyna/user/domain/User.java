@@ -1,35 +1,32 @@
 package pl.confitura.jelatyna.user.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
-import lombok.experimental.Accessors;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+import pl.confitura.jelatyna.AbstractEntity;
 
 @Entity
+@NoArgsConstructor
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-public class User implements UserDetails {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+public class User extends AbstractEntity {
 
     @OneToOne(cascade = CascadeType.ALL)
     @Valid
@@ -37,7 +34,7 @@ public class User implements UserDetails {
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
-    private List<Authority> authorities = new ArrayList<>();
+    private List<Role> roles = new ArrayList<>();
 
     private String twitter;
 
@@ -49,45 +46,26 @@ public class User implements UserDetails {
     @JsonIgnore
     private String password;
 
+    @Column(unique = true)
+    private String token;
+
+    public User(User user) {
+        this.id = user.id;
+        this.roles = user.roles;
+        this.twitter = user.twitter;
+        this.bio = user.code;
+        this.password = user.password;
+        this.person = user.person;
+    }
 
     public User token(String token) {
-        this.person.setToken(token);
+        this.token = token;
         return this;
     }
 
-    public User addAuthority(Authority authority) {
-        authorities.add(authority);
+    public User addRole(Role role) {
+        roles.add(role);
         return this;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
-    }
-
-    @Override
-    public String getUsername() {
-        return person.getEmail();
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
     }
 
     public void copyFrom(User user) {
@@ -98,6 +76,6 @@ public class User implements UserDetails {
     }
 
     public void resetToken() {
-        person.setToken(null);
+        token = null;
     }
 }
