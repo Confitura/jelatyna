@@ -21,7 +21,7 @@ import org.springframework.web.client.RestTemplate;
 @WebAppConfiguration
 @IntegrationTest({
         "server.port:0",
-        "spring.profiles.active=fake",
+        "spring.profiles.active=fake"
 })
 @TransactionConfiguration(defaultRollback = false)
 public class ApplicationTests {
@@ -30,9 +30,11 @@ public class ApplicationTests {
     private int port;
 
     @Test
-    public void loginSucceeds() {
+    public void should_login_successfully() {
         RestTemplate template = new TestRestTemplate("john@example.com", "password");
-        ResponseEntity<String> response = template.getForEntity(format("http://localhost:%s/api/user/login", port), String.class);
+
+        ResponseEntity<String> response = template.getForEntity(format("http://localhost:%s/users/login", port), String.class);
+
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 

@@ -49,6 +49,9 @@ public class User extends AbstractEntity {
     @Column(unique = true)
     private String token;
 
+    @Lob
+    private byte[] photo;
+
     public User(User user) {
         this.id = user.id;
         this.roles = user.roles;

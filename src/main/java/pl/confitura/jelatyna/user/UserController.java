@@ -2,6 +2,7 @@ package pl.confitura.jelatyna.user;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -10,12 +11,15 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import pl.confitura.jelatyna.email.service.EmailService;
 import pl.confitura.jelatyna.user.domain.User;
@@ -31,6 +35,8 @@ public class UserController {
     private TokenGenerator tokenGenerator;
 
     private EmailService sender;
+
+    private MultipartFile file;
 
     @Autowired
     public UserController(UserRepository repository, TokenGenerator tokenGenerator, EmailService sender) {
@@ -74,6 +80,18 @@ public class UserController {
     public void update(@Valid @RequestBody UserDto user) {
         repository.findOne(user.getId())
                 .ifPresent(user::copyTo);
+    }
+
+    @RequestMapping(value = "/{id}/photo", method = POST)
+    @Transactional
+    public void uploadPhoto(final MultipartFile file, @PathVariable String id) throws IOException {
+        repository.findOne(id).get().setPhoto(file.getBytes());
+    }
+
+    @RequestMapping(value = "/{id}/photo", method = GET, produces = MediaType.IMAGE_PNG_VALUE)
+    public ResponseEntity<byte[]> getPhoto(@PathVariable String id) throws IOException {
+        User user = repository.findOne(id).get();
+        return ResponseEntity.ok(user.getPhoto());
     }
 
 }

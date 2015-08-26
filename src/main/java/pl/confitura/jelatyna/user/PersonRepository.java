@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 import pl.confitura.jelatyna.user.domain.Person;
 
-public interface PersonRepository extends Repository<Person, Long> {
+public interface PersonRepository extends Repository<Person, String> {
 
     Person save(Person person);
 

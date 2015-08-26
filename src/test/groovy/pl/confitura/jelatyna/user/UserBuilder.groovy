@@ -50,7 +50,7 @@ class UserBuilder {
     }
 
     def token(token) {
-        person.token = token;
+        user.token = token;
     }
 
 

@@ -74,6 +74,13 @@ abstract class AbstractControllerSpec extends Specification {
                 .contentType(MediaType.APPLICATION_JSON))
             .andReturn()
     }
+    protected MvcResult doPatch(String url, String json) {
+        mockMvc.perform(
+            MockMvcRequestBuilders.patch(url)
+                .content(json)
+                .contentType(MediaType.APPLICATION_JSON))
+            .andReturn()
+    }
 
     Principal logInAsAdmin() { return logInAs("admin@admin.pl", [UserPermission.ADMIN]) }
 

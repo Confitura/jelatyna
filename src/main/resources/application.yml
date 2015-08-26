@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost/confitura-next
-    username: confitura-next
-    password: confitura-next
+    url: jdbc:mysql://192.168.99.101:32769/confitura-next
+    username: root
+    password: root
     max-active: 20
     max-idle: 8
     min-idle: 5

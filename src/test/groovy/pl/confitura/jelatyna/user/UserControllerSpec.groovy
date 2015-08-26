@@ -2,7 +2,10 @@ package pl.confitura.jelatyna.user
 
 import groovy.json.JsonBuilder
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.mock.web.MockMultipartFile
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.web.bind.MethodArgumentNotValidException
+import org.springframework.web.multipart.MultipartFile
 import pl.confitura.jelatyna.AbstractControllerSpec
 import pl.confitura.jelatyna.email.service.EmailService
 import pl.confitura.jelatyna.user.dto.NewUser
@@ -51,7 +54,6 @@ class UserControllerSpec extends AbstractControllerSpec {
         with(admin.get()) {
             id != null
             roles == [ADMIN]
-            person.token != null
             person.firstName == "John"
             person.lastName == "Smith"
             person.email == "john@smith.invalid"
@@ -76,7 +78,7 @@ class UserControllerSpec extends AbstractControllerSpec {
         def user = repository.save(UserBuilder.aUser {})
 
         when:
-        doPut("/users", new JsonBuilder(new UserDto(
+        doPatch("/users", new JsonBuilder(new UserDto(
                 id: user.id,
                 twitter: "my twitter",
                 code: "my code",
@@ -113,9 +115,23 @@ class UserControllerSpec extends AbstractControllerSpec {
 
         then:
         with(repository.findOne(user.id).get()) {
-            person.token == "token"
+            token == "token"
             password == "password"
         }
+    }
+
+    def "should upload a picture"() {
+        given:
+        def user = repository.save(UserBuilder.aUser {})
+        MultipartFile file = new MockMultipartFile("file", "photo.png", null, getClass().getResource("/photo.png").getBytes())
+
+        when:
+        mockMvc.perform(
+                MockMvcRequestBuilders
+                        .fileUpload("/users/$user.id/photo").file(file))
+                .andReturn();
+        then:
+        file.getBytes() == doGet("/users/$user.id/photo").getResponse().getContentAsByteArray()
     }
 
     def person(fn, ln, em) {

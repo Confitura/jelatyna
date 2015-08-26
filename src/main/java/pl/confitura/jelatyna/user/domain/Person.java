@@ -11,12 +11,14 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import pl.confitura.jelatyna.AbstractEntity;
 
 @Entity
 @Data
 @Accessors(chain = true)
+@EqualsAndHashCode(callSuper = true)
 public class Person extends AbstractEntity {
 
     @NotEmpty
@@ -28,8 +30,6 @@ public class Person extends AbstractEntity {
     @Email
     @NotEmpty
     private String email;
-
-
 
     @OneToOne(cascade = CascadeType.ALL)
     private Registration registration;
