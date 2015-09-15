@@ -5,6 +5,7 @@ spring:
     password: confitura-next
 
   jpa:
+    show-sql: true
     hibernate:
       ddl-auto: update
 
@@ -13,7 +14,7 @@ spring:
 
 logging:
   level:
-    org.hibernate: INFO
+    org.hibernate: DEBUG
     org.hibernate.SQL: DEBUG
 
 

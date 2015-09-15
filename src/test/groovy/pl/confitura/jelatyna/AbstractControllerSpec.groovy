@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.SpringApplicationContextLoader
 import org.springframework.http.MediaType
 import org.springframework.mock.web.MockHttpServletResponse
+import org.springframework.mock.web.MockMultipartFile
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.test.context.ActiveProfiles
@@ -17,6 +18,7 @@ import org.springframework.test.web.servlet.MvcResult
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.context.WebApplicationContext
+import org.springframework.web.multipart.MultipartFile
 import pl.confitura.jelatyna.user.domain.Role
 import pl.confitura.jelatyna.user.domain.Person
 import pl.confitura.jelatyna.user.domain.User
@@ -81,6 +83,17 @@ abstract class AbstractControllerSpec extends Specification {
                 .contentType(MediaType.APPLICATION_JSON))
             .andReturn()
     }
+    protected uploadFile(String url, MultipartFile file){
+        mockMvc.perform(
+                MockMvcRequestBuilders
+                        .fileUpload(url).file(file))
+                .andReturn();
+    }
+
+    protected MockMultipartFile aFile() {
+        new MockMultipartFile("file", "photo.png", null, getClass().getResource("/photo.png").getBytes())
+    }
+
 
     Principal logInAsAdmin() { return logInAs("admin@admin.pl", [UserPermission.ADMIN]) }
 

@@ -11,13 +11,14 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+    show-sql: true
 
   profiles:
       active: fake
 
 logging:
   level:
-    org.hibernate: INFO
+    org.hibernate: DEBUG
     org.hibernate.SQL: DEBUG
 
 #spring.groovy.template.check-template-location=false
