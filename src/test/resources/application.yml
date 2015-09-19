@@ -14,8 +14,8 @@ spring:
 
 logging:
   level:
-    org.hibernate: DEBUG
-    org.hibernate.SQL: DEBUG
+    org.hibernate: INFO
+    org.hibernate.SQL: INFO
 
 
 mandril:

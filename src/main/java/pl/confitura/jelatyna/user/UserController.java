@@ -3,6 +3,7 @@ package pl.confitura.jelatyna.user;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -10,7 +11,6 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,7 +34,7 @@ public class UserController {
 
     private TokenGenerator tokenGenerator;
 
-    private EmailService sender;
+    public EmailService sender;
 
     private MultipartFile file;
 
@@ -52,13 +52,13 @@ public class UserController {
     }
 
     @RequestMapping(method = POST)
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     @Transactional
-    public HttpStatus create(@Valid @RequestBody NewUser newUser) {
+    public ResponseEntity<Void> create(@Valid @RequestBody NewUser newUser) {
         User user = newUser.asUser().token(tokenGenerator.generate());
-        repository.save(user);
-        sender.adminCreated(user.getPerson());
-        return HttpStatus.CREATED;
+        user = repository.save(user);
+        sender.created(user, newUser.getRole());
+        return ResponseEntity.created(URI.create("/users/"+user.getId())).build();
     }
 
     @RequestMapping(method = GET)

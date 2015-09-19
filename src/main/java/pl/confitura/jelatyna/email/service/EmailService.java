@@ -18,6 +18,7 @@ import pl.confitura.jelatyna.email.dto.EmailDto;
 import pl.confitura.jelatyna.email.dto.TemplateDto;
 import pl.confitura.jelatyna.user.PersonRepository;
 import pl.confitura.jelatyna.user.domain.Person;
+import pl.confitura.jelatyna.user.domain.Role;
 import pl.confitura.jelatyna.user.domain.User;
 
 @Service
@@ -37,8 +38,8 @@ public class EmailService {
         this.generator = generator;
     }
 
-    public void adminCreated(Person person) {
-        doSend(person, "admin-creation");
+    public void created(User user, Role role) {
+        doSend(user.getPerson(), role.name() + "-created");
     }
 
     public void passwordResetRequested(User user) {

@@ -3,7 +3,6 @@ package pl.confitura.jelatyna.user
 import groovy.json.JsonBuilder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.mock.web.MockMultipartFile
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.multipart.MultipartFile
 import pl.confitura.jelatyna.AbstractControllerSpec
@@ -12,7 +11,7 @@ import pl.confitura.jelatyna.user.dto.NewUser
 import pl.confitura.jelatyna.user.dto.UserDto
 import spock.lang.Unroll
 
-import static pl.confitura.jelatyna.user.domain.Role.ADMIN
+import static pl.confitura.jelatyna.user.domain.Role.*
 
 class UserControllerSpec extends AbstractControllerSpec {
 
@@ -21,6 +20,9 @@ class UserControllerSpec extends AbstractControllerSpec {
 
     @Autowired
     private TokenGenerator generator;
+
+    @Autowired
+    private UserController controller;
 
     private EmailService emailSender = Mock(EmailService);
 
@@ -41,26 +43,28 @@ class UserControllerSpec extends AbstractControllerSpec {
         ]
     }
 
-
-    def "should create admin"() {
+    @Unroll("should create user with #role role")
+    def "should create user"() {
         given:
-        def newUser = new NewUser(firstName: 'John', lastName: 'Smith', email: 'john@smith.invalid', role: ADMIN)
+        def newUser = new NewUser(firstName: 'John', lastName: 'Smith', email: 'john@smith.invalid', role: role)
 
         when:
-        doPost("/users", new JsonBuilder(newUser).toString())
+        def result = doPost("/users", new JsonBuilder(newUser).toString());
 
         then:
-        def admin = repository.findByEmail('john@smith.invalid');
-        with(admin.get()) {
-            id != null
-            roles == [ADMIN]
-            person.firstName == "John"
-            person.lastName == "Smith"
-            person.email == "john@smith.invalid"
+        def id = getId(result)
+        with(get("/users/$id")) {
+            id == id
+            roles == [role.name()]
+            firstName == "John"
+            lastName == "Smith"
+            email == "john@smith.invalid"
         }
+        where:
+        role << [ADMIN, SPEAKER, VOLUNTEER]
     }
 
-    def "should send email to created admin"() {
+    def "should send email to created user"() {
         given:
         def newUser = new NewUser(firstName: 'John', lastName: 'Smith', email: 'john@smith.invalid', role: ADMIN)
 
@@ -68,9 +72,11 @@ class UserControllerSpec extends AbstractControllerSpec {
         doPost("/users", new JsonBuilder(newUser).toString())
 
         then:
-        1 * emailSender.adminCreated({
-            it.firstName == "John"
-        })
+        interaction {
+            1 * emailSender.created(
+                    { it.person.email == newUser.getEmail() },
+                    newUser.getRole())
+        }
     }
 
     def "should update a user"() {
@@ -78,7 +84,7 @@ class UserControllerSpec extends AbstractControllerSpec {
         def user = repository.save(UserBuilder.aUser {})
 
         when:
-        doPatch("/users", new JsonBuilder(new UserDto(
+        def result = doPatch("/users", new JsonBuilder(new UserDto(
                 id: user.id,
                 twitter: "my twitter",
                 code: "my code",
@@ -89,10 +95,10 @@ class UserControllerSpec extends AbstractControllerSpec {
         )).toString())
 
         then:
-        with(repository.findOne(user.id).get()) {
-            person.email == "smith@john.invalid"
-            person.firstName == "Smith"
-            person.lastName == "John"
+        with(get("/users/$user.id")) {
+            email == "smith@john.invalid"
+            firstName == "Smith"
+            lastName == "John"
             twitter == "my twitter"
             code == "my code"
             bio == "my bio"
@@ -126,10 +132,8 @@ class UserControllerSpec extends AbstractControllerSpec {
         MultipartFile file = new MockMultipartFile("file", "photo.png", null, getClass().getResource("/photo.png").getBytes())
 
         when:
-        mockMvc.perform(
-                MockMvcRequestBuilders
-                        .fileUpload("/users/$user.id/photo").file(file))
-                .andReturn();
+        uploadFile("/users/$user.id/photo", file)
+
         then:
         file.getBytes() == doGet("/users/$user.id/photo").getResponse().getContentAsByteArray()
     }

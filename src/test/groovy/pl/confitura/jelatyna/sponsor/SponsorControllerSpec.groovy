@@ -1,5 +1,4 @@
 package pl.confitura.jelatyna.sponsor
-
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.multipart.MultipartFile
 import pl.confitura.jelatyna.AbstractControllerSpec
@@ -98,13 +97,12 @@ class SponsorControllerSpec extends AbstractControllerSpec {
             url(aUrl)
             info(aInfo)
         };
-        def location = doPost("/sponsors", sponsor.toString()).getResponse().getHeader("Location")
-        return location.substring(location.lastIndexOf('/') + 1);
+
+        return getId(doPost("/sponsors", sponsor.toString()))
     }
 
-    private Object get(String location) {
-        asJson(doGet(location).response)
-    }
+
+
 
 
     @Override
