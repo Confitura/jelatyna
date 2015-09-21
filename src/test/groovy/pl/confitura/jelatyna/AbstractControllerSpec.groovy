@@ -95,7 +95,7 @@ abstract class AbstractControllerSpec extends Specification {
         new MockMultipartFile("file", "photo.png", null, getClass().getResource("/photo.png").getBytes())
     }
 
-    protected String getId(MvcResult result) {
+    protected getId = { MvcResult result ->
         def location = result.getResponse().getHeader("Location")
         return location.substring(location.lastIndexOf('/') + 1);
     }

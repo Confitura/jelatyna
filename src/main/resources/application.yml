@@ -17,7 +17,7 @@ spring:
       active: fake
 
 logging:
-  level.: INFO
+  level.: DEBUG
 
 #spring.groovy.template.check-template-location=false
 

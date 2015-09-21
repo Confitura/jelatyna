@@ -5,6 +5,7 @@ import static java.util.stream.Collectors.*;
 import java.net.URI;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import pl.confitura.jelatyna.user.UserRepository;
 import pl.confitura.jelatyna.user.domain.User;
+import pl.confitura.jelatyna.user.dto.UserDto;
 
 @RestController
 public class PresentationsController {
@@ -35,9 +37,8 @@ public class PresentationsController {
     @Transactional
     @RequestMapping(value = "/users/{userId}/presentations", method = RequestMethod.POST)
     public ResponseEntity<Void> save(@PathVariable String userId, @RequestBody Presentation presentation) {
-        User user = userRepository.findOne(userId).get();
-        Presentation saved = repository.save(presentation.setOwner(user));
-        saved.setOwner(user);
+        User owner = userRepository.findOne(userId).get();
+        Presentation saved = repository.save(presentation.addSpeaker(owner));
         return ResponseEntity.created(URI.create("/users/" + userId + "/presentations/" + saved.getId())).build();
     }
 
@@ -54,6 +55,24 @@ public class PresentationsController {
                 .filter(by(tags))
                 .filter(by(level))
                 .collect(toSet());
+    }
+
+    @RequestMapping(value = "/presentations/{id}/speakers/{userId}", method = RequestMethod.POST)
+    public ResponseEntity<Void> addSpeaker(@PathVariable("id") String id, @PathVariable("userId") String userId) {
+        repository.findOne(id)
+                .get()
+                .addSpeaker(userRepository.findOne(userId).get());
+        return ResponseEntity.ok().build();
+    }
+
+    @RequestMapping(value = "/presentations/{id}/speakers", method = RequestMethod.GET)
+    public Set<UserDto> getSpeakersFor(@PathVariable("id") String id) {
+        return repository.findOne(id)
+                .get()
+                .getSpeakers()
+                .stream()
+                .map(UserDto::copyFrom)
+                .collect(Collectors.toSet());
     }
 
     private Predicate<Presentation> by(PresentationLevel level) {

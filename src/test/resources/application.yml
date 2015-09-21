@@ -15,11 +15,8 @@ spring:
 
 logging:
   level:
-#    org.hibernate: 'DEBU'
-    org.hibernate.type: 'DEBUG'
+    org.hibernate.type: 'INFO'
     org.hibernate.SQL: 'DEBUG'
-#    org.hibernate: DEBUG
-
   level.: 'WARN'
 
 

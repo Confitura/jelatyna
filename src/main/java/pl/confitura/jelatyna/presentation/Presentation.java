@@ -1,9 +1,10 @@
 package pl.confitura.jelatyna.presentation;
 
+import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
+import javax.persistence.ManyToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -17,9 +18,9 @@ import pl.confitura.jelatyna.user.domain.User;
 
 @Entity
 @Data
-@ToString(exclude = "owner")
+@ToString(exclude = "speakers")
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true, exclude = "owner")
+@EqualsAndHashCode(callSuper = true, exclude = "speakers")
 @Accessors(chain = true)
 public class Presentation extends AbstractEntity {
     private String title;
@@ -34,12 +35,11 @@ public class Presentation extends AbstractEntity {
     private Set<String> tags;
 
     @JsonIgnore
-    @ManyToOne(optional = false)
-    private User owner;
+    @ManyToMany
+    private Set<User> speakers = new HashSet<>();
 
-    public Presentation setOwner(User owner) {
-        this.owner = owner;
-        owner.addPresentation(this);
+    public Presentation addSpeaker(User speaker) {
+        speakers.add(speaker);
         return this;
     }
 }

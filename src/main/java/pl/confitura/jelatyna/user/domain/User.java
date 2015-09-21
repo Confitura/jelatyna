@@ -12,7 +12,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Lob;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.validation.Valid;
 
@@ -56,7 +56,7 @@ public class User extends AbstractEntity {
     @Lob
     private byte[] photo;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "speakers")
     private Set<Presentation> presentations = new HashSet<>();
 
     public User(User user) {
@@ -90,7 +90,6 @@ public class User extends AbstractEntity {
     }
 
     public void addPresentation(Presentation presentation) {
-//        presentation.setOwner(this);
         this.presentations.add(presentation);
     }
 }

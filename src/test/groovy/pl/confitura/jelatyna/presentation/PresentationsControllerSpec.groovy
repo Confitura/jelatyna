@@ -138,11 +138,29 @@ class PresentationsControllerSpec extends AbstractControllerSpec {
                 .containsAll("title 1")
     }
 
+    def "should add co-speaker to presentation"() {
+        given:
+        def owner = aUser()
+        def cospeaker = aUser()
+        def id = addPresentationTo(owner, "title 1", ["java"], BASIC)
 
-    private void addPresentationTo(User user, String title, List<String> tags = [], PresentationLevel level = BASIC) {
+        when:
+        doPost("/presentations/$id/speakers/$cospeaker.id","")
+
+        then:
+        Object[] speakers = get("/presentations/$id/speakers")
+        speakers.length == 2
+        speakers
+                .collect { it.id }
+                .containsAll(owner.getId(), cospeaker.getId())
+
+
+    }
+
+    private String addPresentationTo(User user, String title, List<String> tags = [], PresentationLevel level = BASIC) {
         def presentation = new JsonBuilder()
         presentation(title: title, tags: tags, level: level)
-        doPost("/users/$user.id/presentations", presentation.toString())
+        return getId(doPost("/users/$user.id/presentations", presentation.toString()))
     }
 
     private User aUser() {
