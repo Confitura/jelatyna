@@ -18,4 +18,5 @@ public interface UserRepository extends org.springframework.data.repository.Repo
     Optional<User> findByEmail(String email);
 
     Optional<User> findOne(String id);
+
 }

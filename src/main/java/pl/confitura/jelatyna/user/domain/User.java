@@ -1,7 +1,9 @@
 package pl.confitura.jelatyna.user.domain;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -10,6 +12,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Lob;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.Valid;
 
@@ -20,11 +23,12 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import pl.confitura.jelatyna.AbstractEntity;
+import pl.confitura.jelatyna.presentation.Presentation;
 
 @Entity
 @NoArgsConstructor
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = "presentations")
 @Accessors(chain = true)
 public class User extends AbstractEntity {
 
@@ -51,6 +55,9 @@ public class User extends AbstractEntity {
 
     @Lob
     private byte[] photo;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
+    private Set<Presentation> presentations = new HashSet<>();
 
     public User(User user) {
         this.id = user.id;
@@ -80,5 +87,10 @@ public class User extends AbstractEntity {
 
     public void resetToken() {
         token = null;
+    }
+
+    public void addPresentation(Presentation presentation) {
+//        presentation.setOwner(this);
+        this.presentations.add(presentation);
     }
 }

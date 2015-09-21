@@ -20,6 +20,8 @@ import org.springframework.web.multipart.MultipartFile
 import pl.confitura.jelatyna.security.SecurityConfiguration
 import spock.lang.Specification
 
+import javax.persistence.EntityManager
+import javax.persistence.PersistenceContext
 import javax.transaction.Transactional
 
 @ContextConfiguration(loader = SpringApplicationContextLoader.class, classes = [SecurityConfiguration.class, Application.class])
@@ -27,13 +29,15 @@ import javax.transaction.Transactional
 @Transactional
 @TransactionConfiguration(defaultRollback = true)
 @ActiveProfiles("test")
-//@WebIntegrationTest
 abstract class AbstractControllerSpec extends Specification {
 
     MockMvc mockMvc
 
     @Autowired
     WebApplicationContext wac
+
+    @PersistenceContext
+    private EntityManager em
 
     def setup() {
         this.mockMvc = MockMvcBuilders
@@ -49,20 +53,19 @@ abstract class AbstractControllerSpec extends Specification {
         new JsonBuilder(content).toString()
     }
 
-    protected Object doGetResponse(String url) {
-        asJson(doGet(url).response)
-    }
-
     protected MvcResult doGet(String url) {
         mockMvc.perform(MockMvcRequestBuilders.get(url)).andReturn()
     }
 
     protected MvcResult doPost(String url, String json) {
-        mockMvc.perform(
+        def result = mockMvc.perform(
                 MockMvcRequestBuilders.post(url)
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andReturn()
+        clear()
+        return result
+
     }
 
     protected MvcResult doPut(String url, String json) {
@@ -99,6 +102,11 @@ abstract class AbstractControllerSpec extends Specification {
 
     protected Object get(String location) {
         asJson(doGet(location).response)
+    }
+
+    void clear() {
+        em.flush()
+        em.clear()
     }
 
 
