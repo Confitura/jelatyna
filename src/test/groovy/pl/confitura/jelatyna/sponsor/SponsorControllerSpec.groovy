@@ -61,7 +61,7 @@ class SponsorControllerSpec extends AbstractControllerSpec {
         uploadFile("/sponsors/$id/logo", file)
 
         then:
-        doGet("/sponsors/$id/logo").getResponse().getContentAsByteArray() == file.getBytes()
+        doGet("/sponsors/$id/logo").response.contentAsByteArray == file.bytes
 
     }
 
@@ -77,7 +77,7 @@ class SponsorControllerSpec extends AbstractControllerSpec {
             info("this is company 2")
             type("SILVER")
         };
-        doPost("/sponsors", sponsor.toString()).getResponse()
+        doPost("/sponsors", sponsor.toString()).response
 
         then:
         with(get("/sponsors/$sponsorId")) {

@@ -74,8 +74,8 @@ class UserControllerSpec extends AbstractControllerSpec {
         then:
         interaction {
             1 * emailSender.created(
-                    { it.person.email == newUser.getEmail() },
-                    newUser.getRole())
+                    { it.person.email == newUser.email },
+                    newUser.role)
         }
     }
 
@@ -129,13 +129,13 @@ class UserControllerSpec extends AbstractControllerSpec {
     def "should upload a picture"() {
         given:
         def user = repository.save(UserBuilder.aUser {})
-        MultipartFile file = new MockMultipartFile("file", "photo.png", null, getClass().getResource("/photo.png").getBytes())
+        MultipartFile file = new MockMultipartFile("file", "photo.png", null, getClass().getResource("/photo.png").bytes)
 
         when:
         uploadFile("/users/$user.id/photo", file)
 
         then:
-        file.getBytes() == doGet("/users/$user.id/photo").getResponse().getContentAsByteArray()
+        file.bytes == doGet("/users/$user.id/photo").response.contentAsByteArray
     }
 
     def person(fn, ln, em) {

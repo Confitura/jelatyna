@@ -41,7 +41,7 @@ abstract class AbstractControllerSpec extends Specification {
 
     def setup() {
         this.mockMvc = MockMvcBuilders
-                .standaloneSetup(getControllerUnderTest())
+                .standaloneSetup(controllerUnderTest)
                 .build()
     }
 
@@ -92,11 +92,11 @@ abstract class AbstractControllerSpec extends Specification {
     }
 
     protected MockMultipartFile aFile() {
-        new MockMultipartFile("file", "photo.png", null, getClass().getResource("/photo.png").getBytes())
+        new MockMultipartFile("file", "photo.png", null, getClass().getResource("/photo.png").bytes)
     }
 
     protected getId = { MvcResult result ->
-        def location = result.getResponse().getHeader("Location")
+        def location = result.response.getHeader("Location")
         return location.substring(location.lastIndexOf('/') + 1);
     }
 

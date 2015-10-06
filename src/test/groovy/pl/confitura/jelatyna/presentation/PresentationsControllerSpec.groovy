@@ -152,7 +152,7 @@ class PresentationsControllerSpec extends AbstractControllerSpec {
         speakers.length == 2
         speakers
                 .collect { it.id }
-                .containsAll(owner.getId(), cospeaker.getId())
+                .containsAll(owner.id, cospeaker.id)
 
 
     }

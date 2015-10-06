@@ -28,7 +28,7 @@ class PasswordControllerSpec extends AbstractControllerSpec {
         doPost("/users/$user.id/password-reset/123", asJson([value: "new_password"]));
 
         then:
-        with(repository.findByEmail(user.getPerson().getEmail()).get()) {
+        with(repository.findByEmail(user.person.email).get()) {
             new BCryptPasswordEncoder().matches("new_password", password)
         }
     }
