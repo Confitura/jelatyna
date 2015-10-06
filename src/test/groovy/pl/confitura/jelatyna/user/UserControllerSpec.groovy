@@ -138,8 +138,8 @@ class UserControllerSpec extends AbstractControllerSpec {
         file.bytes == doGet("/users/$user.id/photo").response.contentAsByteArray
     }
 
-    def person(fn, ln, em) {
-        return UserBuilder.aPersonAsJson {
+    String person(fn, ln, em) {
+        UserBuilder.aPersonAsJson {
             firstName fn
             lastName ln
             email em
@@ -147,7 +147,7 @@ class UserControllerSpec extends AbstractControllerSpec {
     }
 
     @Override
-    def getControllerUnderTest() {
-        return new UserController(repository, generator, emailSender)
+    UserController getControllerUnderTest() {
+        new UserController(repository, generator, emailSender)
     }
 }

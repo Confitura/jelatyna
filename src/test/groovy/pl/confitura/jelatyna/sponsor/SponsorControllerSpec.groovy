@@ -90,7 +90,7 @@ class SponsorControllerSpec extends AbstractControllerSpec {
 
     }
 
-    def postSponsor(String aName, String aType, String aUrl = "", String aInfo = "") {
+    String postSponsor(String aName, String aType, String aUrl = "", String aInfo = "") {
         def sponsor = SponsorBuilder.json {
             name(aName)
             type(aType)
@@ -98,7 +98,7 @@ class SponsorControllerSpec extends AbstractControllerSpec {
             info(aInfo)
         };
 
-        return getId(doPost("/sponsors", sponsor.toString()))
+        getId(doPost("/sponsors", sponsor.toString()))
     }
 
 
@@ -106,7 +106,7 @@ class SponsorControllerSpec extends AbstractControllerSpec {
 
 
     @Override
-    def getControllerUnderTest() {
-        return controller;
+    SponsorController getControllerUnderTest() {
+        controller;
     }
 }

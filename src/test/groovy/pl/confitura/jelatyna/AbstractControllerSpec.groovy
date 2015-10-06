@@ -64,7 +64,7 @@ abstract class AbstractControllerSpec extends Specification {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andReturn()
         clear()
-        return result
+        result
 
     }
 
@@ -97,7 +97,7 @@ abstract class AbstractControllerSpec extends Specification {
 
     protected getId = { MvcResult result ->
         def location = result.response.getHeader("Location")
-        return location.substring(location.lastIndexOf('/') + 1);
+        location.substring(location.lastIndexOf('/') + 1);
     }
 
     protected Object get(String location) {

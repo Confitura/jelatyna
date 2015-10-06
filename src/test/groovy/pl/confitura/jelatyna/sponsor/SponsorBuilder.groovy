@@ -23,14 +23,14 @@ class SponsorBuilder {
         sponsor.url = url;
     }
 
-    public static aSponsor(block) {
+    public static Sponsor aSponsor(block) {
         def builder = new SponsorBuilder();
         builder.with block;
-        return builder.sponsor;
+        builder.sponsor;
     }
 
-    public static json(block) {
+    public static JsonBuilder json(block) {
         def sponsor = aSponsor(block)
-        return new JsonBuilder(sponsor);
+        new JsonBuilder(sponsor);
     }
 }
