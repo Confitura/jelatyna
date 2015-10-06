@@ -43,7 +43,7 @@ class PersonRepositorySpec extends Specification {
           def person = repository.find(text);
 
         then:
-          with(person.get(0)) {
+          with(person[0]) {
               firstName == firstName
           }
 
