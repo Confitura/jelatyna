@@ -16,20 +16,20 @@ import static pl.confitura.jelatyna.user.domain.Role.*
 class UserControllerSpec extends AbstractControllerSpec {
 
     @Autowired
-    private UserRepository repository;
+    private UserRepository repository
 
     @Autowired
-    private TokenGenerator generator;
+    private TokenGenerator generator
 
     @Autowired
-    private UserController controller;
+    private UserController controller
 
-    private EmailService emailSender = Mock(EmailService);
+    private EmailService emailSender = Mock(EmailService)
 
     @Unroll
     def "should throw exception if admin is invalid"() {
         when:
-        def exception = doPost("/users", json).resolvedException;
+        def exception = doPost("/users", json).resolvedException
 
         then:
         exception.class == MethodArgumentNotValidException.class
@@ -49,7 +49,7 @@ class UserControllerSpec extends AbstractControllerSpec {
         def newUser = new NewUser(firstName: 'John', lastName: 'Smith', email: 'john@smith.invalid', role: role)
 
         when:
-        def result = doPost("/users", new JsonBuilder(newUser).toString());
+        def result = doPost("/users", new JsonBuilder(newUser).toString())
 
         then:
         def id = getId(result)

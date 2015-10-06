@@ -14,18 +14,18 @@ import static pl.confitura.jelatyna.user.UserBuilder.aUser
 class PasswordControllerSpec extends AbstractControllerSpec {
 
     @Autowired
-    private UserRepository repository;
+    private UserRepository repository
 
     @Autowired
-    private TokenGenerator generator;
+    private TokenGenerator generator
 
 
     def "should update password for a user by token"() {
         given:
-        User user = repository.save(aUser { token "123" });
+        User user = repository.save(aUser { token "123" })
 
         when:
-        doPost("/users/$user.id/password-reset/123", asJson([value: "new_password"]));
+        doPost("/users/$user.id/password-reset/123", asJson([value: "new_password"]))
 
         then:
         with(repository.findByEmail(user.getPerson().getEmail()).get()) {

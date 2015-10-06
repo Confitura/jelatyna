@@ -88,7 +88,7 @@ abstract class AbstractControllerSpec extends Specification {
         mockMvc.perform(
                 MockMvcRequestBuilders
                         .fileUpload(url).file(file))
-                .andReturn();
+                .andReturn()
     }
 
     protected MockMultipartFile aFile() {
@@ -97,7 +97,7 @@ abstract class AbstractControllerSpec extends Specification {
 
     protected getId = { MvcResult result ->
         def location = result.getResponse().getHeader("Location")
-        return location.substring(location.lastIndexOf('/') + 1);
+        return location.substring(location.lastIndexOf('/') + 1)
     }
 
     protected Object get(String location) {
@@ -110,5 +110,5 @@ abstract class AbstractControllerSpec extends Specification {
     }
 
 
-    abstract getControllerUnderTest();
+    abstract getControllerUnderTest()
 }

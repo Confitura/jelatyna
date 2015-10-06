@@ -6,18 +6,18 @@ import pl.confitura.jelatyna.AbstractControllerSpec
 class SponsorControllerSpec extends AbstractControllerSpec {
 
     @Autowired
-    private SponsorController controller;
+    private SponsorController controller
 
     def "should create a sponsor"() {
         when:
-        def id = postSponsor("Company 1", "GOLD", "http://company.com", "this is company 1");
+        def id = postSponsor("Company 1", "GOLD", "http://company.com", "this is company 1")
 
         then:
         with(get("/sponsors/$id")) {
-            name == "Company 1";
-            url == "http://company.com";
-            info == "this is company 1";
-            type == "GOLD";
+            name == "Company 1"
+            url == "http://company.com"
+            info == "this is company 1"
+            type == "GOLD"
         }
     }
 
@@ -28,12 +28,12 @@ class SponsorControllerSpec extends AbstractControllerSpec {
         postSponsor("Company 3", "SILVER")
 
         when:
-        Object[] sponsors = get("/sponsors?type=GOLD");
+        Object[] sponsors = get("/sponsors?type=GOLD")
 
         then:
-        sponsors.length == 2;
-        sponsors[0].name == "Company 1";
-        sponsors[1].name == "Company 2";
+        sponsors.length == 2
+        sponsors[0].name == "Company 1"
+        sponsors[1].name == "Company 2"
     }
 
     def "should find all sponsors"() {
@@ -43,13 +43,13 @@ class SponsorControllerSpec extends AbstractControllerSpec {
         postSponsor("Company 3", "BROWN")
 
         when:
-        Object[] sponsors = get("/sponsors");
+        Object[] sponsors = get("/sponsors")
 
         then:
-        sponsors.length == 3;
-        sponsors[0].name == "Company 1";
-        sponsors[1].name == "Company 2";
-        sponsors[2].name == "Company 3";
+        sponsors.length == 3
+        sponsors[0].name == "Company 1"
+        sponsors[1].name == "Company 2"
+        sponsors[2].name == "Company 3"
     }
 
     def "should upload logo for a sponsor"() {
@@ -67,7 +67,7 @@ class SponsorControllerSpec extends AbstractControllerSpec {
 
     def "should update a sponsor"() {
         given:
-        def sponsorId = postSponsor("Company 1", "GOLD", "http://company.com", "this is company 1");
+        def sponsorId = postSponsor("Company 1", "GOLD", "http://company.com", "this is company 1")
 
         when:
         def sponsor = SponsorBuilder.json {
@@ -76,15 +76,15 @@ class SponsorControllerSpec extends AbstractControllerSpec {
             url("http://company2.com")
             info("this is company 2")
             type("SILVER")
-        };
+        }
         doPost("/sponsors", sponsor.toString()).getResponse()
 
         then:
         with(get("/sponsors/$sponsorId")) {
-            name == "Company 2";
-            url == "http://company2.com";
-            info == "this is company 2";
-            type == "SILVER";
+            name == "Company 2"
+            url == "http://company2.com"
+            info == "this is company 2"
+            type == "SILVER"
         }
 
 
@@ -96,7 +96,7 @@ class SponsorControllerSpec extends AbstractControllerSpec {
             type(aType)
             url(aUrl)
             info(aInfo)
-        };
+        }
 
         return getId(doPost("/sponsors", sponsor.toString()))
     }
@@ -107,6 +107,6 @@ class SponsorControllerSpec extends AbstractControllerSpec {
 
     @Override
     def getControllerUnderTest() {
-        return controller;
+        return controller
     }
 }

@@ -23,11 +23,11 @@ import javax.transaction.Transactional
 class PersonRepositorySpec extends Specification {
 
     @Autowired
-    def PersonRepository repository;
+    def PersonRepository repository
     @Shared
-    Person john;
+    Person john
     @Shared
-    Person rob;
+    Person rob
 
     def setup() {
         john = repository.save(new Person(firstName: 'John', lastName: 'Smith', email: 'j@s.com',
@@ -40,7 +40,7 @@ class PersonRepositorySpec extends Specification {
     @Unroll
     def "should find a person by first name, last name or email"() {
         when:
-          def person = repository.find(text);
+          def person = repository.find(text)
 
         then:
           with(person.get(0)) {
