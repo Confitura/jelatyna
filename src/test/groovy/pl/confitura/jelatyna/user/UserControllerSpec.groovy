@@ -32,7 +32,7 @@ class UserControllerSpec extends AbstractControllerSpec {
         def exception = doPost("/users", json).resolvedException;
 
         then:
-        exception.class == MethodArgumentNotValidException.class
+        exception.class == MethodArgumentNotValidException
 
         where:
         json << [

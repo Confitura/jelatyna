@@ -42,7 +42,7 @@ class PasswordControllerSpec extends AbstractControllerSpec {
         def exception = doPost("/users/$user.id/password-reset/WRONG-TOKEN", asJson([value: "new_password"])).resolvedException
 
         then:
-        exception.class == TokenInvalidException.class
+        exception.class == TokenInvalidException
     }
 
     @Override

@@ -24,7 +24,7 @@ import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
 import javax.transaction.Transactional
 
-@ContextConfiguration(loader = SpringApplicationContextLoader.class, classes = [SecurityConfiguration.class, Application.class])
+@ContextConfiguration(loader = SpringApplicationContextLoader, classes = [SecurityConfiguration, Application])
 @WebAppConfiguration
 @Transactional
 @TransactionConfiguration(defaultRollback = true)

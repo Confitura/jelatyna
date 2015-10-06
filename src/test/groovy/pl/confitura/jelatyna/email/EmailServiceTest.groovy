@@ -18,7 +18,7 @@ import spock.lang.Specification
 import javax.transaction.Transactional
 
 @Ignore("This is not a unity test. It is used to check if the integration with mandril is working")
-@ContextConfiguration(loader = SpringApplicationContextLoader.class, classes = Application.class)
+@ContextConfiguration(loader = SpringApplicationContextLoader, classes = Application)
 @WebAppConfiguration
 @Transactional
 @TransactionConfiguration(defaultRollback = true)
