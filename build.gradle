@@ -17,6 +17,7 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'codenarc'
 
 project.version = '0.0.1-SNAPSHOT'
 jar {
@@ -68,6 +69,13 @@ eclipse {
         containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
         containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
     }
+}
+
+codenarc {
+    toolVersion = '0.24'
+    configFile = rootProject.file("codenarc.groovy")
+    maxPriority2Violations = 148
+    maxPriority3Violations = 495
 }
 
 task wrapper(type: Wrapper) {
