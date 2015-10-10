@@ -24,7 +24,7 @@ import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
 import javax.transaction.Transactional
 
-@ContextConfiguration(loader = SpringApplicationContextLoader.class, classes = [SecurityConfiguration.class, Application.class])
+@ContextConfiguration(loader = SpringApplicationContextLoader, classes = [SecurityConfiguration, Application])
 @WebAppConfiguration
 @Transactional
 @TransactionConfiguration(defaultRollback = true)
@@ -41,7 +41,7 @@ abstract class AbstractControllerSpec extends Specification {
 
     def setup() {
         this.mockMvc = MockMvcBuilders
-                .standaloneSetup(getControllerUnderTest())
+                .standaloneSetup(controllerUnderTest)
                 .build()
     }
 
@@ -64,7 +64,7 @@ abstract class AbstractControllerSpec extends Specification {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andReturn()
         clear()
-        return result
+        result
 
     }
 
@@ -92,12 +92,12 @@ abstract class AbstractControllerSpec extends Specification {
     }
 
     protected MockMultipartFile aFile() {
-        new MockMultipartFile("file", "photo.png", null, getClass().getResource("/photo.png").getBytes())
+        new MockMultipartFile("file", "photo.png", null, getClass().getResource("/photo.png").bytes)
     }
 
-    protected getId = { MvcResult result ->
-        def location = result.getResponse().getHeader("Location")
-        return location.substring(location.lastIndexOf('/') + 1)
+    protected String getId(MvcResult result){
+        def location = result.response.getHeader("Location")
+        location.substring(location.lastIndexOf('/') + 1);
     }
 
     protected Object get(String location) {

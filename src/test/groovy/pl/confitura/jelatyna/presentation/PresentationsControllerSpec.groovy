@@ -152,7 +152,7 @@ class PresentationsControllerSpec extends AbstractControllerSpec {
         speakers.length == 2
         speakers
                 .collect { it.id }
-                .containsAll(owner.getId(), cospeaker.getId())
+                .containsAll(owner.id, cospeaker.id)
 
 
     }
@@ -160,7 +160,7 @@ class PresentationsControllerSpec extends AbstractControllerSpec {
     private String addPresentationTo(User user, String title, List<String> tags = [], PresentationLevel level = BASIC) {
         def presentation = new JsonBuilder()
         presentation(title: title, tags: tags, level: level)
-        return getId(doPost("/users/$user.id/presentations", presentation.toString()))
+        getId(doPost("/users/$user.id/presentations", presentation.toString()))
     }
 
     private User aUser() {
@@ -168,7 +168,7 @@ class PresentationsControllerSpec extends AbstractControllerSpec {
     }
 
     @Override
-    def getControllerUnderTest() {
-        return new PresentationsController(repository, userRepository)
+    PresentationsController getControllerUnderTest() {
+        return new PresentationsController(repository, userRepository);
     }
 }

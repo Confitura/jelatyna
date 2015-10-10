@@ -15,7 +15,7 @@ import spock.lang.Unroll
 
 import javax.transaction.Transactional
 
-@ContextConfiguration(loader = SpringApplicationContextLoader.class, classes = Application.class)
+@ContextConfiguration(loader = SpringApplicationContextLoader, classes = Application)
 @WebAppConfiguration
 @Transactional
 @TransactionConfiguration(defaultRollback = true)

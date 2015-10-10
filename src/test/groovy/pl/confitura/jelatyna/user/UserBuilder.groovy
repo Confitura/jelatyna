@@ -54,18 +54,18 @@ class UserBuilder {
     }
 
 
-    static def aUser(block) {
-        def builder = new UserBuilder()
+    static User aUser(block) {
+        def builder = new UserBuilder();
         builder.with block
         return builder.user
     }
 
-    static def aUserAsJson(block) {
-        return new JsonBuilder(aUser(block)).toString()
+    static String aUserAsJson(block) {
+        return new JsonBuilder(aUser(block)).toString();
     }
 
-    static def aPersonAsJson(block) {
-        return new JsonBuilder(aUser(block).person).toString()
+    static String aPersonAsJson(block) {
+        return new JsonBuilder(aUser(block).person).toString();
     }
 
 }
