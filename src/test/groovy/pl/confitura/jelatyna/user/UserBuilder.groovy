@@ -33,39 +33,39 @@ class UserBuilder {
 
     def name(String name) {
         println(name)
-        person.firstName = name.split(" ")[0];
-        person.lastName = name.split(" ")[1];
+        person.firstName = name.split(" ")[0]
+        person.lastName = name.split(" ")[1]
     }
 
     def email(email) {
-        person.email = email;
+        person.email = email
     }
 
     def firstName(String firstName) {
-        person.firstName = firstName;
+        person.firstName = firstName
     }
 
     def lastName(lastName) {
-        person.lastName = lastName;
+        person.lastName = lastName
     }
 
     def token(token) {
-        user.token = token;
+        user.token = token
     }
 
 
     static def aUser(block) {
-        def builder = new UserBuilder();
+        def builder = new UserBuilder()
         builder.with block
         return builder.user
     }
 
     static def aUserAsJson(block) {
-        return new JsonBuilder(aUser(block)).toString();
+        return new JsonBuilder(aUser(block)).toString()
     }
 
     static def aPersonAsJson(block) {
-        return new JsonBuilder(aUser(block).person).toString();
+        return new JsonBuilder(aUser(block).person).toString()
     }
 
 }

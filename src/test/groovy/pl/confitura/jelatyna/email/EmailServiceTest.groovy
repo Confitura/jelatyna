@@ -25,16 +25,16 @@ import javax.transaction.Transactional
 @ActiveProfiles("default")
 class EmailServiceTest extends Specification {
     @Autowired
-    def EmailService service;
+    def EmailService service
     @Autowired
-    def PersonRepository repository;
+    def PersonRepository repository
 
     def "should send email"() {
         expect:
           service.adminCreated(new User(email    : "michal.margiel@gmail.com",
                                          firstName: "Michal",
                                          lastName : "Margiel",
-                                         token    : "abc"));
+                                         token    : "abc"))
 
     }
 

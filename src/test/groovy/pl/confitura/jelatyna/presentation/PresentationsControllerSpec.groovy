@@ -15,13 +15,13 @@ import static pl.confitura.jelatyna.presentation.PresentationLevel.*
 
 class PresentationsControllerSpec extends AbstractControllerSpec {
     @Autowired
-    private PresentationRepository repository;
+    private PresentationRepository repository
 
     @Autowired
     private UserRepository userRepository
 
     @PersistenceContext
-    private EntityManager em;
+    private EntityManager em
 
     def "should add presentation to a user"() {
         given:
@@ -39,7 +39,7 @@ class PresentationsControllerSpec extends AbstractControllerSpec {
         doPost("/users/$user.id/presentations", presentation.toString())
 
         then:
-        Object[] presentations = get("/users/$user.id/presentations");
+        Object[] presentations = get("/users/$user.id/presentations")
         presentations.length == 1
         with(presentations[0]) {
             it.title == presentation.content.title
@@ -169,6 +169,6 @@ class PresentationsControllerSpec extends AbstractControllerSpec {
 
     @Override
     def getControllerUnderTest() {
-        return new PresentationsController(repository, userRepository);
+        return new PresentationsController(repository, userRepository)
     }
 }
