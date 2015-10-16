@@ -47,6 +47,6 @@ class PasswordControllerSpec extends AbstractControllerSpec {
 
     @Override
     PasswordController getControllerUnderTest() {
-        new PasswordController(repository, generator, Mock(EmailService))
+        return new PasswordController(repository, generator, Mock(EmailService))
     }
 }

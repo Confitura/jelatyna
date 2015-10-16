@@ -45,16 +45,16 @@ abstract class AbstractControllerSpec extends Specification {
                 .build()
     }
 
-    def asJson(MockHttpServletResponse response) {
-        new JsonSlurper().parseText(response.contentAsString)
+    Object asJson(MockHttpServletResponse response) {
+        return new JsonSlurper().parseText(response.contentAsString)
     }
 
-    def asJson(Object content) {
-        new JsonBuilder(content).toString()
+    String asJson(Object content) {
+        return new JsonBuilder(content).toString()
     }
 
     protected MvcResult doGet(String url) {
-        mockMvc.perform(MockMvcRequestBuilders.get(url)).andReturn()
+        return mockMvc.perform(MockMvcRequestBuilders.get(url)).andReturn()
     }
 
     protected MvcResult doPost(String url, String json) {
@@ -64,12 +64,11 @@ abstract class AbstractControllerSpec extends Specification {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andReturn()
         clear()
-        result
-
+        return result
     }
 
     protected MvcResult doPut(String url, String json) {
-        mockMvc.perform(
+        return mockMvc.perform(
                 MockMvcRequestBuilders.put(url)
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -77,31 +76,31 @@ abstract class AbstractControllerSpec extends Specification {
     }
 
     protected MvcResult doPatch(String url, String json) {
-        mockMvc.perform(
+        return mockMvc.perform(
                 MockMvcRequestBuilders.patch(url)
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andReturn()
     }
 
-    protected uploadFile(String url, MultipartFile file) {
-        mockMvc.perform(
+    protected MvcResult uploadFile(String url, MultipartFile file) {
+        return mockMvc.perform(
                 MockMvcRequestBuilders
                         .fileUpload(url).file(file))
                 .andReturn()
     }
 
     protected MockMultipartFile aFile() {
-        new MockMultipartFile("file", "photo.png", null, getClass().getResource("/photo.png").bytes)
+        return new MockMultipartFile("file", "photo.png", null, getClass().getResource("/photo.png").bytes)
     }
 
     protected String getId(MvcResult result){
         def location = result.response.getHeader("Location")
-        location.substring(location.lastIndexOf('/') + 1);
+        return location.substring(location.lastIndexOf('/') + 1);
     }
 
     protected Object get(String location) {
-        asJson(doGet(location).response)
+        return asJson(doGet(location).response)
     }
 
     void clear() {
