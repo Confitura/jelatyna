@@ -153,18 +153,16 @@ class PresentationsControllerSpec extends AbstractControllerSpec {
         speakers
                 .collect { it.id }
                 .containsAll(owner.id, cospeaker.id)
-
-
     }
 
     private String addPresentationTo(User user, String title, List<String> tags = [], PresentationLevel level = BASIC) {
         def presentation = new JsonBuilder()
         presentation(title: title, tags: tags, level: level)
-        getId(doPost("/users/$user.id/presentations", presentation.toString()))
+        return getId(doPost("/users/$user.id/presentations", presentation.toString()))
     }
 
     private User aUser() {
-        userRepository.save(UserBuilder.aUser({}))
+        return userRepository.save(UserBuilder.aUser({}))
     }
 
     @Override
