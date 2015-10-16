@@ -139,7 +139,7 @@ class UserControllerSpec extends AbstractControllerSpec {
     }
 
     String person(fn, ln, em) {
-        UserBuilder.aPersonAsJson {
+        return UserBuilder.aPersonAsJson {
             firstName fn
             lastName ln
             email em
@@ -148,6 +148,6 @@ class UserControllerSpec extends AbstractControllerSpec {
 
     @Override
     UserController getControllerUnderTest() {
-        new UserController(repository, generator, emailSender)
+        return new UserController(repository, generator, emailSender)
     }
 }

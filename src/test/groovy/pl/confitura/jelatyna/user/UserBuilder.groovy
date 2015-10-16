@@ -57,15 +57,15 @@ class UserBuilder {
     static User aUser(block) {
         def builder = new UserBuilder();
         builder.with block
-        builder.user
+        return builder.user
     }
 
     static String aUserAsJson(block) {
-        new JsonBuilder(aUser(block)).toString();
+        return new JsonBuilder(aUser(block)).toString();
     }
 
     static String aPersonAsJson(block) {
-        new JsonBuilder(aUser(block).person).toString();
+        return new JsonBuilder(aUser(block).person).toString();
     }
 
 }

@@ -17,6 +17,8 @@ ruleset {
     ruleset('rulesets/size.xml') {
         'CrapMetric' enabled: false
     }
-    ruleset('rulesets/unnecessary.xml')
+    ruleset('rulesets/unnecessary.xml') {
+        'UnnecessaryReturnKeyword' enabled: false
+    }
     ruleset('rulesets/unused.xml')
 }

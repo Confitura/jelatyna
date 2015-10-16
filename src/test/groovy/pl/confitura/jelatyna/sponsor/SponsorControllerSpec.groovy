@@ -98,7 +98,7 @@ class SponsorControllerSpec extends AbstractControllerSpec {
             info(aInfo)
         };
 
-        getId(doPost("/sponsors", sponsor.toString()))
+        return getId(doPost("/sponsors", sponsor.toString()))
     }
 
 
@@ -107,6 +107,6 @@ class SponsorControllerSpec extends AbstractControllerSpec {
 
     @Override
     SponsorController getControllerUnderTest() {
-        controller;
+        return controller;
     }
 }

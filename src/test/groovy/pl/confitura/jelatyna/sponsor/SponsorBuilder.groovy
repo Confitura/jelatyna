@@ -26,11 +26,11 @@ class SponsorBuilder {
     public static Sponsor aSponsor(block) {
         def builder = new SponsorBuilder();
         builder.with block;
-        builder.sponsor;
+        return builder.sponsor;
     }
 
     public static JsonBuilder json(block) {
         def sponsor = aSponsor(block)
-        new JsonBuilder(sponsor);
+        return new JsonBuilder(sponsor);
     }
 }
