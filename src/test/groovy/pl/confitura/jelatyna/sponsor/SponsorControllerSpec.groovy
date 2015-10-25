@@ -86,8 +86,6 @@ class SponsorControllerSpec extends AbstractControllerSpec {
             info == "this is company 2"
             type == "SILVER"
         }
-
-
     }
 
     String postSponsor(String aName, String aType, String aUrl = "", String aInfo = "") {

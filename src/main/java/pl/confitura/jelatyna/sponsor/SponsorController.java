@@ -56,7 +56,7 @@ public class SponsorController {
     }
 
     @RequestMapping(value = "/{id}/logo", method = GET, produces = MediaType.IMAGE_PNG_VALUE)
-    public ResponseEntity<byte[]> getPhoto(@PathVariable String id) throws IOException {
+    public ResponseEntity<byte[]> getLogo(@PathVariable String id) throws IOException {
         Sponsor sponsor = repository.findOne(id).get();
         return ResponseEntity.ok(sponsor.getLogo());
     }

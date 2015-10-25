@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -24,6 +23,8 @@ import pl.confitura.jelatyna.user.domain.User;
 @Accessors(chain = true)
 public class Presentation extends AbstractEntity {
     private String title;
+
+    private Language language;
 
     private String shortDescription;
 

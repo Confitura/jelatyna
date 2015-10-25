@@ -83,6 +83,10 @@ abstract class AbstractControllerSpec extends Specification {
                 .andReturn()
     }
 
+    protected MvcResult doDelete(String url) {
+        return mockMvc.perform(MockMvcRequestBuilders.delete(url)).andReturn()
+    }
+
     protected MvcResult uploadFile(String url, MultipartFile file) {
         return mockMvc.perform(
                 MockMvcRequestBuilders
@@ -94,7 +98,7 @@ abstract class AbstractControllerSpec extends Specification {
         return new MockMultipartFile("file", "photo.png", null, getClass().getResource("/photo.png").bytes)
     }
 
-    protected String getId(MvcResult result){
+    protected String getId(MvcResult result) {
         def location = result.response.getHeader("Location")
         return location.substring(location.lastIndexOf('/') + 1);
     }

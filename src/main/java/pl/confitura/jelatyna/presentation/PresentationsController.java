@@ -37,6 +37,20 @@ public class PresentationsController {
     @Transactional
     @RequestMapping(value = "/users/{userId}/presentations", method = RequestMethod.POST)
     public ResponseEntity<Void> save(@PathVariable String userId, @RequestBody Presentation presentation) {
+        if (presentation.getId() == null) {
+            return createFor(userId, presentation);
+        }else {
+            return update(presentation);
+        }
+    }
+
+    private ResponseEntity<Void> update(@RequestBody Presentation presentation) {
+        Set<User> speakers = repository.findOne(presentation.getId()).get().getSpeakers();
+        repository.save(presentation.setSpeakers(speakers));
+        return  ResponseEntity.ok().build();
+    }
+
+    private ResponseEntity<Void> createFor(@PathVariable String userId, @RequestBody Presentation presentation) {
         User owner = userRepository.findOne(userId).get();
         Presentation saved = repository.save(presentation.addSpeaker(owner));
         return ResponseEntity.created(URI.create("/users/" + userId + "/presentations/" + saved.getId())).build();
@@ -73,6 +87,11 @@ public class PresentationsController {
                 .stream()
                 .map(UserDto::copyFrom)
                 .collect(Collectors.toSet());
+    }
+    @RequestMapping(value = "/presentations/{id}", method = RequestMethod.DELETE)
+    @Transactional
+    public void delete(@PathVariable("id") String id) {
+        repository.delete(id);
     }
 
     private Predicate<Presentation> by(PresentationLevel level) {

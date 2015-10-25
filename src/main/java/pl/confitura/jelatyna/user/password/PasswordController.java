@@ -38,13 +38,6 @@ public class PasswordController {
         this.emailService = emailService;
     }
 
-//    @RequestMapping(value = "/{id}/password", method = POST)
-//    @Transactional
-//    public void  change(@PathVariable String id, @RequestBody @Valid ChangePassword changePassword){
-//        repository.findOne(id)
-//                .filter()
-//
-//    }
 
     @RequestMapping(value = "/{id}/password-reset/{token}", method = POST)
     @Transactional

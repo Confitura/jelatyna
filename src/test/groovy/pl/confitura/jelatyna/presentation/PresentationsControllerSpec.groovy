@@ -7,11 +7,7 @@ import pl.confitura.jelatyna.user.UserBuilder
 import pl.confitura.jelatyna.user.UserRepository
 import pl.confitura.jelatyna.user.domain.User
 
-import javax.persistence.EntityManager
-import javax.persistence.PersistenceContext
-
 import static pl.confitura.jelatyna.presentation.PresentationLevel.*
-
 
 class PresentationsControllerSpec extends AbstractControllerSpec {
     @Autowired
@@ -20,15 +16,13 @@ class PresentationsControllerSpec extends AbstractControllerSpec {
     @Autowired
     private UserRepository userRepository
 
-    @PersistenceContext
-    private EntityManager em
-
     def "should add presentation to a user"() {
         given:
         def user = userRepository.save(UserBuilder.aUser({}))
         def presentation = new JsonBuilder()
         presentation(
                 title: "title",
+                language: "PL",
                 shortDescription: "Short Description",
                 description: "Description",
                 level: BASIC,
@@ -43,10 +37,46 @@ class PresentationsControllerSpec extends AbstractControllerSpec {
         presentations.length == 1
         with(presentations[0]) {
             it.title == presentation.content.title
+            it.language == presentation.content.language
             it.shortDescription == presentation.content.shortDescription
             it.description == presentation.content.description
             it.level == presentation.content.level.name()
             it.tags.containsAll(presentation.content.tags)
+        }
+    }
+
+    def "should update presentation"() {
+        given:
+        def user = userRepository.save(UserBuilder.aUser({}))
+        def presentation = new JsonBuilder()
+        presentation(
+                title: "title",
+                language: "PL",
+                shortDescription: "Short Description",
+                description: "Description",
+                level: BASIC,
+                tags: ["JavaScript", "AngularJs"]
+        )
+        def presentationId = getId(doPost("/users/$user.id/presentations", presentation.toString()))
+        presentation(
+                id: presentationId,
+                title: "other title",
+                language: "PL",
+                shortDescription: "Short Description",
+                description: "Description",
+                level: BASIC,
+                tags: ["JavaScript", "AngularJs"]
+        )
+
+        when:
+        doPost("/users/$user.id/presentations", presentation.toString())
+
+        then:
+        Object[] presentations = get("/users/$user.id/presentations")
+        presentations.length == 1
+        with(presentations[0]) {
+            it.title == "other title"
+            it.language == "PL"
         }
     }
 
@@ -58,11 +88,11 @@ class PresentationsControllerSpec extends AbstractControllerSpec {
         addPresentationTo(aUser(), "title 3")
 
         when:
-        Object[] all = get("/presentations")
+        Object[] presentations = get("/presentations")
 
         then:
-        all.length == 3
-        all
+        presentations.length == 3
+        presentations
                 .collect { it.title }
                 .containsAll("title 1", "title 2", "title 3")
     }
@@ -72,7 +102,6 @@ class PresentationsControllerSpec extends AbstractControllerSpec {
         def user = aUser()
         addPresentationTo(user, "title 1", ["TDD", "JavaScript"])
         addPresentationTo(user, "title 2", ["JavaScript"])
-
         addPresentationTo(aUser(), "title 3", ["TDD"])
 
         when:
@@ -145,7 +174,7 @@ class PresentationsControllerSpec extends AbstractControllerSpec {
         def id = addPresentationTo(owner, "title 1", ["java"], BASIC)
 
         when:
-        doPost("/presentations/$id/speakers/$cospeaker.id","")
+        doPost("/presentations/$id/speakers/$cospeaker.id", "")
 
         then:
         Object[] speakers = get("/presentations/$id/speakers")
@@ -153,6 +182,17 @@ class PresentationsControllerSpec extends AbstractControllerSpec {
         speakers
                 .collect { it.id }
                 .containsAll(owner.id, cospeaker.id)
+    }
+
+    def "should delete a presentation"() {
+        given:
+        def id = addPresentationTo(aUser(), "title 1", ["java"], BASIC)
+
+        when:
+        doDelete("/presentations/$id")
+
+        then:
+        get("/presentations") == []
     }
 
     private String addPresentationTo(User user, String title, List<String> tags = [], PresentationLevel level = BASIC) {

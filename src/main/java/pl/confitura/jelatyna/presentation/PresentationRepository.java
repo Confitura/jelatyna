@@ -12,4 +12,6 @@ public interface PresentationRepository extends Repository<Presentation, String>
     Set<Presentation> findAll();
 
     Optional<Presentation> findOne(String id);
+
+    void delete(String id);
 }
