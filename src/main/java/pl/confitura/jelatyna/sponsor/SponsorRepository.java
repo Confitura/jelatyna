@@ -13,4 +13,7 @@ public interface SponsorRepository extends Repository<Sponsor, String> {
     Optional<Sponsor> findOne(String id);
 
     List<Sponsor> findByType(String type);
+
+    void delete(String id);
+
 }

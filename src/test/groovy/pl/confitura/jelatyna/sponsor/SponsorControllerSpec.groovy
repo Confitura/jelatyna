@@ -1,4 +1,5 @@
 package pl.confitura.jelatyna.sponsor
+
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.multipart.MultipartFile
 import pl.confitura.jelatyna.AbstractControllerSpec
@@ -88,6 +89,19 @@ class SponsorControllerSpec extends AbstractControllerSpec {
         }
     }
 
+    def "should delete sponsor"() {
+        given:
+        def toDelete = postSponsor("Company 1", "GOLD")
+        def id = postSponsor("Company 2", "GOLD")
+
+        when:
+        doDelete("/sponsors/$toDelete")
+
+        then:
+        get("/sponsors").collect {it.id} == [id]
+
+    }
+
     String postSponsor(String aName, String aType, String aUrl = "", String aInfo = "") {
         def sponsor = SponsorBuilder.json {
             name(aName)
@@ -98,10 +112,6 @@ class SponsorControllerSpec extends AbstractControllerSpec {
 
         return getId(doPost("/sponsors", sponsor.toString()))
     }
-
-
-
-
 
     @Override
     SponsorController getControllerUnderTest() {

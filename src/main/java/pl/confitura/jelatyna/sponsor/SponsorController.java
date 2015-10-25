@@ -61,4 +61,10 @@ public class SponsorController {
         return ResponseEntity.ok(sponsor.getLogo());
     }
 
+    @RequestMapping(value = "/{id}", method = DELETE)
+    public ResponseEntity<Void> delete(@PathVariable String id) {
+        repository.delete(id);
+        return ResponseEntity.ok().build();
+    }
+
 }
