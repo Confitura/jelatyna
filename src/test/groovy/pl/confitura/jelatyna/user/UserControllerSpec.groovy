@@ -29,7 +29,7 @@ class UserControllerSpec extends AbstractControllerSpec {
     @Unroll
     def "should throw exception if admin is invalid"() {
         when:
-        def exception = doPost("/users", json).resolvedException
+        def exception = post("/users", json).resolvedException
 
         then:
         exception.class == MethodArgumentNotValidException
@@ -49,7 +49,7 @@ class UserControllerSpec extends AbstractControllerSpec {
         def newUser = new NewUser(firstName: 'John', lastName: 'Smith', email: 'john@smith.invalid', role: role)
 
         when:
-        def result = doPost("/users", new JsonBuilder(newUser).toString())
+        def result = post("/users", new JsonBuilder(newUser).toString())
 
         then:
         def id = getId(result)
@@ -69,7 +69,7 @@ class UserControllerSpec extends AbstractControllerSpec {
         def newUser = new NewUser(firstName: 'John', lastName: 'Smith', email: 'john@smith.invalid', role: ADMIN)
 
         when:
-        doPost("/users", new JsonBuilder(newUser).toString())
+        post("/users", new JsonBuilder(newUser).toString())
 
         then:
         interaction {

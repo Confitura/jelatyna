@@ -1,7 +1,7 @@
 package pl.confitura.jelatyna;
 
 import static java.lang.String.format;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,8 +11,8 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.client.RestTemplate;
 
@@ -23,7 +23,7 @@ import org.springframework.web.client.RestTemplate;
         "server.port:0",
         "spring.profiles.active=fake"
 })
-@TransactionConfiguration(defaultRollback = false)
+@Rollback
 public class ApplicationTests {
 
     @Value("${local.server.port}")

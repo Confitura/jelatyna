@@ -9,7 +9,9 @@ spring:
     hibernate:
       ddl-auto: update
 #    properties.hibernate.format_sql: true
-
+  jackson:
+    serialization:
+      write_dates_as_timestamps: false
   profiles:
       active: default
 

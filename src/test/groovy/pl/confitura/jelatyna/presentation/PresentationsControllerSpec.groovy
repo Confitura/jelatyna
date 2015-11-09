@@ -30,7 +30,7 @@ class PresentationsControllerSpec extends AbstractControllerSpec {
         )
 
         when:
-        doPost("/users/$user.id/presentations", presentation.toString())
+        post("/users/$user.id/presentations", presentation.toString())
 
         then:
         Object[] presentations = get("/users/$user.id/presentations")
@@ -57,7 +57,7 @@ class PresentationsControllerSpec extends AbstractControllerSpec {
                 level: BASIC,
                 tags: ["JavaScript", "AngularJs"]
         )
-        def presentationId = getId(doPost("/users/$user.id/presentations", presentation.toString()))
+        def presentationId = getId(post("/users/$user.id/presentations", presentation.toString()))
         presentation(
                 id: presentationId,
                 title: "other title",
@@ -69,7 +69,7 @@ class PresentationsControllerSpec extends AbstractControllerSpec {
         )
 
         when:
-        doPost("/users/$user.id/presentations", presentation.toString())
+        post("/users/$user.id/presentations", presentation.toString())
 
         then:
         Object[] presentations = get("/users/$user.id/presentations")
@@ -174,7 +174,7 @@ class PresentationsControllerSpec extends AbstractControllerSpec {
         def id = addPresentationTo(owner, "title 1", ["java"], BASIC)
 
         when:
-        doPost("/presentations/$id/speakers/$cospeaker.id", "")
+        post("/presentations/$id/speakers/$cospeaker.id", "")
 
         then:
         Object[] speakers = get("/presentations/$id/speakers")
@@ -189,7 +189,7 @@ class PresentationsControllerSpec extends AbstractControllerSpec {
         def id = addPresentationTo(aUser(), "title 1", ["java"], BASIC)
 
         when:
-        doDelete("/presentations/$id")
+        delete("/presentations/$id")
 
         then:
         get("/presentations") == []
@@ -198,7 +198,7 @@ class PresentationsControllerSpec extends AbstractControllerSpec {
     private String addPresentationTo(User user, String title, List<String> tags = [], PresentationLevel level = BASIC) {
         def presentation = new JsonBuilder()
         presentation(title: title, tags: tags, level: level)
-        return getId(doPost("/users/$user.id/presentations", presentation.toString()))
+        return getId(post("/users/$user.id/presentations", presentation.toString()))
     }
 
     private User aUser() {

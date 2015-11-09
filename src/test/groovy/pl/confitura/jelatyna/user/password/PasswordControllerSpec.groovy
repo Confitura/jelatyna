@@ -25,7 +25,7 @@ class PasswordControllerSpec extends AbstractControllerSpec {
         User user = repository.save(aUser { token "123" })
 
         when:
-        doPost("/users/$user.id/password-reset/123", asJson([value: "new_password"]))
+        post("/users/$user.id/password-reset/123", asJson([value: "new_password"]))
 
         then:
         with(repository.findByEmail(user.person.email).get()) {
@@ -39,7 +39,7 @@ class PasswordControllerSpec extends AbstractControllerSpec {
         repository.save(user)
 
         when:
-        def exception = doPost("/users/$user.id/password-reset/WRONG-TOKEN", asJson([value: "new_password"])).resolvedException
+        def exception = post("/users/$user.id/password-reset/WRONG-TOKEN", asJson([value: "new_password"])).resolvedException
 
         then:
         exception.class == TokenInvalidException

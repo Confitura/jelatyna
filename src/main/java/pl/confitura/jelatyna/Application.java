@@ -1,10 +1,11 @@
 package pl.confitura.jelatyna;
 
-import static java.time.LocalDateTime.*;
-import static java.time.ZoneId.*;
+import static java.time.LocalDateTime.ofInstant;
+import static java.time.ZoneId.systemDefault;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
@@ -25,6 +26,22 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
 
+//    @Bean
+//    public ObjectMapper jacksonObjectMapper() {
+//        return Jackson2ObjectMapperBuilder.json()
+//                .serializationInclusion(JsonInclude.Include.NON_NULL) // Don’t include null values
+//                .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS) //ISODate
+//                .modules(new JSR310Module())
+//                .build();
+//    }
+
+//    @Bean
+//    public Jackson2ObjectMapperBuilder objectMapperBuilder() {
+//        return new Jackson2ObjectMapperBuilder()
+//                .json()
+//                .modules(new JSR310Module());
+//
+//    }
 
     @Converter(autoApply = true)
     public static class LocalDateTimeConverter implements AttributeConverter<LocalDateTime, Date> {

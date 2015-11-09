@@ -78,7 +78,7 @@ class SponsorControllerSpec extends AbstractControllerSpec {
             info("this is company 2")
             type("SILVER")
         }
-        doPost("/sponsors", sponsor.toString()).response
+        post("/sponsors", sponsor.toString()).response
 
         then:
         with(get("/sponsors/$sponsorId")) {
@@ -95,7 +95,7 @@ class SponsorControllerSpec extends AbstractControllerSpec {
         def id = postSponsor("Company 2", "GOLD")
 
         when:
-        doDelete("/sponsors/$toDelete")
+        delete("/sponsors/$toDelete")
 
         then:
         get("/sponsors").collect {it.id} == [id]
@@ -110,7 +110,7 @@ class SponsorControllerSpec extends AbstractControllerSpec {
             info(aInfo)
         }
 
-        return getId(doPost("/sponsors", sponsor.toString()))
+        return getId(post("/sponsors", sponsor.toString()))
     }
 
     @Override
