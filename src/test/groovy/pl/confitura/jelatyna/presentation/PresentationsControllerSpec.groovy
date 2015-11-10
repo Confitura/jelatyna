@@ -1,94 +1,89 @@
 package pl.confitura.jelatyna.presentation
-
 import groovy.json.JsonBuilder
 import org.springframework.beans.factory.annotation.Autowired
-import pl.confitura.jelatyna.AbstractControllerSpec
+import pl.confitura.jelatyna.NewAbstractSpecification
+import pl.confitura.jelatyna.RestBuilder
 import pl.confitura.jelatyna.user.UserBuilder
 import pl.confitura.jelatyna.user.UserRepository
 import pl.confitura.jelatyna.user.domain.User
 
 import static pl.confitura.jelatyna.presentation.PresentationLevel.*
 
-class PresentationsControllerSpec extends AbstractControllerSpec {
+class PresentationsControllerSpec extends NewAbstractSpecification {
     @Autowired
     private PresentationRepository repository
 
     @Autowired
     private UserRepository userRepository
 
+    void setup() {
+        rest.forController(new PresentationsController(repository, userRepository))
+    }
+
     def "should add presentation to a user"() {
         given:
         def user = userRepository.save(UserBuilder.aUser({}))
-        def presentation = new JsonBuilder()
-        presentation(
-                title: "title",
-                language: "PL",
-                shortDescription: "Short Description",
-                description: "Description",
-                level: BASIC,
-                tags: ["JavaScript", "AngularJs"]
-        )
+        def presentation = [title           : "title",
+                            language        : "PL",
+                            shortDescription: "Short Description",
+                            description     : "Description",
+                            level           : BASIC,
+                            tags            : ["JavaScript", "AngularJs"]
+        ]
 
         when:
-        post("/users/$user.id/presentations", presentation.toString())
+        path("/users/$user.id/presentations").post(presentation)
 
         then:
-        Object[] presentations = get("/users/$user.id/presentations")
+        Object[] presentations = rest.query()
         presentations.length == 1
         with(presentations[0]) {
-            it.title == presentation.content.title
-            it.language == presentation.content.language
-            it.shortDescription == presentation.content.shortDescription
-            it.description == presentation.content.description
-            it.level == presentation.content.level.name()
-            it.tags.containsAll(presentation.content.tags)
+            it.title == presentation.title
+            it.language == presentation.language
+            it.shortDescription == presentation.shortDescription
+            it.description == presentation.description
+            it.level == presentation.level.name()
+            it.tags.containsAll(presentation.tags)
         }
     }
 
     def "should update presentation"() {
         given:
-        def user = userRepository.save(UserBuilder.aUser({}))
-        def presentation = new JsonBuilder()
-        presentation(
-                title: "title",
-                language: "PL",
+        def user = aUser()
+        def presentation = [
+                title           : "title",
+                language        : "PL",
                 shortDescription: "Short Description",
-                description: "Description",
-                level: BASIC,
-                tags: ["JavaScript", "AngularJs"]
-        )
-        def presentationId = getId(post("/users/$user.id/presentations", presentation.toString()))
-        presentation(
-                id: presentationId,
-                title: "other title",
-                language: "PL",
-                shortDescription: "Short Description",
-                description: "Description",
-                level: BASIC,
-                tags: ["JavaScript", "AngularJs"]
-        )
+                description     : "Description",
+                level           : BASIC,
+                tags            : ["JavaScript", "AngularJs"]
+        ]
+        path("/users/$user.id/presentations")
+        def presentationId = rest.post(presentation).getId()
+        presentation.id = presentationId;
+        presentation.title = "Other title"
 
         when:
-        post("/users/$user.id/presentations", presentation.toString())
+        rest.post(presentation)
 
         then:
-        Object[] presentations = get("/users/$user.id/presentations")
+        Object[] presentations = rest.query()
         presentations.length == 1
         with(presentations[0]) {
-            it.title == "other title"
+            it.title == "Other title"
             it.language == "PL"
         }
     }
 
     def "should fetch all presentations"() {
-        def user = aUser()
         given:
+        def user = aUser()
         addPresentationTo(user, "title 1")
         addPresentationTo(user, "title 2")
         addPresentationTo(aUser(), "title 3")
 
         when:
-        Object[] presentations = get("/presentations")
+        Object[] presentations = presentations().query()
 
         then:
         presentations.length == 3
@@ -105,7 +100,7 @@ class PresentationsControllerSpec extends AbstractControllerSpec {
         addPresentationTo(aUser(), "title 3", ["TDD"])
 
         when:
-        Object[] presentations = get("/presentations?tags=TDD")
+        Object[] presentations = presentations().query(tags: "TDD")
 
         then:
         presentations.length == 2
@@ -122,7 +117,7 @@ class PresentationsControllerSpec extends AbstractControllerSpec {
 
 
         when:
-        Object[] presentations = get("/presentations?tags=TDD,JavaScript")
+        Object[] presentations = rest.path("/presentations").query(tags: "TDD,JavaScript")
 
         then:
         presentations.length == 1
@@ -141,7 +136,7 @@ class PresentationsControllerSpec extends AbstractControllerSpec {
         addPresentationTo(user, "title 4", [], BASIC)
 
         when:
-        Object[] presentations = get("/presentations?level=BASIC")
+        Object[] presentations = presentations().query(level: "BASIC")
 
         then:
         presentations.length == 2
@@ -149,6 +144,7 @@ class PresentationsControllerSpec extends AbstractControllerSpec {
                 .collect { it.title }
                 .containsAll("title 1", "title 4")
     }
+
 
     def "should find presentations by tag and level"() {
         given:
@@ -158,7 +154,7 @@ class PresentationsControllerSpec extends AbstractControllerSpec {
         addPresentationTo(user, "title 3", ["java"], EXPERT)
 
         when:
-        Object[] presentations = get("/presentations?level=BASIC&tags=java")
+        Object[] presentations = presentations().query(level: "BASIC", tags: "java")
 
         then:
         presentations.length == 1
@@ -174,39 +170,40 @@ class PresentationsControllerSpec extends AbstractControllerSpec {
         def id = addPresentationTo(owner, "title 1", ["java"], BASIC)
 
         when:
-        post("/presentations/$id/speakers/$cospeaker.id", "")
+        path("/presentations/$id/speakers/$cospeaker.id").post(new JsonBuilder())
 
         then:
-        Object[] speakers = get("/presentations/$id/speakers")
+        Object[] speakers = path("/presentations/$id/speakers").query()
         speakers.length == 2
         speakers
                 .collect { it.id }
                 .containsAll(owner.id, cospeaker.id)
     }
 
+
     def "should delete a presentation"() {
         given:
         def id = addPresentationTo(aUser(), "title 1", ["java"], BASIC)
 
         when:
-        delete("/presentations/$id")
+        presentations().delete(id)
 
         then:
-        get("/presentations") == []
+        rest.count() == 0
     }
 
     private String addPresentationTo(User user, String title, List<String> tags = [], PresentationLevel level = BASIC) {
-        def presentation = new JsonBuilder()
-        presentation(title: title, tags: tags, level: level)
-        return getId(post("/users/$user.id/presentations", presentation.toString()))
+        return path("/users/$user.id/presentations")
+                .post([title: title, tags: tags, level: level])
+                .getId()
     }
 
     private User aUser() {
         return userRepository.save(UserBuilder.aUser({}))
     }
 
-    @Override
-    PresentationsController getControllerUnderTest() {
-        return new PresentationsController(repository, userRepository);
+    private RestBuilder presentations() {
+        rest.path("/presentations")
     }
+
 }

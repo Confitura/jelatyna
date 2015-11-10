@@ -3,6 +3,7 @@ package pl.confitura.jelatyna
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.mock.web.MockHttpServletResponse
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors
 import org.springframework.stereotype.Component
 import org.springframework.test.web.servlet.MockMvc
@@ -10,6 +11,7 @@ import org.springframework.test.web.servlet.MvcResult
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.context.WebApplicationContext
+import org.springframework.web.multipart.MultipartFile
 import pl.confitura.jelatyna.user.domain.Role
 
 import javax.persistence.EntityManager
@@ -18,6 +20,7 @@ import javax.servlet.Filter
 
 import static org.springframework.http.MediaType.APPLICATION_JSON
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload
 
 @Component
 class RestBuilder {
@@ -108,6 +111,16 @@ class RestBuilder {
         return doGet(path + "/" + id)
     }
 
+    MockHttpServletResponse getAsResponse(String url) {
+        return mockMvc.perform(MockMvcRequestBuilders.get(url))
+                .andReturn().response
+    }
+
+    MvcResult upload(MultipartFile aFile) {
+        return mockMvc.perform(fileUpload(path).file(aFile)).andReturn()
+    }
+
+
     private SecurityMockMvcRequestPostProcessors.UserRequestPostProcessor aUser(Role role) {
         return user("test").roles(role.name())
     }
@@ -123,9 +136,7 @@ class RestBuilder {
     }
 
     private Object doGet(String url) {
-        new JsonSlurper().parseText(
-                mockMvc.perform(MockMvcRequestBuilders.get(url))
-                        .andReturn().response.contentAsString)
+        new JsonSlurper().parseText(getAsResponse(url).contentAsString)
     }
 
 }
