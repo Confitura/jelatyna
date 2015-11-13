@@ -3,7 +3,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import pl.confitura.jelatyna.AbstractRestSpecification
 import pl.confitura.jelatyna.user.UserRepository
 
-import static pl.confitura.jelatyna.user.UserBuilder.aUser
 
 class NewsControllerSpec extends AbstractRestSpecification {
     @Autowired

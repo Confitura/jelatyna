@@ -1,4 +1,5 @@
 package pl.confitura.jelatyna.presentation
+
 import groovy.json.JsonBuilder
 import org.springframework.beans.factory.annotation.Autowired
 import pl.confitura.jelatyna.AbstractRestSpecification

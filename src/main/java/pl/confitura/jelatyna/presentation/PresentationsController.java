@@ -1,11 +1,12 @@
 package pl.confitura.jelatyna.presentation;
 
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.toSet;
 
 import java.net.URI;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,12 +35,13 @@ public class PresentationsController {
         this.userRepository = userRepository;
     }
 
+
     @Transactional
     @RequestMapping(value = "/users/{userId}/presentations", method = RequestMethod.POST)
     public ResponseEntity<Void> save(@PathVariable String userId, @RequestBody Presentation presentation) {
         if (presentation.getId() == null) {
             return createFor(userId, presentation);
-        }else {
+        } else {
             return update(presentation);
         }
     }
@@ -47,7 +49,7 @@ public class PresentationsController {
     private ResponseEntity<Void> update(@RequestBody Presentation presentation) {
         Set<User> speakers = repository.findOne(presentation.getId()).get().getSpeakers();
         repository.save(presentation.setSpeakers(speakers));
-        return  ResponseEntity.ok().build();
+        return ResponseEntity.ok().build();
     }
 
     private ResponseEntity<Void> createFor(@PathVariable String userId, @RequestBody Presentation presentation) {
@@ -64,7 +66,7 @@ public class PresentationsController {
 
     @RequestMapping(value = "/presentations", method = RequestMethod.GET)
     public Set<Presentation> getAll(@RequestParam(value = "tags", required = false) Set<String> tags,
-                                    @RequestParam(value = "level", required = false) PresentationLevel level) {
+            @RequestParam(value = "level", required = false) PresentationLevel level) {
         return repository.findAll().stream()
                 .filter(by(tags))
                 .filter(by(level))
@@ -88,6 +90,7 @@ public class PresentationsController {
                 .map(UserDto::copyFrom)
                 .collect(Collectors.toSet());
     }
+
     @RequestMapping(value = "/presentations/{id}", method = RequestMethod.DELETE)
     @Transactional
     public void delete(@PathVariable("id") String id) {
