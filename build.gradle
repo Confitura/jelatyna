@@ -41,6 +41,7 @@ ext {
     spockVersion = '1.0-groovy-2.4'
     groovyVersion = '2.4.5'
     cglibVersion = '3.1'
+    restAssuredVersion = '2.7.0'
 }
 
 
@@ -62,8 +63,11 @@ dependencies {
     testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile("org.spockframework:spock-core:${spockVersion}")
     testCompile("org.spockframework:spock-spring:${spockVersion}")
-    compile('org.springframework.security:spring-security-test:4.0.2.RELEASE')
+    testCompile("org.springframework.security:spring-security-test:4.0.2.RELEASE")
     testCompile("cglib:cglib-nodep:${cglibVersion}")
+    testCompile("com.jayway.restassured:rest-assured:${restAssuredVersion}")
+    testCompile("com.jayway.restassured:spring-mock-mvc:${restAssuredVersion}")
+
 }
 
 

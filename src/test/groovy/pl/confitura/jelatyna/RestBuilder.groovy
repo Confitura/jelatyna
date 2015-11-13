@@ -3,6 +3,8 @@ package pl.confitura.jelatyna
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.config.ConfigurableBeanFactory
+import org.springframework.context.annotation.Scope
 import org.springframework.mock.web.MockHttpServletResponse
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors
 import org.springframework.stereotype.Component
@@ -23,6 +25,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload
 
 @Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 class RestBuilder {
     private Role role = Role.ADMIN
 
@@ -81,6 +84,17 @@ class RestBuilder {
         return new RestResult(result)
     }
 
+    RestResult patch(Map map) {
+        def result = mockMvc.perform(
+                MockMvcRequestBuilders.patch(path)
+                        .content(new JsonBuilder(map).toString())
+                        .contentType(APPLICATION_JSON)
+                        .with(aUser(role)))
+                .andReturn()
+        clear()
+        return new RestResult(result)
+    }
+
 
     MvcResult delete(String id) {
         return mockMvc
@@ -121,11 +135,11 @@ class RestBuilder {
     }
 
 
-    private SecurityMockMvcRequestPostProcessors.UserRequestPostProcessor aUser(Role role) {
+    private static SecurityMockMvcRequestPostProcessors.UserRequestPostProcessor aUser(Role role) {
         return user("test").roles(role.name())
     }
 
-    private Serializable createParams(Map paramMap) {
+    private static Serializable createParams(Map paramMap) {
         if (paramMap == null) {
             return ""
         } else {

@@ -7,6 +7,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
+
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
@@ -36,7 +37,6 @@ public class UserController {
 
     public EmailService sender;
 
-    private MultipartFile file;
 
     @Autowired
     public UserController(UserRepository repository, TokenGenerator tokenGenerator, EmailService sender) {

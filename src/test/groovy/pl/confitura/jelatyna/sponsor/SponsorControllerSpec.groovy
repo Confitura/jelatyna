@@ -2,9 +2,9 @@ package pl.confitura.jelatyna.sponsor
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.multipart.MultipartFile
-import pl.confitura.jelatyna.NewAbstractSpecification
+import pl.confitura.jelatyna.AbstractRestSpecification
 
-class SponsorControllerSpec extends NewAbstractSpecification {
+class SponsorControllerSpec extends AbstractRestSpecification {
 
     @Autowired
     private SponsorController controller

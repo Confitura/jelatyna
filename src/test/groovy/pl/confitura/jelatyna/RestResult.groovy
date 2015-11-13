@@ -15,5 +15,7 @@ class RestResult {
         return location.substring(location.lastIndexOf('/') + 1);
     }
 
-
+    public Exception getException() {
+        return result.resolvedException
+    }
 }

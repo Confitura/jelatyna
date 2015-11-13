@@ -1,7 +1,7 @@
 package pl.confitura.jelatyna.presentation
 import groovy.json.JsonBuilder
 import org.springframework.beans.factory.annotation.Autowired
-import pl.confitura.jelatyna.NewAbstractSpecification
+import pl.confitura.jelatyna.AbstractRestSpecification
 import pl.confitura.jelatyna.RestBuilder
 import pl.confitura.jelatyna.user.UserBuilder
 import pl.confitura.jelatyna.user.UserRepository
@@ -9,7 +9,7 @@ import pl.confitura.jelatyna.user.domain.User
 
 import static pl.confitura.jelatyna.presentation.PresentationLevel.*
 
-class PresentationsControllerSpec extends NewAbstractSpecification {
+class PresentationsControllerSpec extends AbstractRestSpecification {
     @Autowired
     private PresentationRepository repository
 

@@ -17,7 +17,7 @@ import javax.transaction.Transactional
 @Transactional
 @Rollback
 @ActiveProfiles("test")
-class NewAbstractSpecification extends Specification {
+class AbstractRestSpecification extends Specification {
     @Autowired
     RestBuilder rest;
 

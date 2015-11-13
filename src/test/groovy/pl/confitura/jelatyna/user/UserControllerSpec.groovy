@@ -1,19 +1,14 @@
 package pl.confitura.jelatyna.user
-
-import groovy.json.JsonBuilder
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.mock.web.MockMultipartFile
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.multipart.MultipartFile
-import pl.confitura.jelatyna.AbstractControllerSpec
+import pl.confitura.jelatyna.AbstractRestSpecification
 import pl.confitura.jelatyna.email.service.EmailService
-import pl.confitura.jelatyna.user.dto.NewUser
-import pl.confitura.jelatyna.user.dto.UserDto
 import spock.lang.Unroll
 
 import static pl.confitura.jelatyna.user.domain.Role.*
 
-class UserControllerSpec extends AbstractControllerSpec {
+class UserControllerSpec extends AbstractRestSpecification {
 
     @Autowired
     private UserRepository repository
@@ -21,39 +16,39 @@ class UserControllerSpec extends AbstractControllerSpec {
     @Autowired
     private TokenGenerator generator
 
-    @Autowired
-    private UserController controller
-
     private EmailService emailSender = Mock(EmailService)
+
+    void setup() {
+        path("/users").forController(new UserController(repository, generator, emailSender))
+    }
 
     @Unroll
     def "should throw exception if admin is invalid"() {
         when:
-        def exception = post("/users", json).resolvedException
+        def exception = rest.post(json).getException()
 
         then:
         exception.class == MethodArgumentNotValidException
 
         where:
         json << [
-                person("", "Smith", "a@a.pl"),
-                person("John", "", "a@a.pl"),
-                person("John", "Smith", ""),
-                person("John", "Smith", "a")
+                newUser("", "Smith", "a@a.pl"),
+                newUser("John", "", "a@a.pl"),
+                newUser("John", "Smith", ""),
+                newUser("John", "Smith", "a")
         ]
     }
 
     @Unroll("should create user with #role role")
     def "should create user"() {
         given:
-        def newUser = new NewUser(firstName: 'John', lastName: 'Smith', email: 'john@smith.invalid', role: role)
+        def user = [firstName: 'John', lastName: 'Smith', email: 'john@smith.invalid', role: role]
 
         when:
-        def result = post("/users", new JsonBuilder(newUser).toString())
+        def id = rest.post(user).getId()
 
         then:
-        def id = getId(result)
-        with(get("/users/$id")) {
+        with(rest.get(id)) {
             id == id
             roles == [role.name()]
             firstName == "John"
@@ -66,16 +61,16 @@ class UserControllerSpec extends AbstractControllerSpec {
 
     def "should send email to created user"() {
         given:
-        def newUser = new NewUser(firstName: 'John', lastName: 'Smith', email: 'john@smith.invalid', role: ADMIN)
+        def user = [firstName: 'John', lastName: 'Smith', email: 'john@smith.invalid', role: ADMIN]
 
         when:
-        post("/users", new JsonBuilder(newUser).toString())
+        rest.post(user)
 
         then:
         interaction {
             1 * emailSender.created(
-                    { it.person.email == newUser.email },
-                    newUser.role)
+                    { it.person.email == user.email },
+                    user.role)
         }
     }
 
@@ -84,18 +79,18 @@ class UserControllerSpec extends AbstractControllerSpec {
         def user = repository.save(UserBuilder.aUser {})
 
         when:
-        def result = doPatch("/users", new JsonBuilder(new UserDto(
-                id: user.id,
-                twitter: "my twitter",
-                code: "my code",
-                bio: "my bio",
-                firstName: "Smith",
-                lastName: "John",
-                email: "smith@john.invalid"
-        )).toString())
+        rest.patch(
+                [id       : user.id,
+                 twitter  : "my twitter",
+                 code     : "my code",
+                 bio      : "my bio",
+                 firstName: "Smith",
+                 lastName : "John",
+                 email    : "smith@john.invalid"]
+        )
 
         then:
-        with(get("/users/$user.id")) {
+        with(rest.get(user.id)) {
             email == "smith@john.invalid"
             firstName == "Smith"
             lastName == "John"
@@ -113,11 +108,11 @@ class UserControllerSpec extends AbstractControllerSpec {
         })
 
         when:
-        doPut("/users", UserBuilder.aUserAsJson {
-            id user.id
-            password ""
-            token ""
-        })
+        rest.patch([
+                id      : user.id,
+                password: "",
+                token   : ""
+        ])
 
         then:
         with(repository.findOne(user.id).get()) {
@@ -129,25 +124,21 @@ class UserControllerSpec extends AbstractControllerSpec {
     def "should upload a picture"() {
         given:
         def user = repository.save(UserBuilder.aUser {})
-        MultipartFile file = new MockMultipartFile("file", "photo.png", null, getClass().getResource("/photo.png").bytes)
+        MultipartFile file = aFile()
 
         when:
-        uploadFile("/users/$user.id/photo", file)
+        path("/users/$user.id/photo").upload(file)
 
         then:
-        file.bytes == doGet("/users/$user.id/photo").response.contentAsByteArray
+        file.bytes == rest.getAsResponse("/users/$user.id/photo").contentAsByteArray
     }
 
-    String person(fn, ln, em) {
-        return UserBuilder.aPersonAsJson {
-            firstName fn
-            lastName ln
-            email em
-        }
+    Map newUser(firstName, lastName, email) {
+        return [
+                firstName: firstName,
+                lastName : lastName,
+                email    : email
+        ]
     }
 
-    @Override
-    UserController getControllerUnderTest() {
-        return new UserController(repository, generator, emailSender)
-    }
 }
