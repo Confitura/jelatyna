@@ -1,33 +1,15 @@
 package pl.confitura.jelatyna.news
 
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.SpringApplicationContextLoader
-import org.springframework.test.annotation.Rollback
-import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.context.ContextConfiguration
-import org.springframework.test.context.web.WebAppConfiguration
-import pl.confitura.jelatyna.Application
-import pl.confitura.jelatyna.RestBuilder
-import pl.confitura.jelatyna.security.SecurityConfiguration
-import spock.lang.Specification
+import pl.confitura.jelatyna.AbstractRestSpecification
 import spock.lang.Unroll
-
-import javax.transaction.Transactional
 
 import static pl.confitura.jelatyna.user.domain.Role.*
 
-@ContextConfiguration(loader = SpringApplicationContextLoader, classes = [SecurityConfiguration, Application])
-@WebAppConfiguration
-@Transactional
-@Rollback
-@ActiveProfiles("test")
-class NewsControllerSecuritySpec extends Specification {
+class NewsControllerSecuritySpec extends AbstractRestSpecification {
 
-    @Autowired
-    RestBuilder rest;
 
     def setup() {
-        rest.path("/news").full()
+        path("/news").full()
     }
 
     @Unroll()
