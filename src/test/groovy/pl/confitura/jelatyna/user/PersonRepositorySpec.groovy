@@ -1,10 +1,9 @@
 package pl.confitura.jelatyna.user
-
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.SpringApplicationContextLoader
+import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
-import org.springframework.test.context.transaction.TransactionConfiguration
 import org.springframework.test.context.web.WebAppConfiguration
 import pl.confitura.jelatyna.Application
 import pl.confitura.jelatyna.user.domain.Person
@@ -18,16 +17,16 @@ import javax.transaction.Transactional
 @ContextConfiguration(loader = SpringApplicationContextLoader, classes = Application)
 @WebAppConfiguration
 @Transactional
-@TransactionConfiguration(defaultRollback = true)
+@Rollback
 @ActiveProfiles("test")
 class PersonRepositorySpec extends Specification {
 
     @Autowired
-    def PersonRepository repository
+    private PersonRepository repository
     @Shared
-    Person john
+    private Person john
     @Shared
-    Person rob
+    private Person rob
 
     def setup() {
         john = repository.save(new Person(firstName: 'John', lastName: 'Smith', email: 'j@s.com',
@@ -36,15 +35,14 @@ class PersonRepositorySpec extends Specification {
             registration: new Registration(size: 'M')))
     }
 
-
     @Unroll
     def "should find a person by first name, last name or email"() {
         when:
-          def person = repository.find(text)
+        Person[] person = repository.find(text)
 
         then:
           with(person[0]) {
-              firstName == firstName
+              it.firstName == firstName
           }
 
         where:

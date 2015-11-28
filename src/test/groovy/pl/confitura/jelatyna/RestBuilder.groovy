@@ -6,28 +6,33 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.mock.web.MockHttpServletResponse
+import org.springframework.security.authentication.TestingAuthenticationToken
+import org.springframework.security.core.Authentication
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors
 import org.springframework.stereotype.Component
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.MvcResult
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+import org.springframework.test.web.servlet.request.RequestPostProcessor
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.context.WebApplicationContext
 import org.springframework.web.multipart.MultipartFile
 import pl.confitura.jelatyna.user.domain.Role
+import pl.confitura.jelatyna.user.domain.User
 
 import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
 import javax.servlet.Filter
 
 import static org.springframework.http.MediaType.APPLICATION_JSON
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 class RestBuilder {
     private Role role = Role.ADMIN
+
+    private String userId = "FAKE_ID"
 
     private String path
 
@@ -56,51 +61,51 @@ class RestBuilder {
                 .build()
     }
 
-
     RestBuilder path(String path) {
         this.path = path
-        return this;
+        return this
     }
 
-
-    RestBuilder asUser(Role role) {
+    RestBuilder asUser(Role role, String id = "123") {
         this.role = role
-        return this;
+        this.userId = id
+        return this
     }
-
 
     RestResult post(Map map) {
         return post(new JsonBuilder(map))
     }
 
     RestResult post(JsonBuilder json) {
-        def result = mockMvc.perform(
+        MvcResult result = mockMvc.perform(
                 MockMvcRequestBuilders.post(path)
                         .content(json.toString())
                         .contentType(APPLICATION_JSON)
-                        .with(aUser(role)))
+                        .with(aUser(role, userId))
+        )
                 .andReturn()
         clear()
         return new RestResult(result)
     }
 
     RestResult patch(Map map) {
-        def result = mockMvc.perform(
+        MvcResult result = mockMvc.perform(
                 MockMvcRequestBuilders.patch(path)
                         .content(new JsonBuilder(map).toString())
                         .contentType(APPLICATION_JSON)
-                        .with(aUser(role)))
+                        .with(aUser(role, userId))
+        )
                 .andReturn()
         clear()
         return new RestResult(result)
     }
 
-
     MvcResult delete(String id) {
         return mockMvc
                 .perform(
                 MockMvcRequestBuilders.delete(path + "/" + id)
-                        .with(aUser(role)))
+                        .with(aUser(role, userId))
+        )
                 .andReturn()
     }
 
@@ -126,7 +131,7 @@ class RestBuilder {
     }
 
     MockHttpServletResponse getAsResponse(String url) {
-        return mockMvc.perform(MockMvcRequestBuilders.get(url))
+        return mockMvc.perform(MockMvcRequestBuilders.get(url).with(aUser(role, userId)))
                 .andReturn().response
     }
 
@@ -134,23 +139,22 @@ class RestBuilder {
         return mockMvc.perform(fileUpload(path).file(aFile)).andReturn()
     }
 
-
-    private static SecurityMockMvcRequestPostProcessors.UserRequestPostProcessor aUser(Role role) {
-        return user("test").roles(role.name())
+    private static RequestPostProcessor aUser(Role role, String id) {
+        Authentication authentication = new TestingAuthenticationToken(new User(id: id), null, "ROLE_" + role.name())
+        return SecurityMockMvcRequestPostProcessors.authentication(authentication)
     }
 
     private static Serializable createParams(Map paramMap) {
         if (paramMap == null) {
             return ""
-        } else {
-            return paramMap
-                    .inject([]) { list, k, v -> list + "$k=$v" }
-                    .inject("?") { result, item -> "$result$item&" }
         }
+        return paramMap
+                .inject([]) { list, k, v -> list + "$k=$v" }
+                .inject("?") { result, item -> "$result$item&" }
     }
 
     private Object doGet(String url) {
-        new JsonSlurper().parseText(getAsResponse(url).contentAsString)
+        return new JsonSlurper().parseText(getAsResponse(url).contentAsString)
     }
 
 }

@@ -2,6 +2,7 @@ package pl.confitura.jelatyna.draw;
 
 import java.util.Collections;
 import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class DrawController {
         List<Person> people = repository.findNotDrawnWithStamps();
         Collections.shuffle(people);
         Person person = people.get(0);
-        person.drown();
+//        person.drown();
         return person;
     }
 

@@ -23,8 +23,12 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 @RequestMapping("/news")
 public class NewsController {
-    @Autowired
     private NewsRepository repository;
+
+    @Autowired
+    public NewsController(NewsRepository repository) {
+        this.repository = repository;
+    }
 
     @RequestMapping(method = RequestMethod.POST)
     @PreAuthorize("hasRole('ADMIN')")

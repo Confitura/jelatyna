@@ -19,7 +19,7 @@ import javax.transaction.Transactional
 @ActiveProfiles("test")
 class AbstractRestSpecification extends Specification {
     @Autowired
-    RestBuilder rest;
+    RestBuilder rest
 
     protected RestBuilder path(String path) {
         return rest.path(path)

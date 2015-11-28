@@ -23,13 +23,13 @@ class PresentationsControllerSpec extends AbstractRestSpecification {
 
     def "should add presentation to a user"() {
         given:
-        def user = userRepository.save(UserBuilder.aUser({}))
-        def presentation = [title           : "title",
-                            language        : "PL",
-                            shortDescription: "Short Description",
-                            description     : "Description",
-                            level           : BASIC,
-                            tags            : ["JavaScript", "AngularJs"]
+        User user = userRepository.save(UserBuilder.aUser {})
+        Object presentation = [title           : "title",
+                               language        : "PL",
+                               shortDescription: "Short Description",
+                               description     : "Description",
+                               level           : BASIC,
+                               tags            : ["JavaScript", "AngularJs"]
         ]
 
         when:
@@ -50,8 +50,8 @@ class PresentationsControllerSpec extends AbstractRestSpecification {
 
     def "should update presentation"() {
         given:
-        def user = aUser()
-        def presentation = [
+        User user = aUser()
+        Object presentation = [
                 title           : "title",
                 language        : "PL",
                 shortDescription: "Short Description",
@@ -60,8 +60,8 @@ class PresentationsControllerSpec extends AbstractRestSpecification {
                 tags            : ["JavaScript", "AngularJs"]
         ]
         path("/users/$user.id/presentations")
-        def presentationId = rest.post(presentation).getId()
-        presentation.id = presentationId;
+        String presentationId = rest.post(presentation).id
+        presentation.id = presentationId
         presentation.title = "Other title"
 
         when:
@@ -78,7 +78,7 @@ class PresentationsControllerSpec extends AbstractRestSpecification {
 
     def "should fetch all presentations"() {
         given:
-        def user = aUser()
+        User user = aUser()
         addPresentationTo(user, "title 1")
         addPresentationTo(user, "title 2")
         addPresentationTo(aUser(), "title 3")
@@ -88,14 +88,13 @@ class PresentationsControllerSpec extends AbstractRestSpecification {
 
         then:
         presentations.length == 3
-        presentations
-                .collect { it.title }
+        presentations*.title
                 .containsAll("title 1", "title 2", "title 3")
     }
 
     def "should find presentations by single tag"() {
         given:
-        def user = aUser()
+        User user = aUser()
         addPresentationTo(user, "title 1", ["TDD", "JavaScript"])
         addPresentationTo(user, "title 2", ["JavaScript"])
         addPresentationTo(aUser(), "title 3", ["TDD"])
@@ -105,32 +104,28 @@ class PresentationsControllerSpec extends AbstractRestSpecification {
 
         then:
         presentations.length == 2
-        presentations
-                .collect { it.title }
+        presentations*.title
                 .containsAll("title 1", "title 3")
     }
 
     def "should find presentations by multiple tags"() {
         given:
-        def user = aUser()
+        User user = aUser()
         addPresentationTo(user, "title 1", ["TDD", "JavaScript"])
         addPresentationTo(user, "title 2", ["JavaScript"])
-
 
         when:
         Object[] presentations = rest.path("/presentations").query(tags: "TDD,JavaScript")
 
         then:
         presentations.length == 1
-        presentations
-                .collect { it.title }
+        presentations*.title
                 .containsAll("title 1")
     }
 
-
     def "should find presentations by level"() {
         given:
-        def user = aUser()
+        User user = aUser()
         addPresentationTo(user, "title 1", [], BASIC)
         addPresentationTo(user, "title 2", [], ADVANCED)
         addPresentationTo(user, "title 3", [], EXPERT)
@@ -141,15 +136,13 @@ class PresentationsControllerSpec extends AbstractRestSpecification {
 
         then:
         presentations.length == 2
-        presentations
-                .collect { it.title }
+        presentations*.title
                 .containsAll("title 1", "title 4")
     }
 
-
     def "should find presentations by tag and level"() {
         given:
-        def user = aUser()
+        User user = aUser()
         addPresentationTo(user, "title 1", ["java"], BASIC)
         addPresentationTo(user, "title 2", ["TDD"], BASIC)
         addPresentationTo(user, "title 3", ["java"], EXPERT)
@@ -159,16 +152,15 @@ class PresentationsControllerSpec extends AbstractRestSpecification {
 
         then:
         presentations.length == 1
-        presentations
-                .collect { it.title }
+        presentations*.title
                 .containsAll("title 1")
     }
 
     def "should add co-speaker to presentation"() {
         given:
-        def owner = aUser()
-        def cospeaker = aUser()
-        def id = addPresentationTo(owner, "title 1", ["java"], BASIC)
+        User owner = aUser()
+        User cospeaker = aUser()
+        String id = addPresentationTo(owner, "title 1", ["java"], BASIC)
 
         when:
         path("/presentations/$id/speakers/$cospeaker.id").post(new JsonBuilder())
@@ -176,15 +168,13 @@ class PresentationsControllerSpec extends AbstractRestSpecification {
         then:
         Object[] speakers = path("/presentations/$id/speakers").query()
         speakers.length == 2
-        speakers
-                .collect { it.id }
+        speakers*.id
                 .containsAll(owner.id, cospeaker.id)
     }
 
-
     def "should delete a presentation"() {
         given:
-        def id = addPresentationTo(aUser(), "title 1", ["java"], BASIC)
+        String id = addPresentationTo(aUser(), "title 1", ["java"], BASIC)
 
         when:
         presentations().delete(id)
@@ -195,12 +185,12 @@ class PresentationsControllerSpec extends AbstractRestSpecification {
 
     private String addPresentationTo(User user, String title, List<String> tags = [], PresentationLevel level = BASIC) {
         return path("/users/$user.id/presentations")
-                .post([title: title, tags: tags, level: level])
-                .getId()
+                .post(title: title, tags: tags, level: level)
+                .id
     }
 
     private User aUser() {
-        return userRepository.save(UserBuilder.aUser({}))
+        return userRepository.save(UserBuilder.aUser {})
     }
 
     private RestBuilder presentations() {

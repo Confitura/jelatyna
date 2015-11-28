@@ -9,6 +9,7 @@ import pl.confitura.jelatyna.user.TokenInvalidException
 import pl.confitura.jelatyna.user.UserRepository
 import pl.confitura.jelatyna.user.domain.User
 
+import static pl.confitura.jelatyna.user.UserBuilder.aUser
 
 class PasswordControllerSpec extends AbstractRestSpecification {
 

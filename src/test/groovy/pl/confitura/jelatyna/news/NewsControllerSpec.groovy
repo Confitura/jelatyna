@@ -1,29 +1,31 @@
 package pl.confitura.jelatyna.news
+
 import org.springframework.beans.factory.annotation.Autowired
 import pl.confitura.jelatyna.AbstractRestSpecification
 import pl.confitura.jelatyna.user.UserRepository
 
+import static pl.confitura.jelatyna.user.UserBuilder.aUser
 
 class NewsControllerSpec extends AbstractRestSpecification {
     @Autowired
-    private NewsController controller
+    private NewsRepository repository
 
     @Autowired
-    private UserRepository userRepository;
+    private UserRepository userRepository
 
     void setup() {
-        rest.path("/news").forController(controller)
+        rest.path("/news").forController(new NewsController(repository))
     }
 
     def "should save news"() {
         given:
-        def user = userRepository.save(aUser({}))
+        def user = userRepository.save(aUser {})
 
         when:
-        saveNews(
+        def id = saveNews(
                 title: "Title",
                 published: false,
-                authot: user.id,
+                author: [id: user.id],
                 publicationDate: "2015-01-01T01:02",
                 shortText: "Short text",
                 longText: "Long text"
@@ -33,7 +35,7 @@ class NewsControllerSpec extends AbstractRestSpecification {
         Object[] fetched = rest.query()
         fetched.length == 1
         with(fetched[0]) {
-            it.id != null
+            it.id == id
             it.title == "Title"
             it.published == false
 //            it.publicationDate == "2015-01-01T01:02"
@@ -44,26 +46,25 @@ class NewsControllerSpec extends AbstractRestSpecification {
 
     def "should update news"() {
         given:
-        def user = userRepository.save(aUser({}))
+        def user = userRepository.save(aUser {})
         def id = rest.post([
                 title          : "Title",
                 published      : false,
-                authot         : user.id,
+                author         : [id: user.id],
                 publicationDate: "2015-01-01T01:02",
                 shortText      : "Short text",
-                longText       : "Long text"]).getId()
+                longText       : "Long text"]).id
 
         when:
         saveNews(
                 id: id,
                 title: "Other title",
                 published: true,
-                authot: user.id,
+                author: [id: user.id],
                 publicationDate: "2015-01-01T01:02",
                 shortText: "Short text",
                 longText: "Long text"
         )
-
 
         then:
         Object[] fetched = rest.query()
@@ -135,11 +136,11 @@ class NewsControllerSpec extends AbstractRestSpecification {
 
         then:
         fetched.length == 2
-        fetched.collect { it.title }.containsAll(["title 2", "title 3"])
+        fetched*.title.containsAll(["title 2", "title 3"])
     }
 
     private String saveNews(Map values) {
-        return rest.post(values).getId()
+        return rest.post(values).id
     }
 
 }

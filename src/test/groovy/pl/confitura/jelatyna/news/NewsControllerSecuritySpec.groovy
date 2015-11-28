@@ -7,18 +7,14 @@ import static pl.confitura.jelatyna.user.domain.Role.*
 
 class NewsControllerSecuritySpec extends AbstractRestSpecification {
 
-
     def setup() {
         path("/news").full()
     }
 
-    @Unroll()
+    @Unroll
     def "only admin should be able to create news"() {
-        given:
-        def news = ["title": "news 1"]
-
         when:
-        rest.asUser(role).post(news)
+        rest.asUser(role).post(title: "news 1")
 
         then:
         rest.count() == size
@@ -30,12 +26,10 @@ class NewsControllerSecuritySpec extends AbstractRestSpecification {
         VOLUNTEER || 0
     }
 
-
-    @Unroll()
+    @Unroll
     def "only admin should be able to delete news"() {
         given:
-        def news = ["title": "news 1"]
-        rest.asUser(ADMIN).post(news)
+        rest.asUser(ADMIN).post(title: "news 1")
 
         when:
         rest.asUser(role).delete("news+1")

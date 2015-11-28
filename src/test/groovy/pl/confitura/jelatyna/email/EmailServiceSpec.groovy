@@ -24,11 +24,12 @@ import javax.transaction.Transactional
 @Transactional
 @Rollback
 @ActiveProfiles("default")
-class EmailServiceTest extends Specification {
+class EmailServiceSpec extends Specification {
     @Autowired
-    def EmailService service
+    private EmailService service
+
     @Autowired
-    def PersonRepository repository
+    private PersonRepository repository
 
     def "should send email"() {
         expect:

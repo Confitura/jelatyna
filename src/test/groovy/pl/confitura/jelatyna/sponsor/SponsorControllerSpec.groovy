@@ -36,8 +36,7 @@ class SponsorControllerSpec extends AbstractRestSpecification {
         Object[] sponsors = rest.query(type: "GOLD")
 
         then:
-        sponsors
-                .collect { it.name }
+        sponsors*.name
                 .containsAll("Company 1", "Company 2")
     }
 
@@ -52,8 +51,7 @@ class SponsorControllerSpec extends AbstractRestSpecification {
 
         then:
         sponsors.length == 3
-        sponsors
-                .collect { it.name }
+        sponsors*.name
                 .containsAll("Company 1", "Company 2", "Company 3")
     }
 
@@ -103,17 +101,17 @@ class SponsorControllerSpec extends AbstractRestSpecification {
         rest.delete(toDelete)
 
         then:
-        rest.query().collect { it.id } == [id]
+        rest.query()*.id == [id]
 
     }
 
     String postSponsor(String aName, String aType, String aUrl = "", String aInfo = "") {
-        return rest.post([
+        return rest.post(
                 name: aName,
                 type: aType,
-                url : aUrl,
+                url: aUrl,
                 info: aInfo
-        ]).getId()
+        ).id
     }
 
 }

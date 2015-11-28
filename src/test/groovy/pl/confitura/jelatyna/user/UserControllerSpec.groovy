@@ -1,4 +1,5 @@
 package pl.confitura.jelatyna.user
+
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.multipart.MultipartFile
@@ -25,7 +26,7 @@ class UserControllerSpec extends AbstractRestSpecification {
     @Unroll
     def "should throw exception if admin is invalid"() {
         when:
-        def exception = rest.post(json).getException()
+        def exception = rest.post(json).exception
 
         then:
         exception.class == MethodArgumentNotValidException
@@ -45,15 +46,15 @@ class UserControllerSpec extends AbstractRestSpecification {
         def user = [firstName: 'John', lastName: 'Smith', email: 'john@smith.invalid', role: role]
 
         when:
-        def id = rest.post(user).getId()
+        String id = rest.post(user).id
 
         then:
         with(rest.get(id)) {
-            id == id
-            roles == [role.name()]
-            firstName == "John"
-            lastName == "Smith"
-            email == "john@smith.invalid"
+            it.id == id
+            it.roles == [role.name()]
+            it.firstName == "John"
+            it.lastName == "Smith"
+            it.email == "john@smith.invalid"
         }
         where:
         role << [ADMIN, SPEAKER, VOLUNTEER]

@@ -11,6 +11,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +39,7 @@ public class PresentationsController {
 
     @Transactional
     @RequestMapping(value = "/users/{userId}/presentations", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ADMIN') or @jelatynaSecurity.isOwner(#userId)")
     public ResponseEntity<Void> save(@PathVariable String userId, @RequestBody Presentation presentation) {
         if (presentation.getId() == null) {
             return createFor(userId, presentation);
