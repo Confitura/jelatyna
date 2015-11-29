@@ -23,16 +23,19 @@ class PersonRepositorySpec extends Specification {
 
     @Autowired
     private PersonRepository repository
+
     @Shared
-    private Person john
+    Person john
+
     @Shared
-    private Person rob
+    Person rob
 
     def setup() {
+        repository.deleteAll();
         john = repository.save(new Person(firstName: 'John', lastName: 'Smith', email: 'j@s.com',
-            registration: new Registration(size: 'S')))
+                registration: new Registration(size: 'S')))
         rob = repository.save(new Person(firstName: 'Rob', lastName: 'Martin', email: 'r@m.com',
-            registration: new Registration(size: 'M')))
+                registration: new Registration(size: 'M')))
     }
 
     @Unroll
@@ -41,17 +44,17 @@ class PersonRepositorySpec extends Specification {
         Person[] person = repository.find(text)
 
         then:
-          with(person[0]) {
-              it.firstName == firstName
-          }
+        with(person[0]) {
+            it.firstName == firstName
+        }
 
         where:
-          text      || firstName
-          "rob"     || "Rob"
-          "jo"      || "John"
-          "SMITH"   || "John"
-          "mar"     || "Rob"
-          "r@m.com" || "Rob"
-          "j@"      || "John"
+        text      || firstName
+        "rob"     || "Rob"
+        "jo"      || "John"
+        "SMITH"   || "John"
+        "mar"     || "Rob"
+        "r@m.com" || "Rob"
+        "j@"      || "John"
     }
 }

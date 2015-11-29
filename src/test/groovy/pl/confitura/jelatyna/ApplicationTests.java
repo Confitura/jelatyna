@@ -3,8 +3,10 @@ package pl.confitura.jelatyna;
 import static java.lang.String.format;
 import static org.junit.Assert.assertEquals;
 
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -16,6 +18,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.client.RestTemplate;
 
+import pl.confitura.jelatyna.user.UserRepository;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
@@ -24,10 +28,18 @@ import org.springframework.web.client.RestTemplate;
         "spring.profiles.active=fake"
 })
 @Rollback
+//@Ignore
 public class ApplicationTests {
 
     @Value("${local.server.port}")
     private int port;
+    @Autowired
+    private UserRepository repository;
+
+    @After
+    public void tearDown() throws Exception {
+        repository.deleteAll();
+    }
 
     @Test
     public void should_login_successfully() {
@@ -37,6 +49,5 @@ public class ApplicationTests {
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
-
 
 }

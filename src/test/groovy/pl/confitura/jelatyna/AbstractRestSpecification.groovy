@@ -1,5 +1,4 @@
 package pl.confitura.jelatyna
-
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.SpringApplicationContextLoader
 import org.springframework.mock.web.MockMultipartFile
@@ -17,7 +16,7 @@ import javax.transaction.Transactional
 @Transactional
 @Rollback
 @ActiveProfiles("test")
-class AbstractRestSpecification extends Specification {
+abstract class AbstractRestSpecification extends Specification {
     @Autowired
     RestBuilder rest
 

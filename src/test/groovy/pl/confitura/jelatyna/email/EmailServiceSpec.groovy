@@ -1,5 +1,4 @@
 package pl.confitura.jelatyna.email
-
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.SpringApplicationContextLoader
 import org.springframework.test.annotation.Rollback

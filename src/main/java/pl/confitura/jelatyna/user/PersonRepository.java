@@ -41,4 +41,6 @@ public interface PersonRepository extends Repository<Person, String> {
     @Modifying
     @Query("UPDATE Registration SET drawn = false")
     void resetDrawing();
+
+    void deleteAll();
 }

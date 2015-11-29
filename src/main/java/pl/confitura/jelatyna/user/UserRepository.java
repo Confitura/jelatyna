@@ -19,4 +19,5 @@ public interface UserRepository extends org.springframework.data.repository.Repo
 
     Optional<User> findOne(String id);
 
+    void deleteAll();
 }
